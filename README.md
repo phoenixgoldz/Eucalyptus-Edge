@@ -25,7 +25,7 @@ In the vibrant world of **Verdantia**, animal clans gather to compete in the leg
 
 ---
 
-## 🐾 Playable Fighters
+## 🐾 Playable Fighters for Demo
 
 ### Koda the Koala
 
@@ -47,6 +47,7 @@ Beginner-friendly speed fighter.
 
 Acrobatic whip specialist.
 
+### Plus More to Come as Game Develops and gets funded.
 ---
 
 ## 🗺️ Arenas
@@ -61,19 +62,19 @@ Acrobatic whip specialist.
 
 ## 🛠️ Built With
 
-* Unreal Engine 5.6
+* Unreal Engine 5.7
 * Enhanced Input System
 * Niagara Visual Effects
 * Animation Blueprints
 * Chaos Physics
 * MetaSounds
 * Multiplayer Networking
-
+* Local player Combat
 ---
 
 ## 📅 Development Roadmap
 
-### Phase 1
+### Phase 1 (Currently in Progress see Kickstarter page)
 
 Combat Prototype
 
@@ -114,7 +115,7 @@ No pay-to-win mechanics.
 
 ## 🤝 Contributing
 
-This project is currently in active development.
+This project is currently in active development and needs funding.
 
 Feedback, suggestions, and contributions are welcome as the game evolves.
 
