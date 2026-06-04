@@ -13,6 +13,7 @@ Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by c
 Eucalyptus Edge is currently seeking funding on Kickstarter!
 
 **🌿 Back the project here:**
+
 https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge
 
 ---
