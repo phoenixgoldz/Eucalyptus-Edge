@@ -8,6 +8,14 @@ Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by c
 
 ---
 
+## 🚀 Support Development
+
+Eucalyptus Edge is currently seeking funding on Kickstarter!
+
+**🌿 Back the project here:**
+https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge
+
+---
 ## 🎮 About The Game
 
 In the vibrant world of **Verdantia**, animal clans gather to compete in the legendary **Edge Festival**. When a mysterious force known as **The Blight** threatens the balance of nature, champions from every corner of the realm must fight to protect their world.
