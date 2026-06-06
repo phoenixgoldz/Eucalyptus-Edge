@@ -4,21 +4,20 @@
 
 > **Cute Fighters. Serious Skills.**
 
-Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters. Built in Unreal Engine 5, players battle as adorable animal warriors across magical arenas using unique weapons, special abilities, and strategic combat.
-
-Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters. Built in Unreal Engine 5, players battle as adorable animal warriors across magical arenas using unique weapons, special abilities, and strategic combat.
+Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters. Built in Unreal Engine 5, players battle as Australian-inspired animal warriors across magical arenas using unique weapons, special abilities, and strategic combat.
 
 ---
 
 ## 🚀 Support Development
 
-Eucalyptus Edge is currently seeking funding on Kickstarter!
+Eucalyptus Edge is currently seeking funding on Kickstarter.
 
-**🌿 Back the project here:**
+🌿 **Support the project:**
 
 https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge
 
 ---
+
 ## 🎮 About The Game
 
 In the vibrant world of **Verdantia**, animal clans gather to compete in the legendary **Edge Festival**. When a mysterious force known as **The Blight** threatens the balance of nature, champions from every corner of the realm must fight to protect their world.
@@ -26,7 +25,7 @@ In the vibrant world of **Verdantia**, animal clans gather to compete in the leg
 ### Features
 
 * ⚔️ Weapon-based combat
-* 🦊 Unique animal fighters
+* 🦘 Australian-inspired animal fighters
 * 🌎 Colorful fantasy arenas
 * 💥 Special attacks and ultimate abilities
 * 🛡️ Dodge, guard, and counter systems
@@ -36,7 +35,7 @@ In the vibrant world of **Verdantia**, animal clans gather to compete in the leg
 
 ---
 
-## 🐾 Playable Fighters for Demo
+## 🐾 Playable Fighters (Prototype)
 
 ### Koda the Koala
 
@@ -58,10 +57,13 @@ Beginner-friendly speed fighter.
 
 Acrobatic whip specialist.
 
-### Plus More to Come as Game Develops and gets funded.
+### More Fighters Coming
+
+Additional Australian-inspired fighters will be added as development progresses.
+
 ---
 
-## 🗺️ Arenas
+## 🗺️ Planned Arenas
 
 * Eucalyptus Summit
 * Crystal Caverns
@@ -80,18 +82,78 @@ Acrobatic whip specialist.
 * Chaos Physics
 * MetaSounds
 * Multiplayer Networking
-* Local player Combat
+* Local Multiplayer Systems
+
 ---
 
 ## 📅 Development Roadmap
 
-### Phase 1 (Currently in Progress see Kickstarter page)
+### Phase 1 — Combat Prototype *(Current Phase)*
 
-Combat Prototype
+* Core combat mechanics
+* First playable fighters
+* Weapon systems
+* Initial arena development
 
-### Phase 2
+### Phase 2 — Vertical Slice Demo
 
-Vertical Slice Demo
+* Expanded roster
+* Improved visuals
+* Refined gameplay systems
+
+### Phase 3 — Online Multiplayer Integration
+
+* Matchmaking
+* Online play
+* Network optimization
+
+### Phase 4 — Full Character Roster
+
+* Additional fighters
+* More arenas
+* Expanded content
+
+### Phase 5 — Launch & Post-Launch Content
+
+* Full release
+* Ongoing updates
+* New fighters and arenas
+
+---
+
+## 💰 Monetization
+
+Eucalyptus Edge follows an ethical monetization model:
+
+* Cosmetic Character Skins
+* Seasonal Costume Packs
+* Weapon Customization Packs
+* Expansion Fighters
+* Additional Arenas
+* Supporter Packs
+* Merchandise Opportunities
+
+**No pay-to-win mechanics.**
+
+---
+
+## 🤝 Contributing
+
+Eucalyptus Edge is currently in active development.
+
+Feedback, suggestions, bug reports, and community involvement are always welcome as the project grows.
+
+---
+
+## 📜 License
+
+This project is currently proprietary.
+
+All rights reserved unless otherwise specified.
+
+---
+
+# 🌿 Nature Fights Back!
 
 ### Phase 3
 
