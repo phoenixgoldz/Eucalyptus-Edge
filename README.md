@@ -1,8 +1,10 @@
 # Eucalyptus Edge
 
-![Eucalyptus Edge Banner](GameBanner2 (1).png)
+![Eucalyptus Edge Banner](eucalyptus-edge-banner.png)
 
 > **Cute Fighters. Serious Skills.**
+
+Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters. Built in Unreal Engine 5, players battle as adorable animal warriors across magical arenas using unique weapons, special abilities, and strategic combat.
 
 Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters. Built in Unreal Engine 5, players battle as adorable animal warriors across magical arenas using unique weapons, special abilities, and strategic combat.
 
