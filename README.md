@@ -167,7 +167,7 @@ Agile fighter specializing in intimidation and mobility.
 
 ## Eucalyptus Summit
 
-![Eucalyptus Summit](Eucalyptus Summit.png)
+![Eucalyptus Summit](Eucalyptus%20Summit.png)
 
 A sacred mountain arena surrounded by ancient eucalyptus trees, waterfalls, and dangerous cliff edges.
 
@@ -175,7 +175,7 @@ A sacred mountain arena surrounded by ancient eucalyptus trees, waterfalls, and 
 
 ## Crystal Caverns
 
-![Crystal Caverns](Crystal Cavern.png)
+![Crystal Caverns](Crystal%20Cavern.png)
 
 A glowing underground cavern filled with magical crystals and hidden dangers.
 
@@ -183,7 +183,7 @@ A glowing underground cavern filled with magical crystals and hidden dangers.
 
 ## Bamboo Harbor
 
-![Bamboo Harbor](Bamboo Harbor.png)
+![Bamboo Harbor](Bamboo%20Harbor.png)
 
 A bustling coastal settlement planned for future development.
 
@@ -191,7 +191,7 @@ A bustling coastal settlement planned for future development.
 
 ## Moonlit Rainforest
 
-![Moonlit Rainforest](Moonlit Rainforest.png)
+![Moonlit Rainforest](Moonlit%20Rainforest.png)
 
 A mystical jungle illuminated by glowing flora.
 
@@ -207,7 +207,7 @@ The grand tournament arena where Verdantia's greatest warriors gather.
 
 ## Frostpine Ridge
 
-![Frostpine Ridge](Frostpine Ridge.png)
+![Frostpine Ridge](Frostpine%20Ridge.png)
 
 A frozen battlefield planned for future development.
 
@@ -306,6 +306,8 @@ All rights reserved unless otherwise specified.
 
 # 🌿 Nature Fights Back!
 
-**Eucalyptus Edge** aims to become a unique family-friendly fighting game franchise built around Australia's incredible wildlife, skill-based combat, memorable characters, and the magical world of Verdantia.
+**Eucalyptus Edge** is a family-friendly competitive fighting game franchise built around Australia's incredible wildlife, skill-based combat, memorable characters, and the magical world of Verdantia.
+
+Currently in **Phase 1 – Combat Prototype**, the project is focused on building the core gameplay foundation before expanding into additional fighters, arenas, story content, and online multiplayer.
 
 Thank you for following development and helping bring Verdantia to life.
