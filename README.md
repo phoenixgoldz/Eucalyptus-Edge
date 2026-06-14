@@ -1,6 +1,6 @@
 # Eucalyptus Edge
 
-![Eucalyptus Edge Banner](FighterBanner.png)
+![Eucalyptus Edge Banner](/Marketing/Banners/FighterBanner.png)
 
 > **Cute Fighters. Serious Skills.**
 
