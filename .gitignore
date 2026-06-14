@@ -73,3 +73,9 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+EucalyptusEdge/Binaries/
+EucalyptusEdge/DerivedDataCache/
+EucalyptusEdge/Intermediate/
+EucalyptusEdge/Saved/
+EucalyptusEdge/.vs/
