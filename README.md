@@ -89,7 +89,7 @@ Players must challenge and purify Blighted Champions throughout Story Mode to un
 
 ### 🐨 Koda the Koala
 
-![Koda](EE_CharectorConcepts/KodaKoala.png)
+![Koda](/EE_CharectorConcepts/KodaKoala.png)
 
 Balanced staff fighter wielding the legendary Eucalyptus Staff.
 
