@@ -89,7 +89,7 @@ Players must challenge and purify Blighted Champions throughout Story Mode to un
 
 ### 🐨 Koda the Koala
 
-![Koda](KodaKoala.png)
+![Koda](EE_CharectorConcepts/KodaKoala.png)
 
 Balanced staff fighter wielding the legendary Eucalyptus Staff.
 
@@ -97,7 +97,7 @@ Balanced staff fighter wielding the legendary Eucalyptus Staff.
 
 ### 🐦 Kiri the Kookaburra
 
-![Kiri](KiriKookaburra.png)
+![Kiri](EE_CharectorConcepts/KiriKookaburra.png)
 
 Precision duelist specializing in aerial attacks and technical combat.
 
@@ -105,7 +105,7 @@ Precision duelist specializing in aerial attacks and technical combat.
 
 ### 🦘 Wren the Kangaroo
 
-![Wren](WrenRedKangaroo.png)
+![Wren](EE_CharectorConcepts/WrenRedKangaroo.png)
 
 Mobile bruiser utilizing powerful kicks, mobility, and ring-out pressure.
 
@@ -113,7 +113,7 @@ Mobile bruiser utilizing powerful kicks, mobility, and ring-out pressure.
 
 ### 😈 Ripper the Tasmanian Devil
 
-![Ripper](RipperTasmanianDevil.png)
+![Ripper](EE_CharectorConcepts/RipperTasmanianDevil.png)
 
 Aggressive close-range brawler focused on relentless offense.
 
@@ -123,7 +123,7 @@ Aggressive close-range brawler focused on relentless offense.
 
 ### 🐿️ Banjo the Sugar Glider
 
-![Banjo](BanjoSugarGlider.png)
+![Banjo](EE_CharectorConcepts/BanjoSugarGlider.png)
 
 Acrobatic aerial fighter unlocked through Story Mode.
 
@@ -131,7 +131,7 @@ Acrobatic aerial fighter unlocked through Story Mode.
 
 ### 🐾 Mako the Quokka
 
-![Mako](MakoTheQuokka.png)
+![Mako](EE_CharectorConcepts/MakoTheQuokka.png)
 
 Versatile fighter unlocked by defeating Blighted Mako.
 
@@ -139,7 +139,7 @@ Versatile fighter unlocked by defeating Blighted Mako.
 
 ### 🐇 Bindi the Bilby
 
-![Bindi](BindiTheBilby.png)
+![Bindi](EE_CharectorConcepts/BindiTheBilby.png)
 
 Trickster fighter utilizing agility and deceptive attacks.
 
@@ -149,7 +149,7 @@ Trickster fighter utilizing agility and deceptive attacks.
 
 ### 🦡 Bramble the Wombat
 
-![Bramble](BrambleWombat.png)
+![Bramble](EE_CharectorConcepts/BrambleWombat.png)
 
 Heavy defensive fighter currently in concept development.
 
@@ -157,7 +157,7 @@ Heavy defensive fighter currently in concept development.
 
 ### 🦎 Tazra the Frilled Lizard
 
-![Tazra](TazraFrilledLizard.png)
+![Tazra](EE_CharectorConcepts/TazraFrilledLizard.png)
 
 Agile fighter specializing in intimidation and mobility.
 
@@ -167,7 +167,7 @@ Agile fighter specializing in intimidation and mobility.
 
 ## Eucalyptus Summit
 
-![Eucalyptus Summit](Eucalyptus%20Summit.png)
+![Eucalyptus Summit](EE_ArenaConcepts/Eucalyptus%20Summit.png)
 
 A sacred mountain arena surrounded by ancient eucalyptus trees, waterfalls, and dangerous cliff edges.
 
@@ -175,7 +175,7 @@ A sacred mountain arena surrounded by ancient eucalyptus trees, waterfalls, and 
 
 ## Crystal Caverns
 
-![Crystal Caverns](Crystal%20Cavern.png)
+![Crystal Caverns](EE_ArenaConcepts/Crystal%20Cavern.png)
 
 A glowing underground cavern filled with magical crystals and hidden dangers.
 
@@ -183,7 +183,7 @@ A glowing underground cavern filled with magical crystals and hidden dangers.
 
 ## Bamboo Harbor
 
-![Bamboo Harbor](Bamboo%20Harbor.png)
+![Bamboo Harbor](EE_ArenaConcepts/Bamboo%20Harbor.png)
 
 A bustling coastal settlement planned for future development.
 
@@ -191,7 +191,7 @@ A bustling coastal settlement planned for future development.
 
 ## Moonlit Rainforest
 
-![Moonlit Rainforest](Moonlit%20Rainforest.png)
+![Moonlit Rainforest](EE_ArenaConcepts/Moonlit%20Rainforest.png)
 
 A mystical jungle illuminated by glowing flora.
 
@@ -199,7 +199,7 @@ A mystical jungle illuminated by glowing flora.
 
 ## Edge Festival Colosseum
 
-![Edge Festival Colosseum](EdgeFestivalColosseum.png)
+![Edge Festival Colosseum](EE_ArenaConcepts/EdgeFestivalColosseum.png)
 
 The grand tournament arena where Verdantia's greatest warriors gather.
 
@@ -207,7 +207,7 @@ The grand tournament arena where Verdantia's greatest warriors gather.
 
 ## Frostpine Ridge
 
-![Frostpine Ridge](Frostpine%20Ridge.png)
+![Frostpine Ridge](EE_ArenaConcepts/Frostpine%20Ridge.png)
 
 A frozen battlefield planned for future development.
 
