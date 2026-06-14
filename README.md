@@ -1,6 +1,6 @@
 # Eucalyptus Edge
 
-![Eucalyptus Edge Banner](FighterBanner.png)
+![Eucalyptus Edge Banner](/Marketing/Banners/FighterBanner.png)
 
 > **Cute Fighters. Serious Skills.**
 
@@ -32,7 +32,7 @@ Eucalyptus Edge combines accessible gameplay with skill-based combat that reward
 
 # 🌎 The World of Verdantia
 
-![Verdantia](Verdantia.png)
+![Verdantia](Marketing/Verdantia.png)
 
 Verdantia is a magical wildlife world inspired by Australia's forests, deserts, mountains, rivers, and coastlines.
 
