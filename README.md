@@ -1,313 +1,198 @@
-# Eucalyptus Edge
+<div align="center">
+
+# 🌿 Eucalyptus Edge
 
 ![Eucalyptus Edge Banner](/Marketing/Banners/EE_Banner.png)
 
-> **Cute Fighters. Serious Skills.**
+### *Cute Fighters. Serious Skills.*
 
-Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters such as Soulcalibur. Built in Unreal Engine 5, players battle as Australian-inspired animal warriors in the magical world of Verdantia using unique weapons, special abilities, and strategic combat.
+**A family-friendly, weapon-based 3D arena fighting game set in the magical world of Verdantia.**
+
+![Engine](https://img.shields.io/badge/Unreal_Engine-5.8-0E1128?logo=unrealengine)
+![Genre](https://img.shields.io/badge/Genre-Arena_Fighter-2E7D32)
+![Status](https://img.shields.io/badge/Status-Phase_1_Prototype-F0C75E)
+![License](https://img.shields.io/badge/License-Proprietary-8E24AA)
+
+[**🎮 Kickstarter**](https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge) · [**🌐 Official Site**](https://phoenixgoldz.github.io/eucalyptus-edge.html)
+
+</div>
+
+---
+
+## 🌏 Overview
+
+Eucalyptus Edge is a family-friendly 3D weapon-based fighting game inspired by classic arena fighters such as **Soulcalibur**. Players battle as Australian-inspired animal warriors in the magical world of **Verdantia**, wielding unique weapons, Edge-powered abilities, and strategic combat built on timing, positioning, and ring-out mastery.
+
+The design goal is simple to state and hard to earn: **easy to learn, difficult to master.** Accessible enough for a family living-room session, deep enough to reward hundreds of hours.
+
+> **Current status:** Phase 1 – Combat Prototype (in active development · Unreal Engine 5.8 · Blueprint-based).
+
+---
+
+## 📖 Table of Contents
+
+- [The World of Verdantia](#-the-world-of-verdantia)
+- [The Edge Energy System](#-the-edge-energy-system)
+- [The Blight](#-the-blight)
+- [Key Features](#-key-features)
+- [Meet the Fighters](#-meet-the-fighters)
+- [Arenas](#️-arenas)
+- [Built With](#️-built-with)
+- [Development Roadmap](#-development-roadmap)
+- [Monetization](#-monetization)
+- [Support Development](#-support-development)
+
+---
+
+## 🌎 The World of Verdantia
+
+![Verdantia](Marketing/Verdantia.png)
+
+Verdantia is a magical wildlife world inspired by Australia's forests, deserts, mountains, rivers, and coastlines. Ancient clans coexist across the land, gathering each year to compete in the legendary **Edge Festival**.
+
+Beneath it all flows **The Edge** — a natural life force that empowers Verdantia's champions. But when a corruption called **The Blight** begins spreading through the wilderness, champions must travel across the world to purify the fallen and restore balance to nature.
+
+---
+
+## ⚡ The Edge Energy System
+
+The Edge is Verdantia's natural life force, and every fighter channels it. Edge Energy is built through skillful play, not passive waiting — rewarding aggression *and* defense:
+
+| Build Edge by… | |
+|---|---|
+| ⚔️ Landing attacks | 🛡️ Blocking incoming hits |
+| 🌀 Dodging attacks | 🔗 Performing combos |
+| 🔥 Surviving intense exchanges | |
+
+Spend it on **special abilities** and devastating **Ultimate Attacks** unique to every champion — turning a defensive stand into a comeback.
+
+---
+
+## 🌑 The Blight
+
+The Blight is a mysterious corruption spreading throughout Verdantia. Blighted warriors become **stronger, faster, and more dangerous** than their normal selves.
+
+Throughout **Story Mode**, players challenge and purify Blighted Champions to unlock new fighters and push back the corruption — every victory restores a piece of the world.
+
+---
+
+## 🌿 Key Features
+
+**Available in the prototype**
+- ⚔️ Weapon-based, skill-driven combat
+- 🛡️ Blocking, dodging, and counterattacks
+- 🏆 Ring-out victory mechanics
+- 🦘 Australian-inspired animal fighters
+- 🌎 Stylized fantasy arenas
+- 💥 Edge Energy special abilities
+- 🎮 Local versus multiplayer
+
+**Planned**
+- 🌐 Online multiplayer
+- 🎥 Replay and spectator systems
+
+---
+
+## 🐾 Meet the Fighters
+
+### Starting Fighters
+
+| | Fighter | Style |
+|---|---|---|
+| 🐨 | **Koda the Koala** | Balanced staff fighter wielding the legendary Eucalyptus Staff |
+| 🐦 | **Kiri the Kookaburra** | Precision duelist specializing in aerial attacks and technical combat |
+| 🦘 | **Wren the Kangaroo** | Mobile bruiser built on powerful kicks, mobility, and ring-out pressure |
+| 😈 | **Ripper the Tasmanian Devil** | Aggressive close-range brawler focused on relentless offense |
+
+### Unlockable Fighters
+
+| | Fighter | Style |
+|---|---|---|
+| 🐿️ | **Banjo the Sugar Glider** | Acrobatic aerial fighter unlocked through Story Mode |
+| 🐾 | **Mako the Quokka** | Versatile fighter unlocked by defeating Blighted Mako |
+| 🐇 | **Bindi the Bilby** | Trickster fighter using agility and deceptive attacks |
+
+### In Concept Development
+
+| | Fighter | Style |
+|---|---|---|
+| 🦡 | **Bramble the Wombat** | Heavy defensive fighter |
+| 🦎 | **Tazra the Frilled Lizard** | Agile fighter specializing in intimidation and mobility |
+
+> Full character concept art lives in [`/EE_CharectorConcepts`](/EE_CharectorConcepts).
+
+---
+
+## 🗺️ Arenas
+
+| Arena | Description | Status |
+|---|---|---|
+| **Eucalyptus Summit** | Sacred mountain arena ringed by ancient eucalyptus, waterfalls, and dangerous cliff edges | Phase 1 |
+| **Crystal Caverns** | Glowing underground cavern of magical crystals and hidden dangers | Phase 1 |
+| **Moonlit Rainforest** | Mystical jungle illuminated by glowing flora | Planned |
+| **Edge Festival Colosseum** | The grand tournament arena where Verdantia's greatest gather | Planned |
+| **Bamboo Harbor** | Bustling coastal settlement | Future |
+| **Frostpine Ridge** | Frozen battlefield | Future |
+
+> Arena concept art lives in [`/EE_ArenaConcepts`](/EE_ArenaConcepts).
+
+---
+
+## 🛠️ Built With
+
+- **Unreal Engine 5.8** (Blueprint-based)
+- Enhanced Input System
+- Niagara Visual Effects
+- Animation Blueprints
+- Chaos Physics
+- MetaSounds
+- Local multiplayer systems
+- Online networking *(planned)*
+
+---
+
+## 📅 Development Roadmap
+
+| Phase | Focus | Highlights |
+|---|---|---|
+| **1 – Combat Prototype** *(current)* | Core gameplay foundation | Third-person movement · camera system · core combat · health · blocking & dodging · test arena · prototype fighters |
+| **2 – Vertical Slice** | First polished playable | Story intro · expanded roster · Edge abilities · arena polish |
+| **3 – Multiplayer** | Play together | Online matchmaking · private lobbies · ranked play |
+| **4 – Roster Expansion** | More of everything | Additional fighters · arenas · story expansion |
+| **5 – Launch & Live Support** | Ship & sustain | Full release · balance updates · DLC fighters · seasonal content |
+
+---
+
+## 💰 Monetization
+
+Eucalyptus Edge follows an **ethical, cosmetic-only** model. Planned offerings include character skins, seasonal costume packs, additional fighters, arena expansions, soundtrack DLC, and supporter packs.
+
+**No pay-to-win. No loot boxes. No gambling. No gameplay advantages sold for money.**
 
 ---
 
 ## 🚀 Support Development
 
-Eucalyptus Edge is currently seeking funding through Kickstarter.
+Eucalyptus Edge is seeking funding through Kickstarter to build the Phase 1 prototype into a full game.
 
-🌿 Support the project:
+🌿 **Back the project:** https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge
 
-https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge
-
----
-
-## 🎮 About The Game
-
-In the vibrant world of **Verdantia**, animal clans gather to celebrate the legendary **Edge Festival**.
-
-Hidden beneath the land lies an ancient force known as **The Edge**, a natural energy that empowers Verdantia's warriors with extraordinary abilities.
-
-When a mysterious corruption known as **The Blight** begins spreading across the wilderness, champions must rise to defend their homeland and restore balance to nature.
-
-Eucalyptus Edge combines accessible gameplay with skill-based combat that rewards timing, positioning, strategy, and mastery.
+Feedback, suggestions, and community involvement are always welcome as the project grows.
 
 ---
 
-# 🌎 The World of Verdantia
+## 📜 License
 
-![Verdantia](Marketing/Verdantia.png)
-
-Verdantia is a magical wildlife world inspired by Australia's forests, deserts, mountains, rivers, and coastlines.
-
-Ancient clans coexist throughout the land while gathering each year to compete in the Edge Festival.
-
-As The Blight spreads, champions must travel across Verdantia to purify corrupted warriors and restore balance.
+This project is currently **proprietary**. All rights reserved unless otherwise specified.
 
 ---
 
-# ⚡ The Edge Energy System
+<div align="center">
 
-The Edge is Verdantia's natural life force.
+### 🌿 Nature Fights Back!
 
-Fighters build Edge Energy by:
+*A family-friendly competitive fighting game built around Australia's incredible wildlife, skill-based combat, memorable characters, and the magical world of Verdantia.*
 
-* Landing attacks
-* Blocking attacks
-* Dodging attacks
-* Performing combos
-* Surviving intense battles
+**Thank you for following development and helping bring Verdantia to life.**
 
-Edge Energy powers special abilities and devastating Ultimate Attacks unique to every fighter.
-
----
-
-# 🌑 The Blight
-
-The Blight is a mysterious corruption spreading throughout Verdantia.
-
-Blighted warriors become stronger, faster, and more dangerous than their normal counterparts.
-
-Players must challenge and purify Blighted Champions throughout Story Mode to unlock new fighters and restore balance to the world.
-
----
-
-# 🌿 Key Features
-
-* ⚔️ Weapon-Based Combat
-* 🦘 Australian-Inspired Animal Fighters
-* 🌎 Stylized Fantasy Arenas
-* 💥 Edge Energy Special Abilities
-* 🛡️ Blocking, Dodging, and Counterattacks
-* 🏆 Ring-Out Victory Mechanics
-* 🎯 Easy to Learn, Difficult to Master
-* 🎮 Local Versus Multiplayer
-* 🌐 Online Multiplayer (Planned)
-* 🎥 Replay and Spectator Systems (Planned)
-
----
-
-# 🐾 Meet The Fighters
-
-## Starting Fighters
-
-### 🐨 Koda the Koala
-
-![Koda](/EE_CharectorConcepts/KodaKoala.png)
-
-Balanced staff fighter wielding the legendary Eucalyptus Staff.
-
----
-
-### 🐦 Kiri the Kookaburra
-
-![Kiri](/EE_CharectorConcepts/KiriKookaburra.png)
-
-Precision duelist specializing in aerial attacks and technical combat.
-
----
-
-### 🦘 Wren the Kangaroo
-
-![Wren](/EE_CharectorConcepts/WrenRedKangaroo.png)
-
-Mobile bruiser utilizing powerful kicks, mobility, and ring-out pressure.
-
----
-
-### 😈 Ripper the Tasmanian Devil
-
-![Ripper](/EE_CharectorConcepts/RipperTasmanianDevil.png)
-
-Aggressive close-range brawler focused on relentless offense.
-
----
-
-## Unlockable Fighters
-
-### 🐿️ Banjo the Sugar Glider
-
-![Banjo](/EE_CharectorConcepts/BanjoSugarGlider.png)
-
-Acrobatic aerial fighter unlocked through Story Mode.
-
----
-
-### 🐾 Mako the Quokka
-
-![Mako](/EE_CharectorConcepts/MakoTheQuokka.png)
-
-Versatile fighter unlocked by defeating Blighted Mako.
-
----
-
-### 🐇 Bindi the Bilby
-
-![Bindi](/EE_CharectorConcepts/BindiTheBilby.png)
-
-Trickster fighter utilizing agility and deceptive attacks.
-
----
-
-## Future Fighters
-
-### 🦡 Bramble the Wombat
-
-![Bramble](/EE_CharectorConcepts/BrambleWombat.png)
-
-Heavy defensive fighter currently in concept development.
-
----
-
-### 🦎 Tazra the Frilled Lizard
-
-![Tazra](/EE_CharectorConcepts/TazraFrilledLizard.png)
-
-Agile fighter specializing in intimidation and mobility.
-
----
-
-# 🗺️ Arenas
-
-## Eucalyptus Summit
-
-![Eucalyptus Summit](/EE_ArenaConcepts/Eucalyptus%20Summit.png)
-
-A sacred mountain arena surrounded by ancient eucalyptus trees, waterfalls, and dangerous cliff edges.
-
----
-
-## Crystal Caverns
-
-![Crystal Caverns](/EE_ArenaConcepts/Crystal%20Cavern.png)
-
-A glowing underground cavern filled with magical crystals and hidden dangers.
-
----
-
-## Bamboo Harbor
-
-![Bamboo Harbor](/EE_ArenaConcepts/Bamboo%20Harbor.png)
-
-A bustling coastal settlement planned for future development.
-
----
-
-## Moonlit Rainforest
-
-![Moonlit Rainforest](/EE_ArenaConcepts/Moonlit%20Rainforest.png)
-
-A mystical jungle illuminated by glowing flora.
-
----
-
-## Edge Festival Colosseum
-
-![Edge Festival Colosseum](/EE_ArenaConcepts/EdgeFestivalColosseum.png)
-
-The grand tournament arena where Verdantia's greatest warriors gather.
-
----
-
-## Frostpine Ridge
-
-![Frostpine Ridge](/EE_ArenaConcepts/Frostpine%20Ridge.png)
-
-A frozen battlefield planned for future development.
-
----
-
-# 🛠️ Built With
-
-* Unreal Engine 5.7
-* Enhanced Input System
-* Niagara Visual Effects
-* Animation Blueprints
-* Chaos Physics
-* MetaSounds
-* Multiplayer Networking
-* Local Multiplayer Systems
-
----
-
-# 📅 Development Roadmap
-
-## Phase 1 – Combat Prototype (Current)
-
-* Third-Person Movement
-* Camera System
-* Core Combat Mechanics
-* Health System
-* Blocking and Dodging
-* Test Arena
-* Prototype Fighters
-
-## Phase 2 – Vertical Slice
-
-* Story Introduction
-* Expanded Fighter Roster
-* Edge Energy Abilities
-* Arena Polish
-
-## Phase 3 – Multiplayer Integration
-
-* Online Matchmaking
-* Private Lobbies
-* Ranked Play
-* Networking Improvements
-
-## Phase 4 – Full Roster Expansion
-
-* Additional Fighters
-* Additional Arenas
-* Story Expansion
-
-## Phase 5 – Launch & Live Support
-
-* Full Release
-* Balance Updates
-* DLC Fighters
-* Seasonal Content
-
----
-
-# 💰 Monetization
-
-Eucalyptus Edge follows an ethical monetization model.
-
-Planned monetization includes:
-
-* Cosmetic Character Skins
-* Seasonal Costume Packs
-* Additional Fighters
-* Arena Expansions
-* Soundtrack DLC
-* Supporter Packs
-
-### No Pay-To-Win Mechanics
-
-* No Loot Boxes
-* No Gambling Systems
-* No Gameplay Advantages Sold For Money
-
----
-
-# 🤝 Contributing
-
-Eucalyptus Edge is currently in active development.
-
-Feedback, suggestions, bug reports, and community involvement are always welcome as the project grows.
-
----
-
-# 📜 License
-
-This project is currently proprietary.
-
-All rights reserved unless otherwise specified.
-
----
-
-# 🌿 Nature Fights Back!
-
-**Eucalyptus Edge** is a family-friendly competitive fighting game franchise built around Australia's incredible wildlife, skill-based combat, memorable characters, and the magical world of Verdantia.
-
-Currently in **Phase 1 – Combat Prototype**, the project is focused on building the core gameplay foundation before expanding into additional fighters, arenas, story content, and online multiplayer.
-
-Thank you for following development and helping bring Verdantia to life.
+</div>
