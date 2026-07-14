@@ -130,7 +130,7 @@ Phase 1 launches with a **seven-fighter roster** — four starters and three cha
 | **Bamboo Harbor** | Bustling coastal settlement | Future |
 | **Frostpine Ridge** | Frozen battlefield | Future |
 | **Sunbaked Outback** | Land of endurance and unyielding spirit — a sun-scorched outback battleground | Future |
-| **Blightroot Hollow** | Details coming soon | Future |
+| **Blightroot Hollow** | A sacred grove overtaken by The Blight — living roots, toxic pools, and collapsing root bridges under perpetual twilight | Future |
 
 > Arena concept art lives in [`/EE_ArenaConcepts`](/EE_ArenaConcepts).
 
