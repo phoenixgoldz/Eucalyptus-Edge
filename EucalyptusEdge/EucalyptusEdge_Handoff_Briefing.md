@@ -38,8 +38,8 @@ Phoenix (Trevor Hicks), founder of **PhoenixGold Game Studios**. You are joining
 
 **Core systems canon:** Edge Energy (meter built by attacking/blocking/dodging/combos/surviving → specials & ultimates) — **deferred until after the slice**. The Blight (purify Blighted champions to unlock them). Ring-out victories. Family-friendly, no blood/gore. Color language: green = life/Edge, violet = loss/Blight.
 
-### 🔒 SPOILER — internal only, never public
-**Sonia** — secret unlockable fighter. **White Tiger, 175 cm.** She exists to tease **DLC 1: an India-inspired region** (more fighters/arenas from that region alongside her). She must **never** appear in the public repo, README, official site, or Kickstarter. The GitHub repo (`phoenixgoldz/Eucalyptus-Edge`) **is public** — keep her storyboards and all DLC material out of it. The GDD (any version) also stays out of the public repo because its Appendix A contains her.
+### 🔒 SPOILER — the secret is her EE appearance, not her existence
+**Sonia** — White Tiger, 175 cm — is PUBLIC canon as MegaBlast Mayhem's unlockable finale challenger ("white tigress warrior and future Verdantia legend"); her MBM sprites, extracts, and page copy are fine on public surfaces. What stays SECRET: she returns in **Eucalyptus Edge** as a secret unlockable 3D fighter teasing **DLC 1: an India-inspired region** (more fighters/arenas alongside her). Never connect her to EE anywhere public — no EE-context Sonia art or mentions in the EE repo (`phoenixgoldz/Eucalyptus-Edge` is public), the EE site page, README, or Kickstarter. Her EE kit, 3D model work, storyboards, and the GDD (Appendix A names her EE role) stay private.
 
 ---
 
