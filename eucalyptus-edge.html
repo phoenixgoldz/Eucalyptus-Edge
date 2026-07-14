@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eucalyptus Edge | PhoenixGold Game Studios</title>
+  <meta
+    name="description"
+    content="Eucalyptus Edge is a family-friendly 3D weapon-based arena fighting game from PhoenixGold Game Studios, planned for PC and Steam."
+  />
+  <link rel="stylesheet" href="css/eucalyptus-edge.css?v=verdantia-map-carousel-2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="icon" type="image/png" href="Images/Logo2026.png" />
+</head>
+<body>
+  <nav class="ee-navbar">
+    <div class="ee-container ee-nav-inner">
+      <a href="index.html" class="ee-logo" aria-label="PhoenixGold Game Studios">
+        <img src="Images/Logo2026.png" alt="PhoenixGold Game Studios logo" />
+        <span>PhoenixGold</span>
+      </a>
+      <div class="ee-nav-links">
+        <a href="index.html">Studio</a>
+        <a href="#trailer">Trailer</a>
+        <a href="#world">World</a>
+        <a href="#map">Map</a>
+        <a href="#fighters">Fighters</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#support" class="ee-btn ee-btn-small">Support</a>
+      </div>
+      <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu">
+    <div class="mobile-menu-container">
+      <a href="index.html" class="mobile-link">Studio</a>
+      <a href="#trailer" class="mobile-link">Trailer</a>
+      <a href="#world" class="mobile-link">World</a>
+      <a href="#map" class="mobile-link">Map</a>
+      <a href="#fighters" class="mobile-link">Fighters</a>
+      <a href="#roadmap" class="mobile-link">Roadmap</a>
+      <a href="#support" class="mobile-link">Support</a>
+    </div>
+  </div>
+
+  <main>
+    <section class="ee-hero">
+      <picture class="ee-hero-picture" aria-hidden="true">
+        <source media="(max-width: 700px)" srcset="Images/Scene4.png" />
+        <source media="(max-width: 1100px)" srcset="Images/Scene2.png" />
+        <img src="Images/Scene1.png" alt="" />
+      </picture>
+      <video class="ee-hero-video" autoplay muted loop playsinline poster="Images/Scene1.png">
+        <source src="Video/EE_Background.mp4" type="video/mp4" />
+        <source src="Images/EE_Background.mp4" type="video/mp4" />
+      </video>
+      <div class="ee-leaf-layer" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="ee-hero-overlay"></div>
+      <div class="ee-container ee-hero-inner">
+        <div class="ee-hero-content reveal">
+          <span class="ee-kicker">PhoenixGold Game Studios Presents</span>
+          <h1>Eucalyptus Edge</h1>
+          <p class="ee-tagline">Cute Fighters. Serious Skills.</p>
+          <p class="ee-hero-text">
+            A stylized 3D weapon-based arena fighter where Australian animal warriors battle across Verdantia,
+            a magical world threatened by The Blight.
+          </p>
+          <div class="ee-status-row">
+            <span>PC</span>
+            <span>Steam page coming soon</span>
+            <span>In development</span>
+            <span>Family friendly</span>
+          </div>
+          <div class="ee-actions">
+            <a href="#trailer" class="ee-btn ee-btn-primary">Watch Trailer</a>
+            <a href="#support" class="ee-btn ee-btn-secondary">Support Development</a>
+          </div>
+        </div>
+        <aside class="ee-steam-card reveal">
+          <span class="ee-card-label">Coming Soon</span>
+          <h2>Steam Page Not Live Yet</h2>
+          <p>The wishlist button will be added here once Eucalyptus Edge is ready for Steam wishlists.</p>
+          <a href="#support" class="ee-text-link">Follow development</a>
+        </aside>
+      </div>
+    </section>
+
+    <section class="ee-quick-strip">
+      <div class="ee-container ee-quick-grid">
+        <article><strong>Animal Warriors</strong><span>Unique weapons, readable silhouettes, and signature combat roles.</span></article>
+        <article><strong>3D Arena Combat</strong><span>Dodge, block, counter, and pressure opponents toward ring-outs.</span></article>
+        <article><strong>Edge Energy</strong><span>Build meter through skillful play and unleash character abilities.</span></article>
+        <article><strong>Nature Fights Back</strong><span>Protect Verdantia from a corruption known as The Blight.</span></article>
+      </div>
+    </section>
+
+    <section id="trailer" class="ee-section">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Official Concept Trailer</span>
+          <h2>Watch the Vision</h2>
+          <p>
+            This concept trailer was created with Google Flow and Canva to communicate the cinematic tone,
+            world, and excitement of Eucalyptus Edge while the playable prototype continues development.
+          </p>
+        </div>
+        <div class="ee-video-frame reveal">
+          <video controls preload="metadata" poster="Images/EE_Wallpaper1920x1080.png">
+            <source src="Video/EE_TrailerConcept.mp4" type="video/mp4" />
+            Your browser does not support HTML5 video.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section id="world" class="ee-story-panel ee-world-panel">
+      <div class="ee-story-media">
+        <img src="Images/Scene1.png" alt="The world of Verdantia with waterfalls, crystals, forests, and distant mountains" />
+      </div>
+      <div class="ee-container ee-story-content">
+        <span class="ee-kicker">World of Verdantia</span>
+        <h2>A living world shaped by nature and crystal energy.</h2>
+        <p>
+          Verdantia is a magical wildlife world inspired by eucalyptus forests, crystal caverns, coastal harbors,
+          sunbaked red desert outposts, moonlit rainforests, and ancient battle grounds. It is beautiful, dangerous, and built for champions.
+        </p>
+      </div>
+    </section>
+
+    <section id="map" class="ee-section ee-section-alt">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Interactive World Map</span>
+          <h2>Welcome to Verdantia</h2>
+          <p>
+            Explore the regions planned for Eucalyptus Edge. Each location is designed as a memorable landmark with
+            its own atmosphere, hazards, and combat identity.
+          </p>
+        </div>
+        <div class="ee-map-shell reveal">
+          <img src="Images/VerdantiaWorld.png" alt="Illustrated map of Verdantia" />
+          <button class="ee-map-pin summit active" type="button" data-map-target="summit" aria-pressed="true">
+            <span>Eucalyptus Summit</span>
+            <small>Home of the Edge Clans</small>
+          </button>
+          <button class="ee-map-pin frostpine" type="button" data-map-target="frostpine" aria-pressed="false">
+            <span>Frostpine Ridge</span>
+            <small>Cold highlands and icy trials</small>
+          </button>
+          <button class="ee-map-pin crystal" type="button" data-map-target="crystal" aria-pressed="false">
+            <span>Crystal Caverns</span>
+            <small>Ancient crystals beneath the surface</small>
+          </button>
+          <button class="ee-map-pin bamboo" type="button" data-map-target="bamboo" aria-pressed="false">
+            <span>Bamboo Harbor</span>
+            <small>Coastal village and tidal platforms</small>
+          </button>
+          <button class="ee-map-pin moonlit" type="button" data-map-target="moonlit" aria-pressed="false">
+            <span>Moonlit Rainforest</span>
+            <small>Glowing forest under ancient magic</small>
+          </button>
+          <button class="ee-map-pin sunbaked" type="button" data-map-target="sunbaked" aria-pressed="false">
+            <span>Sunbaked Outback</span>
+            <small>Red desert arena and sand gust hazards</small>
+          </button>
+          <button class="ee-map-pin festival" type="button" data-map-target="festival" aria-pressed="false">
+            <span>Edge Festival Colosseum</span>
+            <small>Where champions prove their skill</small>
+          </button>
+          <div class="ee-map-info" aria-live="polite">
+            <article class="ee-map-detail active" data-map-detail="summit">
+              <img src="Images/Eucalyptus Summit.png" alt="Eucalyptus Summit arena concept" />
+              <div>
+                <span>Eucalyptus Summit</span>
+                <h3>Home of the Edge Clans</h3>
+                <p>A high-altitude arena surrounded by ancient eucalyptus trees, wooden platforms, and scenic cliffside views.</p>
+                <small>Planned focus: ring-out pressure, breakable railings, lantern hazards, and strong vertical atmosphere.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="frostpine">
+              <img src="Images/Frostpine Ridge.png" alt="Frostpine Ridge arena concept" />
+              <div>
+                <span>Frostpine Ridge</span>
+                <h3>Where Cold Forges Endurance</h3>
+                <p>A frozen mountain region built around icy ledges, wind pressure, and dangerous arena edges.</p>
+                <small>Planned focus: slippery surfaces, cold wind pressure, cliff danger, and dramatic snow lighting.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="crystal">
+              <img src="Images/Crystal Cavern.png" alt="Crystal Caverns arena concept" />
+              <div>
+                <span>Crystal Caverns</span>
+                <h3>Ancient Power Beneath Verdantia</h3>
+                <p>A glowing underground arena filled with radiant crystals, reflective surfaces, and magical combat lighting.</p>
+                <small>Planned focus: crystal hazards, underground waterfalls, glowing arena edges, and magical ambience.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="bamboo">
+              <img src="Images/Bamboo Harbor.png" alt="Bamboo Harbor arena concept" />
+              <div>
+                <span>Bamboo Harbor</span>
+                <h3>Coastal Village Combat</h3>
+                <p>A vibrant harbor of bamboo platforms, tidal hazards, rope bridges, and shifting battlefield momentum.</p>
+                <small>Planned focus: moving platforms, tidal pressure, dock edges, and coastal combat flow.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="moonlit">
+              <img src="Images/Moonlit Rainforest.png" alt="Moonlit Rainforest arena concept" />
+              <div>
+                <span>Moonlit Rainforest</span>
+                <h3>Where Ancient Magic Glows</h3>
+                <p>A mystical rainforest arena filled with bioluminescent plants, moonlight, fog, and hidden paths.</p>
+                <small>Planned focus: atmosphere, glowing plants, low visibility moments, and magical forest energy.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="sunbaked">
+              <img src="Images/SunbakedOutback.png" alt="Sunbaked Outback arena concept" />
+              <div>
+                <span>Sunbaked Outback</span>
+                <h3>Land of Endurance and Unyielding Spirit</h3>
+                <p>A windswept desert arena built around ancient carvings, red rock cliffs, totem banners, and blazing sunlight.</p>
+                <small>Planned focus: sand gust hazards, open sightlines, ring-out pressure, red dune atmosphere, and endurance-based arena design.</small>
+              </div>
+            </article>
+            <article class="ee-map-detail" data-map-detail="festival">
+              <img src="Images/EdgeFestivalColosseum.png" alt="Edge Festival Colosseum arena concept" />
+              <div>
+                <span>Edge Festival Colosseum</span>
+                <h3>The Heart of the Championship</h3>
+                <p>The ceremonial grounds where champions gather to prove their skill, honor their clans, and protect Verdantia.</p>
+                <small>Planned focus: championship spectacle, local versus presentation, crowd energy, and final arena polish.</small>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ee-story-panel ee-training-panel">
+      <div class="ee-story-media">
+        <img src="Images/Scene2.png" alt="Training grounds with animal fighters and a glowing crystal arena" />
+      </div>
+      <div class="ee-container ee-story-content right">
+        <span class="ee-kicker">Training Grounds</span>
+        <h2>Every fighter enters the arena with a role.</h2>
+        <p>
+          Fighters are built around signature weapons, movement styles, readable silhouettes, and clear combat identities.
+          Phase 1 focuses on proving the core loop through local versus gameplay and training arena combat.
+        </p>
+      </div>
+    </section>
+
+    <section class="ee-story-panel ee-blight-panel">
+      <div class="ee-story-media">
+        <img src="Images/Scene3.png" alt="The Blight corrupting the training arena with purple storm energy" />
+      </div>
+      <div class="ee-container ee-story-content">
+        <span class="ee-kicker">The Blight</span>
+        <h2>A corruption spreading through Verdantia.</h2>
+        <p>
+          The Blight twists nature, amplifies aggression, and threatens every clan. What begins as a sacred combat
+          festival becomes a fight to protect the balance of the world.
+        </p>
+      </div>
+    </section>
+
+    <section class="ee-story-panel ee-koda-panel">
+      <div class="ee-story-media">
+        <img src="Images/Scene4.png" alt="Koda overlooking a corrupted Verdantia landscape" />
+      </div>
+      <div class="ee-container ee-story-content right">
+        <span class="ee-kicker">Story Direction</span>
+        <h2>The Edge must be restored.</h2>
+        <p>
+          Champions who fall to The Blight can be purified through combat. Victory is not only about defeating opponents,
+          but restoring the natural life force that connects Verdantia.
+        </p>
+      </div>
+    </section>
+
+    <section id="features" class="ee-section ee-section-alt">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Game Features</span>
+          <h2>Unite Nature. Master the Edge.</h2>
+        </div>
+        <div class="ee-feature-cards">
+          <article class="ee-feature-card reveal"><h3>Responsive Combat</h3><p>Tight and readable action with light attacks, heavy attacks, blocking, dodging, counters, and combo chains.</p></article>
+          <article class="ee-feature-card reveal"><h3>Ring-Out Victories</h3><p>Every arena edge matters. Knock opponents out of the battlefield or win through health pressure.</p></article>
+          <article class="ee-feature-card reveal"><h3>Edge Energy</h3><p>Build Verdantia's natural life force through active play and spend it on special and ultimate abilities.</p></article>
+          <article class="ee-feature-card reveal"><h3>Family-Friendly Fantasy</h3><p>Stylized effects, expressive animation, magical impact, and no blood or graphic violence.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="fighters" class="ee-section">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Character Carousel</span>
+          <h2>Fighters of Verdantia</h2>
+          <p>Scroll through the current roster direction. Fighter reveal videos can be added here later once gameplay captures exist.</p>
+        </div>
+        <div class="ee-carousel-wrap">
+          <div class="ee-fighter-carousel" aria-label="Fighter carousel">
+            <article class="ee-fighter-card reveal"><img src="Images/KodaRedesign.png" alt="Koda the Koala" /><div><h3>Koda</h3><p>The Koala</p><span>Balanced Staff Fighter</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/WrenRedesign.png" alt="Wren the Kangaroo" /><div><h3>Wren</h3><p>The Kangaroo</p><span>Mobile Bruiser</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/RipperRedesign.png" alt="Ripper the Tasmanian Devil" /><div><h3>Ripper</h3><p>The Tasmanian Devil</p><span>Aggressive Brawler</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/KiriRedesign.png" alt="Kiri the Kookaburra" /><div><h3>Kiri</h3><p>The Kookaburra</p><span>Precision Duelist</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/BanjoRedesign.png" alt="Banjo the Sugar Glider" /><div><h3>Banjo</h3><p>The Sugar Glider</p><span>Vine Whip Grappler</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/EchoRedesign.png" alt="Echo the Platypus" /><div><h3>Echo</h3><p>The Platypus</p><span>Crystal Tonfa Specialist</span></div></article>
+            <article class="ee-fighter-card reveal"><img src="Images/AtlasRedesign.png?v=2" alt="Atlas the Emu" /><div><h3>Atlas</h3><p>The Emu</p><span>Windspine Polearm Fighter</span></div></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arenas" class="ee-section ee-section-alt">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Explore Verdantia</span>
+          <h2>Arenas Built Like Landmarks</h2>
+          <p>Verdantia is shaped by eucalyptus forests, crystal caverns, coastal harbors, sunbaked outposts, moonlit rainforests, icy ridges, and ceremonial battle arenas.</p>
+        </div>
+        <div class="ee-arena-grid">
+          <article class="ee-arena-card reveal"><img src="Images/Eucalyptus Summit.png" alt="Eucalyptus Summit arena" /><h3>Eucalyptus Summit</h3></article>
+          <article class="ee-arena-card reveal"><img src="Images/Crystal Cavern.png" alt="Crystal Caverns arena" /><h3>Crystal Caverns</h3></article>
+          <article class="ee-arena-card reveal"><img src="Images/Bamboo Harbor.png" alt="Bamboo Harbor arena" /><h3>Bamboo Harbor</h3></article>
+          <article class="ee-arena-card reveal"><img src="Images/SunbakedOutback.png" alt="Sunbaked Outback arena" /><h3>Sunbaked Outback</h3></article>
+          <article class="ee-arena-card reveal"><img src="Images/Frostpine Ridge.png" alt="Frostpine Ridge arena" /><h3>Frostpine Ridge</h3></article>
+          <article class="ee-arena-card reveal"><img src="Images/Moonlit Rainforest.png" alt="Moonlit Rainforest arena" /><h3>Moonlit Rainforest</h3></article>
+        </div>
+        <div class="ee-wide-showcase reveal">
+          <img src="Images/Arenas of Verdantia.png" alt="Arenas of Verdantia overview" />
+        </div>
+      </div>
+    </section>
+
+    <section id="dev-insights" class="ee-section">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Developer Insights</span>
+          <h2>Community and Prototype Planning</h2>
+          <p>
+            Eucalyptus Edge is being shaped in public through early concept art, Kickstarter updates, and prototype planning.
+          </p>
+        </div>
+        <div class="ee-dev-grid">
+          <article class="ee-dev-card reveal">
+            <img src="Images/TestDummiesVote.png" alt="Training partner community vote" />
+            <div>
+              <h3>Training Partner Vote</h3>
+              <p>Backers can help shape Verdantia by voting on training partner concepts for future prototype content.</p>
+            </div>
+          </article>
+          <article class="ee-dev-card reveal">
+            <img src="Images/TestDummyConcept.png" alt="Verdantia practice dummy concept sheet" />
+            <div>
+              <h3>Practice Dummy Concept</h3>
+              <p>Behind-the-scenes concept planning for training systems, visual feedback, and combat practice spaces.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="ee-section ee-section-alt">
+      <div class="ee-container">
+        <div class="ee-section-head reveal">
+          <span class="ee-kicker">Development Timeline</span>
+          <h2>From Prototype to Launch</h2>
+        </div>
+        <div class="ee-timeline">
+          <article class="done"><span>Now</span><h3>Visual Identity</h3><p>Logo, roster direction, arena art, website, Kickstarter materials, and main menu concepts.</p></article>
+          <article class="active"><span>Phase 1</span><h3>Combat Prototype</h3><p>Movement, attacks, blocking, dodging, Edge Energy, local versus, and first battle arenas.</p></article>
+          <article><span>Phase 2</span><h3>Vertical Slice</h3><p>Animation polish, combat feedback, menus, arena presentation, and prototype trailer updates.</p></article>
+          <article><span>Phase 3</span><h3>Online Testing</h3><p>Private lobbies, ranked testing plans, networked combat validation, and multiplayer polish.</p></article>
+          <article><span>Launch</span><h3>Steam Release</h3><p>Steam page, optimization, rewards, post-launch content, and community events.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="support" class="ee-section ee-support-section">
+      <div class="ee-container">
+        <div class="ee-support-panel reveal">
+          <span class="ee-kicker">Support Development</span>
+          <h2>Help Bring Verdantia to Life</h2>
+          <p>Eucalyptus Edge is in early development. Support helps move the project toward its playable prototype, future Steam page, and commercial release.</p>
+          <div class="ee-actions center-actions">
+            <a href="https://www.kickstarter.com/projects/phoenixgoldgames/eucalyptus-edge" target="_blank" rel="noopener noreferrer" class="ee-btn ee-btn-primary">Support on Kickstarter</a>
+            <a href="#trailer" class="ee-btn ee-btn-secondary">Watch Trailer</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ee-footer">
+    <div class="ee-container ee-footer-inner">
+      <p>Eucalyptus Edge is a PhoenixGold original.</p>
+      <p>United by nature. Master the Edge.</p>
+      <nav>
+        <a href="index.html">Studio</a>
+        <a href="#trailer">Trailer</a>
+        <a href="#fighters">Fighters</a>
+        <a href="#support">Support</a>
+      </nav>
+    </div>
+    <div class="ee-footer-bottom">© <span id="current-year"></span> PhoenixGold Game Studios. All rights reserved.</div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const pins = document.querySelectorAll(".ee-map-pin[data-map-target]");
+      const details = document.querySelectorAll(".ee-map-detail[data-map-detail]");
+
+      function setActiveMapLocation(location) {
+        pins.forEach((pin) => {
+          const isActive = pin.dataset.mapTarget === location;
+          pin.classList.toggle("active", isActive);
+          pin.setAttribute("aria-pressed", isActive ? "true" : "false");
+        });
+        details.forEach((detail) => {
+          detail.classList.toggle("active", detail.dataset.mapDetail === location);
+        });
+      }
+
+      pins.forEach((pin) => {
+        pin.addEventListener("mouseenter", () => setActiveMapLocation(pin.dataset.mapTarget));
+        pin.addEventListener("focus", () => setActiveMapLocation(pin.dataset.mapTarget));
+        pin.addEventListener("click", () => setActiveMapLocation(pin.dataset.mapTarget));
+        pin.addEventListener("touchstart", () => setActiveMapLocation(pin.dataset.mapTarget), { passive: true });
+      });
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>
