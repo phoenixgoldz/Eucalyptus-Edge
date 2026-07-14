@@ -95,6 +95,8 @@ Throughout **Story Mode**, players challenge and purify Blighted Champions to un
 
 ## 🐾 Meet the Fighters
 
+Phase 1 launches with a **seven-fighter roster** — four starters and three champions to purify and unlock through Story Mode.
+
 ### Starting Fighters
 
 | | Fighter | Style |
@@ -108,17 +110,11 @@ Throughout **Story Mode**, players challenge and purify Blighted Champions to un
 
 | | Fighter | Style |
 |---|---|---|
-| 🐿️ | **Banjo the Sugar Glider** | Acrobatic aerial fighter unlocked through Story Mode |
-| 🐾 | **Mako the Quokka** | Versatile fighter unlocked by defeating Blighted Mako |
-| 🐇 | **Bindi the Bilby** | Trickster fighter using agility and deceptive attacks |
+| 🐿️ | **Banjo the Sugar Glider** | Vine Whip Grappler — acrobatic aerial fighter unlocked through Story Mode |
+| ❄️ | **Echo the Platypus** | Crystal Tonfa Specialist — purify Blighted Echo in Story Mode |
+| 🪶 | **Atlas the Emu** | Windspine Polearm Fighter — purify Blighted Atlas in Story Mode |
 
-### In Concept Development
-
-| | Fighter | Style |
-|---|---|---|
-| 🦡 | **Bramble the Wombat** | Heavy defensive fighter |
-| 🦎 | **Tazra the Frilled Lizard** | Agile fighter specializing in intimidation and mobility |
-
+> More champions will join the roster in post-launch updates.
 > Full character concept art lives in [`/EE_CharectorConcepts`](/EE_CharectorConcepts).
 
 ---
@@ -133,6 +129,8 @@ Throughout **Story Mode**, players challenge and purify Blighted Champions to un
 | **Edge Festival Colosseum** | The grand tournament arena where Verdantia's greatest gather | Planned |
 | **Bamboo Harbor** | Bustling coastal settlement | Future |
 | **Frostpine Ridge** | Frozen battlefield | Future |
+| **Sunbaked Outback** | Land of endurance and unyielding spirit — a sun-scorched outback battleground | Future |
+| **Blightroot Hollow** | Details coming soon | Future |
 
 > Arena concept art lives in [`/EE_ArenaConcepts`](/EE_ArenaConcepts).
 
