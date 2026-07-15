@@ -29,16 +29,20 @@
 - [x] **PHASE1 project audit** (2026-07-15): full asset/Blueprint/milestone inventory → `PHASE1_AUDIT.md`
 - [x] **M1 Main Menu wiring** (2026-07-15, via MCP — details in `PHASE1_AUDIT.md` §8): panel structure inside `WBP_MainMenu` (`Panel_Content` → `WS_Panels` WidgetSwitcher: CharSelect placeholder / Options / Credits + shared `Back_btn`), quit-confirm modal (`Overlay_QuitConfirm`, Yes → QuitGame / No → cancel), `OnPlayRequested` Event Dispatcher (fired by Play), all 5 nav buttons + Back/Yes/No wired, initial + per-transition keyboard focus, input locking (nav column collapses while a panel is open), hover scale feedback on all nav buttons. Compiled + saved.
 
+- [x] **Menu texture + video pass** (2026-07-15, via MCP — details in `PHASE1_AUDIT.md` §9): Images/ atlases spliced with alpha (12 pieces: 4 large plank button states, 4 small button states, green banner + parchment panels, gem divider, vine flourish) and applied to all WBP_MainMenu buttons/panels; **video background LIVE** — `EE_MenuMediaPlayer` + `EE_MenuMediaTexture` + `M_EE_MenuVideo` + full-screen `IMG_VideoBG`, Construct opens `EE_Background`; verified playing in PIE
+- [x] **MP4 audio + 60 FPS cap** (2026-07-15): Native Audio Out enabled on `EE_MenuMediaPlayer` (WmfMedia → OS mixer; bypasses UE audio so Master Volume doesn't govern it yet); default `FrameRateLimit` = 60 in `BP_EE_SettingsSave` + `[/Script/Engine.GameUserSettings] FrameRateLimit=60` in DefaultEngine.ini — PIE-verified `t.MaxFPS=60` at startup
+- [x] **Settings framework + Options + font pack** (2026-07-15, `PHASE1_AUDIT.md` §10): `BP_EE_SettingsSave` SaveGame (25 settings incl. accessibility) + `BP_EE_GameInstance` (loads & applies settings at startup, registered in DefaultEngine.ini) + reusable row widgets (`WBP_EE_Row_Slider/Check/Dropdown` with dispatchers + instance-editable labels/options) + working Options panel (12 rows, Sync-on-open, Apply→apply+save to `EE_Settings.sav`; PIE-verified). **Verdantia Font Pack live**: Cinzel = Verdantia Display (nav/titles/prompts), Inter = Edge Sans (body/settings rows), both OFL with license files
+
 ## Pending Work
 
-- [ ] Build video pipeline: MediaPlayer + MediaTexture + UI material for `EE_Background` + Image layer in `WBP_MainMenu` (MCP can't create Media assets — manual editor step)
-- [ ] Import Cinzel TTF and the 4 button-state PNGs as engine assets; apply to nav + panel buttons
-- [ ] TEMP_ button sounds (manual import; MCP can't create audio assets)
+- [ ] TEMP_ button sounds (manual import; MCP can't create audio assets) — last M1 gap
+- [ ] SoundClass/SoundMix assets so the stored Master/Music/SFX volume settings actually apply (blocked on first audio assets)
 - [ ] Real UWidgetAnimation fade/slide transitions (0.15–0.3s) to replace instant panel show/hide (MCP can't create widget animations)
-- [ ] Create `WBP_EE_MenuButton` (4-state art, Cinzel label, hover/press feedback) and swap in for plain Buttons
-- [ ] Options panel contents (audio/video/controls — scope TBD; placeholder text in place)
+- [ ] Options panel layout polish (rows overhang the banner art at some aspect ratios); more settings categories (Controls/Accessibility tabs) using the existing row widgets
+- [ ] Optional: `WBP_EE_MenuButton` reusable widget (art now applied directly to the Buttons, so this is a refactor, not a blocker)
 - [ ] Lore panel — note: current button column has **Local Versus**, not Lore; Local Versus currently opens the CharSelect placeholder panel
 - [ ] Credits panel contents (studio placeholder text in place)
+- [ ] Menu background video replacement per Trevor's direction: living Edge Festival scene (moving banners, birds, waterfalls, evolving Blight storm) instead of a static scenic shot
 
 ## Known Issues
 
@@ -65,16 +69,14 @@
 |---|---|---|
 | `BP_EE_MainMenu` | GameMode | Main menu game mode for `LV_MainMenu` |
 | `BP_EE_MenuController` | PlayerController | Creates `WBP_MainMenu`, adds to viewport, sets input mode |
+| `BP_EE_GameInstance` | GameInstance | Project GameInstance — loads `EE_Settings` save on Init and applies all settings (resolution, window mode, VSync, FPS cap, scalability, res scale, motion blur) |
+| `BP_EE_SettingsSave` | SaveGame | 25 persisted settings across Display/Graphics/Audio/Controls/Gameplay/Accessibility |
+| `WBP_EE_Row_Slider` / `_Check` / `_Dropdown` | Widgets | Reusable setting rows (label + control + change dispatcher + Get/Set accessors) — the UI framework for all future screens |
 | `WBP_MainMenu` | Widget | The single full-screen front-end widget — nav column, WidgetSwitcher panels (CharSelect placeholder/Options/Credits), quit modal, `OnPlayRequested` dispatcher; all buttons wired (2026-07-15) |
 | `WBP_EE_MenuButton` | Widget | *(planned)* reusable 4-state menu button |
 
 ## TODO / Next Recommended Task
 
-**➡ Next: manual editor pass on the menu (things MCP can't automate), then verify in PIE.**
+**➡ Next: Character Select (M2)** — bind to `OnPlayRequested`, reuse the Framework row/panel widgets and the two fonts. Remaining M1 polish in parallel: TEMP_ button sounds + fade/slide widget animations (manual editor steps), plus a hands-on PIE pass with a controller (focus/nav/Apply behavior, video loop, settings persisting across restarts).
 
-1. Media pipeline for the video background (MediaPlayer + MediaTexture + UI material + Image layer, OpenSource+Play on Construct)
-2. Import Cinzel font + button-state PNGs; apply styles
-3. TEMP_ button sounds; 0.15–0.3s fade/slide widget animations for the panels
-4. PIE test: focus starts on Play; panels open/lock/back correctly; Exit → confirm → quits; gamepad navigation can't escape the menu
-
-After this milestone: Character Select (binds to `OnPlayRequested` — M2), then arena/fight loop work per `PHASE1_AUDIT.md` §7.
+After M2: arena/fight loop work per `PHASE1_AUDIT.md` §7.

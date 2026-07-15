@@ -100,10 +100,10 @@ No focus set to any button; no gamepad consideration.
 | Widget animations | **Partial** | Hover/unhover SetRenderScale 1.05/1.0 on all 5 nav buttons; real UWidgetAnimation fade/slide (0.15–0.3s) cannot be created via MCP — manual editor step |
 | Controller navigation | **Partial** | Construct sets keyboard focus to Play_btn; Back restores focus to Play_btn, quit-confirm focuses No; default VerticalBox arrow/gamepad nav applies. Explicit nav-wrap rules = manual polish |
 | Transitions (panels) | **Done** (structure) | `Panel_Content` Border (anchored right, collapsed) → `VB_Panel` → `WS_Panels` WidgetSwitcher (P_CharSelect / P_Options / P_Credits) + shared `Back_btn`; instant show/hide, animated slide pending (see above) |
-| Button sounds | **Missing** | no audio assets in /Game; MCP cannot create sound assets — TEMP_ placeholder sounds are a manual import step |
+| Button sounds | **Missing** | no audio assets in /Game; MCP cannot create sound assets — TEMP_ placeholder sounds are a manual import step. **Only remaining M1 gap.** |
 | Input locking during transitions | **Done** | `VB_MenuButtons` collapsed while a panel is open (blocks re-click + removes from nav); quit-confirm overlay scrim (zOrder 10) blocks clicks behind it |
 | Focus handling | **Done** | UI-only input mode (BP_EE_MenuController) + initial focus Play_btn on Construct; focus explicitly moved on every panel open/close |
-| Animated MP4 background | **Missing** | FileMediaSource `EE_Background` exists; **no MediaPlayer/MediaTexture/material; no video layer in widget** — MCP toolsets cannot create Media assets; manual editor step documented in §8 |
+| Animated MP4 background | **Done** (2026-07-15) | `EE_MenuMediaPlayer` (PlayOnOpen+Loop) + `EE_MenuMediaTexture` + `M_EE_MenuVideo` (UI-domain material) + full-screen `IMG_VideoBG` layer (zOrder -10, hit-test invisible); Construct calls OpenSource(EE_Background). **Verified playing in PIE.** |
 | **M2 Character Select** | | |
 | Screen / roster data / P2 join / portraits / ready-up | **Missing** | no assets found |
 | **M3 Mode Select** | | |
@@ -157,7 +157,64 @@ Only **one** asset was modified — `/Game/EE_ProjectFiles/MainMenu/Widgets/WBP_
 - **OnHovered/OnUnhovered** on all 5 nav buttons → SetRenderScale 1.05 / 1.0
 
 ### Manual editor steps remaining (MCP tooling cannot create these asset types)
-1. **Video background**: create MediaPlayer (`EE_MenuMediaPlayer`) + MediaTexture (`EE_MenuMediaTexture`) from FileMediaSource `EE_Background`, a UI material over the MediaTexture, an Image layer behind VB_MenuButtons in WBP_MainMenu, and OpenSource+Play on Construct.
-2. **Button sounds**: import TEMP_ placeholder WAVs → set each Button style's Pressed/Hovered sound.
-3. **Widget animations**: replace instant panel show/hide with 0.15–0.3s fade/slide UWidgetAnimations; optional focus-highlight animation.
-4. Optional polish: explicit navigation wrap rules on VB_MenuButtons; Cinzel font + button-state textures (already on disk under `Content/EE_ProjectFiles/MainMenu/{Fonts,Textures/ButtonStates}`) applied to the new panel text/buttons.
+1. **Button sounds**: import TEMP_ placeholder WAVs → set each Button style's Pressed/Hovered sound.
+2. **Widget animations**: replace instant panel show/hide with 0.15–0.3s fade/slide UWidgetAnimations; optional focus-highlight animation.
+3. Optional polish: explicit navigation wrap rules on VB_MenuButtons; Cinzel font applied to the menu TextBlocks (TTF on disk under `MainMenu/Fonts/`, needs import as Font asset).
+
+---
+
+## 9. Texture + video work log (2026-07-15, second pass)
+
+### Atlas splicing (on disk, C# flood-fill cutter — crops region, removes near-black bg connected to image border, trims)
+From `Content/EE_ProjectFiles/Images/` source PNGs, cut with alpha to:
+- `MainMenu/Textures/ButtonStates/`: **EE_Btn_Idle / Hover / Pressed / Disabled** (~1281×192–205, from MainMenuButtons.png; re-cut clean — the old cuts had a logo-banner scrap baked into the corner)
+- `MainMenu/Textures/UI/`: **EE_Panel_Parchment** (473×709), **EE_Panel_Green** (474×706) from UI_Panels.png; **EE_BtnSm_Idle/Hover/Pressed/Disabled** (~462–512×250–317) from UI_Buttons.png row 2; **EE_Divider_Gem** (1280×153) from UI_Dividers.png; **EE_Flourish_Vine** (1304×233) from UI_Decorative.png
+- All 12 auto-imported by the editor as Texture2D assets (verified sizes match today's pixels)
+
+### Widget styling (WBP_MainMenu — same single asset modified)
+- 5 nav buttons: `widgetStyle` Normal/Hovered/Pressed/Disabled = EE_Btn_* plank art (drawAs Image, content padding 44/10–14)
+- `Back_btn`, `QuitYes_btn`, `QuitNo_btn`: EE_BtnSm_* small-frame art
+- `Panel_Content`: background = EE_Panel_Green banner (tint reset to white)
+- New `Border_QuitPlate` (Border) wraps `VB_Quit` inside `Overlay_QuitConfirm`: parchment background, padding 70/90; `Txt_QuitPrompt` recolored dark-brown for parchment
+- New Images: `IMG_Div_CharSelect/Options/Credits` (EE_Divider_Gem, centered under each panel title), `IMG_Flourish` (EE_Flourish_Vine, top of quit plate)
+
+### Video background pipeline (fully automated — MediaPlayer/MediaTexture created via editor UI automation, SlateInspector toolset)
+- **EE_MenuMediaPlayer** (MediaPlayer; PlayOnOpen ✓, Loop ✓) — `MainMenu/UI/`
+- **EE_MenuMediaTexture** (MediaTexture; linked to player, Clamp addressing) — `MainMenu/UI/`
+- **M_EE_MenuVideo** (Material, UI domain; TextureSample(EE_MenuMediaTexture, Color sampler) → Final Color) — `MainMenu/Materials/`
+- **IMG_VideoBG** Image in WBP_MainMenu: full-screen anchors, zOrder −10 (behind everything), HitTestInvisible, brush = M_EE_MenuVideo
+- Construct event now calls `OpenSource(EE_MenuMediaPlayer, EE_Background)` before setting keyboard focus
+- A stray `NewMediaTexture` byproduct of the automated menu clicks was deleted (created and removed same session, never referenced)
+- **PIE-verified**: video plays behind logo + plank-art nav column
+
+### Assets created this pass
+`EE_MenuMediaPlayer`, `EE_MenuMediaTexture`, `M_EE_MenuVideo` + 8 new Texture2D (EE_Panel_*, EE_BtnSm_*, EE_Divider_Gem, EE_Flourish_Vine) + 4 re-imported (EE_Btn_*). Modified: `WBP_MainMenu` only.
+
+---
+
+## 10. Settings framework + Options system + font pack (2026-07-15, third pass)
+
+### Architecture (all Blueprint, all under `/Game/EE_ProjectFiles/Framework/`)
+- **`BP_EE_SettingsSave`** (SaveGame): 25 variables covering Display (ResolutionX/Y, WindowMode, MonitorIndex, FrameRateLimit, bVSync, Brightness, UIScale), Graphics (OverallQuality, ScreenPercentage, bMotionBlur), Audio (Master/Music/SFX/UI/Voice/Ambient volumes), Controls (bVibration, DeadZone), Gameplay (bSubtitles, bDamageNumbers, bTutorialPrompts, Language), Accessibility (bLargeText, bHighContrastUI, ColorBlindMode, bReduceCameraShake, bReduceFlashing, bMonoAudio). CDO defaults set (1920×1080, Borderless, Unlimited FPS, VSync on, Epic quality, volumes 1.0, motion blur OFF, subtitles on).
+- **`BP_EE_GameInstance`** (GameInstance; registered in DefaultEngine.ini `GameInstanceClass` + live CDO): **Event Init → LoadSettings → ApplyAllSettings** (settings persist and auto-apply at every startup). Functions: `LoadSettings` (slot "EE_Settings", creates from defaults if missing/corrupt), `SaveSettings`, `ApplyAllSettings` (GameUserSettings: resolution, window mode, VSync, frame-rate limit, overall scalability, resolution scale, ApplySettings; console: r.MotionBlurQuality).
+- **Reusable rows** (`Framework/Widgets/`): `WBP_EE_Row_Slider` (label+slider+value readout; `OnRowValueChanged` dispatcher; SetValue/GetValue), `WBP_EE_Row_Check` (label+checkbox; `OnRowChecked`; SetChecked/GetChecked), `WBP_EE_Row_Dropdown` (label+ComboBoxString; instance-editable `Options` string array auto-populates at Construct; `OnRowSelected`; SetIndex/GetIndex). All have instance-editable `LabelText` applied in PreConstruct. These are the building blocks for every future screen (Pause, Character Select, etc.).
+
+### Options panel (inside WBP_MainMenu P_Options)
+`SB_Options` ScrollBox with 12 rows — Resolution (720p→4K), Window Mode (Fullscreen/Borderless/Windowed), Frame Rate Limit (Unlimited→240), Overall Quality (Low→Epic), VSync, Resolution Scale (50–100%), Motion Blur, Master/Music/SFX Volume, Subtitles, Reduce Camera Shake — plus **Apply** button (EE_BtnSm art).
+Flow: **Options click → SyncOptionsFromSettings** (reads save, sets all 12 rows) → user edits → **Apply → ApplyOptions** (reads all rows, writes save object, ApplyAllSettings, SaveSettings to disk). **PIE-verified end-to-end**: rows render with synced values, Apply writes `Saved/SaveGames/EE_Settings.sav`.
+
+### Verdantia Font Pack (both OFL, auto-imported as Font assets from TTFs in `MainMenu/Fonts/`)
+- **Verdantia Display = Cinzel** (`Cinzel-VariableFont_Font`): applied to all 5 nav button labels (26pt), panel titles (32pt), quit prompt (26pt), Back/Yes/No/Apply (22pt)
+- **Edge Sans = Inter** (`EdgeSans-Inter-VariableFont_Font`, downloaded this session + OFL-Inter.txt): applied to panel body text (18pt) and all setting-row labels/value readouts (18pt, set once in the row classes)
+
+### Assets created this pass
+`Framework/BP_EE_SettingsSave`, `Framework/BP_EE_GameInstance`, `Framework/Widgets/WBP_EE_Row_{Slider,Check,Dropdown}`, `Fonts/EdgeSans-Inter-VariableFont` (+_Font). Modified: `WBP_MainMenu`, `Config/DefaultEngine.ini` (GameInstanceClass). Note: audio volume settings are **stored** but not yet applied (needs SoundClass/SoundMix assets — none exist in the project yet); Brightness/UIScale/DeadZone/etc. stored for future systems to read.
+
+### Follow-up fixes (2026-07-15, same day)
+- **MP4 audio**: `EE_MenuMediaPlayer` had no audio route (MediaTexture is video-only). Enabled **Native Audio Out** on the player — WmfMedia sends the MP4's AAC track straight to the OS mixer. Note: native audio bypasses UE's audio system, so the Master Volume setting won't affect it (use `SetNativeVolume` later, or switch to a MediaSoundComponent on an actor in LV_MainMenu once SoundClasses exist — that's the route that respects the mixer).
+- **60 FPS cap game-wide**: `BP_EE_SettingsSave` default `FrameRateLimit` changed 0 → **60**; DefaultEngine.ini adds `[/Script/Engine.GameUserSettings] FrameRateLimit=60` + `bSmoothFrameRate=False` as belt-and-braces. Verified in PIE: `t.MaxFPS = 60` after GameInstance Init. Players can still change it in Options (it re-saves), but every fresh install starts at 60.
+
+### Known quirks / polish backlog
+- Options rows currently overhang the green banner's inner area at some aspect ratios — cosmetic, revisit when the panel becomes a proper content frame for Character Select.
+- A stray-input episode during one PIE run (likely automation keys landing in the game viewport) wrote junk settings; the .sav was deleted — next launch recreates it from proper defaults.
+- Dropdown option lists live on each row instance (designer-editable `Options` array).
