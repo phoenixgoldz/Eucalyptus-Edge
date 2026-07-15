@@ -1,7 +1,7 @@
 # Eucalyptus Edge — Project State
 
 > Auto-maintained by Claude. Updated whenever a major milestone is completed.
-> Last updated: **2026-07-06**
+> Last updated: **2026-07-15**
 
 **Game:** Family-friendly UE 5.8 3D weapon arena fighter (Soulcalibur-style), Blueprint-only.
 **World:** Verdantia · **Tagline:** "Cute Fighters. Serious Skills." · "Nature Fights Back!"
@@ -26,17 +26,19 @@
 - [x] Button art cut from `Images/MainMenuButtons.png` atlas with background removed to alpha: `MainMenu/Textures/ButtonStates/EE_Btn_{Idle,Hover,Pressed,Disabled}.png` (~1281 px wide)
 - [x] Cinzel font (OFL-licensed) downloaded to `MainMenu/Fonts/` with license file — menu font (VerdantiaFont.png is just an image, not a usable font)
 - [x] MCP port conflict solved: `Launch_EucalyptusEdge_Dev.bat` in project root launches UE 5.8 with `-ModelContextProtocolPort=8765` (XAMPP owns default port 8000)
+- [x] **PHASE1 project audit** (2026-07-15): full asset/Blueprint/milestone inventory → `PHASE1_AUDIT.md`
+- [x] **M1 Main Menu wiring** (2026-07-15, via MCP — details in `PHASE1_AUDIT.md` §8): panel structure inside `WBP_MainMenu` (`Panel_Content` → `WS_Panels` WidgetSwitcher: CharSelect placeholder / Options / Credits + shared `Back_btn`), quit-confirm modal (`Overlay_QuitConfirm`, Yes → QuitGame / No → cancel), `OnPlayRequested` Event Dispatcher (fired by Play), all 5 nav buttons + Back/Yes/No wired, initial + per-transition keyboard focus, input locking (nav column collapses while a panel is open), hover scale feedback on all nav buttons. Compiled + saved.
 
 ## Pending Work
 
-- [ ] Relaunch editor via `Launch_EucalyptusEdge_Dev.bat` so MCP automation is available
-- [ ] Import Cinzel TTF and the 4 button-state PNGs as engine assets
-- [ ] Build video pipeline: MediaPlayer + MediaTexture + UI material for `EE_Background`
-- [ ] Create `WBP_EE_MenuButton` (4-state art, Cinzel label, hover/press feedback)
-- [ ] Rebuild `WBP_MainMenu` in place: video bg → gradient scrim → logo → nav column → sliding content panel (WidgetSwitcher: Lore / Options / Credits) → modal layer
-- [ ] Play button → `OnPlayRequested` Event Dispatcher (no placeholder Character Select)
-- [ ] Options panel contents (audio/video/controls — scope TBD)
-- [ ] Lore + Credits panel contents
+- [ ] Build video pipeline: MediaPlayer + MediaTexture + UI material for `EE_Background` + Image layer in `WBP_MainMenu` (MCP can't create Media assets — manual editor step)
+- [ ] Import Cinzel TTF and the 4 button-state PNGs as engine assets; apply to nav + panel buttons
+- [ ] TEMP_ button sounds (manual import; MCP can't create audio assets)
+- [ ] Real UWidgetAnimation fade/slide transitions (0.15–0.3s) to replace instant panel show/hide (MCP can't create widget animations)
+- [ ] Create `WBP_EE_MenuButton` (4-state art, Cinzel label, hover/press feedback) and swap in for plain Buttons
+- [ ] Options panel contents (audio/video/controls — scope TBD; placeholder text in place)
+- [ ] Lore panel — note: current button column has **Local Versus**, not Lore; Local Versus currently opens the CharSelect placeholder panel
+- [ ] Credits panel contents (studio placeholder text in place)
 
 ## Known Issues
 
@@ -63,18 +65,16 @@
 |---|---|---|
 | `BP_EE_MainMenu` | GameMode | Main menu game mode for `LV_MainMenu` |
 | `BP_EE_MenuController` | PlayerController | Creates `WBP_MainMenu`, adds to viewport, sets input mode |
-| `WBP_MainMenu` | Widget | The single full-screen front-end widget (being rebuilt this milestone) |
+| `WBP_MainMenu` | Widget | The single full-screen front-end widget — nav column, WidgetSwitcher panels (CharSelect placeholder/Options/Credits), quit modal, `OnPlayRequested` dispatcher; all buttons wired (2026-07-15) |
 | `WBP_EE_MenuButton` | Widget | *(planned)* reusable 4-state menu button |
 
 ## TODO / Next Recommended Task
 
-**➡ Next: close the current editor instance and double-click `Launch_EucalyptusEdge_Dev.bat`.**
-That unblocks everything else. Immediately after MCP connects, the build order is:
+**➡ Next: manual editor pass on the menu (things MCP can't automate), then verify in PIE.**
 
-1. Import font + button PNGs
-2. Media pipeline for the video background
-3. `WBP_EE_MenuButton`
-4. `WBP_MainMenu` unified rebuild
-5. Wire `OnPlayRequested`
+1. Media pipeline for the video background (MediaPlayer + MediaTexture + UI material + Image layer, OpenSource+Play on Construct)
+2. Import Cinzel font + button-state PNGs; apply styles
+3. TEMP_ button sounds; 0.15–0.3s fade/slide widget animations for the panels
+4. PIE test: focus starts on Play; panels open/lock/back correctly; Exit → confirm → quits; gamepad navigation can't escape the menu
 
-After this milestone: character select (binds to `OnPlayRequested`), then arena/fight loop work per the GDD.
+After this milestone: Character Select (binds to `OnPlayRequested` — M2), then arena/fight loop work per `PHASE1_AUDIT.md` §7.

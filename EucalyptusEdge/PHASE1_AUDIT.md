@@ -48,7 +48,7 @@ No focus set to any button; no gamepad consideration.
 
 **WBP_MainMenu** (UserWidget, root CanvasPanel, 18 widgets):
 - `Canvas_Root` → `VB_MenuButtons` (five SizeBox-wrapped Buttons: **`Play_btn`, `Local_Versus_btn`, `Options_btn`, `Credits_btn`, `Exit_btn`**, each with a plain TextBlock label) + `IMG_Logo`
-- **Event graph is empty** — zero button handlers, no panels, no animations, no video layer, no scrim. Note: the button column is Play / **Local Versus** / Options / Credits / Exit — the briefing's M1 list says "Lore", which does not exist in the widget.
+- **Event graph is empty** — zero button handlers, no panels, no animations, no video layer, no scrim. Note: the button column is Play / **Local Versus** / Options / Credits / Exit — the briefing's M1 list says "Lore", which does not exist in the widget. *(Superseded 2026-07-15 — see §8 M1 work log: panels, quit modal, dispatcher, and all button wiring now exist.)*
 
 **BP_CombatCharacter** (template fighter): vars — MaxHP/CurrentHP, PelvisBoneName, MeleeTraceDistance/Radius, MeleeDamage, MeleeKnockbackImpulse, MeleeLaunchImpulse, ComboAttackMontage + ComboSectionNames + input-cache tolerances, ChargedAttackMontage + charge sections, LifeBarWidget, DefaultCameraDistance/DeathCameraDistance, ShoulderOffset, CameraHeight, RespawnTime, DangerTraceDistance/Radius. Functions: Move, Aim. Input via IMC_Default + IMC_Combat.
 
@@ -96,14 +96,14 @@ No focus set to any button; no gamepad consideration.
 | Item | Status | Evidence |
 |---|---|---|
 | **M1 Main Menu** | | |
-| Play/Lore(=Local Versus)/Options/Credits/Exit wiring | **Missing** | WBP_MainMenu event graph empty |
-| Widget animations | **Missing** | none in WBP_MainMenu |
-| Controller navigation | **Missing** | no focus/navigation setup; SetInputModeUIOnly without focus widget |
-| Transitions (panels) | **Missing** | no panels exist |
-| Button sounds | **Missing** | no audio assets in /Game at all |
-| Input locking during transitions | **Missing** | n/a yet |
-| Focus handling | **Partial** | UI-only input mode + cursor set in BP_EE_MenuController BeginPlay; no initial button focus |
-| Animated MP4 background | **Missing** | FileMediaSource `EE_Background` exists; **no MediaPlayer/MediaTexture/material; no video layer in widget** |
+| Play/Lore(=Local Versus)/Options/Credits/Exit wiring | **Done** (2026-07-15) | All 5 buttons + Back/QuitYes/QuitNo wired via component-bound OnClicked events; Play fires `OnPlayRequested` dispatcher + opens CharSelect placeholder panel; Exit opens quit-confirm modal → QuitGame |
+| Widget animations | **Partial** | Hover/unhover SetRenderScale 1.05/1.0 on all 5 nav buttons; real UWidgetAnimation fade/slide (0.15–0.3s) cannot be created via MCP — manual editor step |
+| Controller navigation | **Partial** | Construct sets keyboard focus to Play_btn; Back restores focus to Play_btn, quit-confirm focuses No; default VerticalBox arrow/gamepad nav applies. Explicit nav-wrap rules = manual polish |
+| Transitions (panels) | **Done** (structure) | `Panel_Content` Border (anchored right, collapsed) → `VB_Panel` → `WS_Panels` WidgetSwitcher (P_CharSelect / P_Options / P_Credits) + shared `Back_btn`; instant show/hide, animated slide pending (see above) |
+| Button sounds | **Missing** | no audio assets in /Game; MCP cannot create sound assets — TEMP_ placeholder sounds are a manual import step |
+| Input locking during transitions | **Done** | `VB_MenuButtons` collapsed while a panel is open (blocks re-click + removes from nav); quit-confirm overlay scrim (zOrder 10) blocks clicks behind it |
+| Focus handling | **Done** | UI-only input mode (BP_EE_MenuController) + initial focus Play_btn on Construct; focus explicitly moved on every panel open/close |
+| Animated MP4 background | **Missing** | FileMediaSource `EE_Background` exists; **no MediaPlayer/MediaTexture/material; no video layer in widget** — MCP toolsets cannot create Media assets; manual editor step documented in §8 |
 | **M2 Character Select** | | |
 | Screen / roster data / P2 join / portraits / ready-up | **Missing** | no assets found |
 | **M3 Mode Select** | | |
@@ -131,3 +131,33 @@ No focus set to any button; no gamepad consideration.
 5. **Wire Play → Character Select → LV_EucalyptusSummit** flow (M1→M2 handoff), or for the very first capture, `Open Level LV_EucalyptusSummit` directly from Play.
 
 **Biggest unplanned gap**: no IK Rig/Retargeter assets — the moment RiggedKoda needs the template's combat montages, retargeting setup (Mannequin → Koda skeleton) becomes the critical path. Ripper has no skeletal mesh at all yet (Blender/AccuRig workflow pending).
+
+---
+
+## 8. M1 work log (2026-07-15)
+
+### Assets modified
+Only **one** asset was modified — `/Game/EE_ProjectFiles/MainMenu/Widgets/WBP_MainMenu` (compiled + saved). No assets were created, renamed, or deleted. Per the unified-menu decision (2026-07-06), everything lives inside WBP_MainMenu — no placeholder widgets.
+
+### Widgets added to WBP_MainMenu (18 new, tree now 36)
+- `Panel_Content` (Border, **variable**, collapsed, anchors 0.55/0.08–0.97/0.92, zOrder 5, dark green-black 85%) — sliding content panel
+  - `VB_Panel` (VerticalBox, padding 32)
+    - `WS_Panels` (WidgetSwitcher, **variable**, fill) — index 0 `P_CharSelect`, 1 `P_Options`, 2 `P_Credits` (each a VerticalBox with `Txt_*Title` + `Txt_*Body` TextBlocks; CharSelect is the placeholder panel: "CHARACTER SELECT / Choose your fighter — coming soon.")
+    - `Back_btn` (Button, **variable**, centered) + `Txt_Back`
+- `Overlay_QuitConfirm` (Border, **variable**, collapsed, full-screen scrim black 60%, zOrder 10)
+  - `VB_Quit` (centered) → `Txt_QuitPrompt` ("Quit Eucalyptus Edge?") + `HB_QuitButtons` → `QuitYes_btn`/`Txt_QuitYes`, `QuitNo_btn`/`Txt_QuitNo`
+- `VB_MenuButtons` flipped to **variable** (needed for input locking)
+
+### Blueprint graph (was empty; now 21 events)
+- **Event dispatcher `OnPlayRequested`** added — Character Select hooks this later (no temp flow)
+- **Construct** → SetKeyboardFocus(Play_btn)
+- **Play_btn** → Call OnPlayRequested + open panel 0 (CharSelect placeholder); **Local_Versus_btn** → panel 0; **Options_btn** → panel 1; **Credits_btn** → panel 2. Panel open = show Panel_Content, collapse VB_MenuButtons (input lock), focus Back_btn
+- **Back_btn** → collapse Panel_Content, restore VB_MenuButtons, focus Play_btn
+- **Exit_btn** → show Overlay_QuitConfirm, focus QuitNo_btn; **QuitYes_btn** → QuitGame; **QuitNo_btn** → close overlay, focus Exit_btn
+- **OnHovered/OnUnhovered** on all 5 nav buttons → SetRenderScale 1.05 / 1.0
+
+### Manual editor steps remaining (MCP tooling cannot create these asset types)
+1. **Video background**: create MediaPlayer (`EE_MenuMediaPlayer`) + MediaTexture (`EE_MenuMediaTexture`) from FileMediaSource `EE_Background`, a UI material over the MediaTexture, an Image layer behind VB_MenuButtons in WBP_MainMenu, and OpenSource+Play on Construct.
+2. **Button sounds**: import TEMP_ placeholder WAVs → set each Button style's Pressed/Hovered sound.
+3. **Widget animations**: replace instant panel show/hide with 0.15–0.3s fade/slide UWidgetAnimations; optional focus-highlight animation.
+4. Optional polish: explicit navigation wrap rules on VB_MenuButtons; Cinzel font + button-state textures (already on disk under `Content/EE_ProjectFiles/MainMenu/{Fonts,Textures/ButtonStates}`) applied to the new panel text/buttons.
