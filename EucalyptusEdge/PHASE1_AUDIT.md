@@ -1,5 +1,195 @@
 # PHASE1_AUDIT.md — Eucalyptus Edge (UE 5.8, Blueprint-only)
-**Read-only audit · 2026-07-14 · via unreal-mcp against the live editor**
+
+**Original live-editor audit:** 2026-07-14  
+**Current directive revision:** 2026-07-15
+
+> This document contains historical audit evidence plus newer implementation logs.  
+> When an older section conflicts with **Section 0 — Current Canon and Immediate Directive**, Section 0 is authoritative.
+
+---
+
+## 0. Current Canon and Immediate Directive
+
+### Active roster
+
+The current roster data must contain:
+
+**Base fighters**
+- Koda
+- Wren
+- Ripper
+- Kiri
+- Echo
+- Banjo
+- Atlas
+
+**Secret unlockable**
+- Sonia the White Tigress — locked/hidden by default, Twin Crescent Chakrams, orange-and-gold clothing, white fur
+
+Do not use Mako, Bindi, Bramble, or Tazra in new gameplay/UI work. Mako is permanently removed, Bindi is cut, and Bramble/Tazra are archived.
+
+### Canonical arenas
+
+The current canonical arena roster is:
+
+- Eucalyptus Summit
+- Crystal Caverns
+- Bamboo Harbor
+- Frostpine Ridge
+- Sunbaked Outback
+- Moonlit Rainforest
+- Edge Festival Colosseum
+- Blightroot Hollow
+
+`Sunbaked Outback` and `Sunbaked Outback` are obsolete names. Use **Sunbaked Outback**.
+
+The original audit's asset inventory records what existed in UE at that moment; it does not define canon. A missing map means implementation is pending, not that the arena has been removed.
+
+
+### Canonical arena correction
+
+The current arena canon includes **Blightroot Hollow**, the newest Blight-corrupted arena concept. Any older arena list that omits it is incomplete.
+
+Blightroot Hollow should be treated as a distinct future arena/environment featuring:
+
+- corrupted roots and hollow trees
+- purple and black Blight crystals
+- drifting spores and black smoke
+- unstable terrain and ring-out hazards
+- readable family-friendly presentation rather than horror
+
+
+### Current fighter-model status
+
+All seven canonical fighter model folders are now present:
+
+- Atlas
+- Banjo
+- Echo
+- Kiri
+- Koda
+- Ripper
+- Wren
+
+No active-roster fighter is missing.
+
+The first combat validation pair is now:
+
+```text
+Wren vs. Ripper
+Arena: Eucalyptus Summit
+```
+
+This supersedes the older Koda-vs.-Ripper recommendation. Wren and Ripper are preferred because their weapons are already integrated into their models, avoiding a weapon-modeling dependency for the first playable fight.
+
+Before implementation, verify in the live editor:
+
+- Wren skeletal mesh, skeleton, physics asset, materials, and animation compatibility
+- Ripper skeletal mesh, skeleton, physics asset, materials, and animation compatibility
+- whether either mesh needs retargeting cleanup or scale correction
+
+### First playable matchup
+
+The first combat implementation target is:
+
+```text
+Wren vs. Ripper
+Arena: Eucalyptus Summit
+```
+
+This supersedes the older Koda-vs.-Ripper target because Wren and Ripper already have their weapons integrated into their current models, removing the separate weapon-modeling dependency.
+
+### Correct front-end flow
+
+```text
+Main Menu
+→ Play
+→ Dynamic Character Select
+→ Mode Select
+→ Arena Select popup
+→ Match
+```
+
+Only three major full-screen front-end states are intended:
+
+1. Main Menu
+2. Character Select
+3. Mode Select
+
+### Main Menu buttons
+
+```text
+Play
+Lore
+Options
+Credits
+Exit
+```
+
+The existing `Local_Versus_btn` is legacy and should become `Lore_btn`.  
+The Character Select placeholder inside `WBP_MainMenu` is not the final Character Select and must be removed after the dedicated flow is connected.
+
+### Dynamic Character Select requirement
+
+The defining Character Select behavior is:
+
+> When a player highlights a fighter, the camera glides through Verdantia to that fighter's in-world showcase location.
+
+Character Select must not remain a modal popup over the Main Menu and must not be flattened into one stationary preview model.
+
+Required capabilities:
+
+- data-driven eight-entry roster: seven base fighters plus locked secret fighter Sonia
+- full-screen dedicated Character Select presentation
+- Player 1 active by default
+- Player 2 joins from a second controller
+- independent player navigation and ready states
+- camera blend to each fighter's showcase point
+- character-specific idle/attention/confirm animation hooks
+- Continue only when all active players confirm
+- transition to Mode Select, not directly to a match
+- controller-first navigation
+- configurable duplicate-selection rule
+
+### Preferred new assets
+
+```text
+/Game/EE_ProjectFiles/CharacterSelect/
+├── Blueprints/
+│   ├── BP_EE_CharacterSelectGameMode
+│   ├── BP_EE_CharacterSelectController
+│   ├── BP_EE_CharacterSelectManager
+│   └── BP_EE_CharacterShowcasePoint
+├── Data/
+│   ├── ST_EE_CharacterSelectEntry
+│   └── DA_EE_CharacterRoster
+├── Level/
+│   └── LV_CharacterSelect
+└── Widgets/
+    ├── WBP_CharacterSelect
+    ├── WBP_CharacterPortrait
+    ├── WBP_PlayerJoinPanel
+    └── WBP_CharacterInfoPanel
+```
+
+Equivalent architecture inside a reusable front-end shell is acceptable only if it behaves as a dedicated cinematic screen rather than a popup.
+
+### Required read-only verification before implementation
+
+Because fighter modeling/import work has advanced since the original audit, Claude must re-audit the live editor for:
+
+- exact skeletal mesh paths
+- skeletons and physics assets
+- Banjo and Atlas import status
+- Ripper skeletal status
+- existing Character Select placeholder assets
+- input actions and mapping contexts
+- local-player support
+- usable idle/confirm animations
+- any existing camera/showcase work
+- current implementation status for all eight canonical arenas, distinguishing concept art, imported meshes, and playable maps
+
+Do not rely on the older asset inventory for final fighter availability without checking the live project.
 
 ---
 
@@ -14,8 +204,8 @@
 | Levels | `MainMenu/Level/LV_MainMenu` (EditorStartupMap + GameDefaultMap) |
 | Media | `MainMenu/UI/EE_Background` (**FileMediaSource** — no MediaPlayer, MediaTexture, or media material exists anywhere in /Game) |
 | Fighter meshes | Koda: `Characters/KodaKoalaModel/RiggedKoda` (+ `_Skeleton`, `_PhysicsAsset`, `0_T-Pose`, `0_Open_A_UE5`) · Kiri: `Characters/KiriKookaModel/RiggedKiri` (same set) · Echo: `Characters/EchoPlatyModel/RiggedEcho` (same set) · Wren: `Characters/KangarooModel/WrenKangaroo` (same set) |
-| Ripper | `Characters/TasModel/RipperTas` — **StaticMesh only** (Tripo export; not usable as a fighter until skeletal FBX import) |
-| Atlas / Banjo | `Characters/AtlasEmuModel/` is an empty folder (intentional); Banjo has no folder. No meshes in-project |
+| Ripper | Original audit found `Characters/TasModel/RipperTas` as StaticMesh only. **Superseded by current state:** Ripper now has a skeletal mesh, skeleton, and physics asset visible in UE; exact asset path and readiness require live verification. |
+| Atlas / Banjo | Character folders now exist under `/Game/EE_ProjectFiles/Characters/`; user reports all seven base fighter models are present. Re-audit exact meshes, skeletons, materials, and animation assets live in UE before implementation. |
 | Arena env meshes | Eucalyptus Summit: `Maps/LV_EucalyptusSummit/Environment/Main_Platform` (+ PBR textures) · Crystal Caverns: `Maps/Lv_CrystalCaverns/Environment/` (Cavern_Rock_Walls, Crystal_Cluster, Crystal_Platform, Hanging_Lantern, Large_Purple_Crystal, Wooden_Bridge) · Frostpine Ridge: `Maps/LV_FrostpineRidge/` (Breakable_Ice_Pillar, Front_Access_Stairs, Stone_Brazier, Wooden_Bridge) · plus `Maps/Right_Festival_Banner` |
 | UI art | `MainMenu/Textures/ButtonStates/EE_Btn_{Idle,Hover,Pressed,Disabled}`, `MainMenu/Textures/UI_Btn{Normal,Glow}`, `MainMenu/UI/EE_logo`, `Images/` UI atlases (UI_ButtonPack, UI_Panels, UI_Icons, …) |
 | Fonts | `MainMenu/Fonts/Cinzel-VariableFont` (+ `_Font` face) |
@@ -76,15 +266,20 @@ No focus set to any button; no gamepad consideration.
 | Lore / Credits / Options | none (buttons `Options_btn`/`Credits_btn` inside WBP_MainMenu only) |
 
 ## 5. Skeletal meshes / skeletons / retargeting
+
+**Wren current screenshot evidence:** `WrenKangaroo` SkeletalMesh, `WrenKangarooSkeleton`, PhysicsAsset, Open_A_UE5 animation, T-Pose animation, diffuse/normal textures, and material instance are visible in the current UE 5.8 project.
+
+**Ripper current screenshot evidence:** `Ripper_Tas` SkeletalMesh, `Ripper_Tas_Skeleton`, PhysicsAsset, material, base-color texture, and normal map are visible in the current UE 5.8 project.
+
 | Fighter | Mesh | Skeleton | Status |
 |---|---|---|---|
 | Koda | RiggedKoda | RiggedKoda_Skeleton | ✅ imported |
 | Kiri | RiggedKiri | RiggedKiri_Skeleton | ✅ imported |
 | Echo | RiggedEcho | RiggedEcho_Skeleton | ✅ imported |
 | Wren | WrenKangaroo | WrenKangaroo_Skeleton | ✅ imported |
-| Ripper | RipperTas (**StaticMesh**) | — | ❌ needs skeletal FBX (Blender resize → AccuRig → re-import) |
-| Atlas | — (empty folder, intentional) | — | ❌ pending FBX |
-| Banjo | — | — | ❌ pending FBX |
+| Ripper | Ripper_Tas | Ripper_Tas_Skeleton | ✅ skeletal mesh visible in current UE screenshot; verify live path and animation compatibility |
+| Atlas | present per current project state | verify live | ⚠️ re-audit exact imported assets |
+| Banjo | present per current project state | verify live | ⚠️ re-audit exact imported assets |
 | Template | SK_Mannequin, SKM_Manny_Simple, SKM_Quinn_Simple | UE5 Mannequin | ✅ |
 
 **IK Rig / IK Retargeter assets: none in project.** Each EE fighter has its own skeleton — retargeting the Mannequin combat anims (or bespoke anims) onto RiggedKoda/RipperTas skeletons will need IK Rigs + Retargeters (or AnimBP duplication per skeleton).
@@ -104,8 +299,12 @@ No focus set to any button; no gamepad consideration.
 | Input locking during transitions | **Done** | `VB_MenuButtons` collapsed while a panel is open (blocks re-click + removes from nav); quit-confirm overlay scrim (zOrder 10) blocks clicks behind it |
 | Focus handling | **Done** | UI-only input mode (BP_EE_MenuController) + initial focus Play_btn on Construct; focus explicitly moved on every panel open/close |
 | Animated MP4 background | **Done** (2026-07-15) | `EE_MenuMediaPlayer` (PlayOnOpen+Loop) + `EE_MenuMediaTexture` + `M_EE_MenuVideo` (UI-domain material) + full-screen `IMG_VideoBG` layer (zOrder -10, hit-test invisible); Construct calls OpenSource(EE_Background). **Verified playing in PIE.** |
-| **M2 Character Select** | | |
-| Screen / roster data / P2 join / portraits / ready-up | **Missing** | no assets found |
+| **M2 Dynamic Character Select** | | |
+| Dedicated full-screen state | **Missing / placeholder incorrect** | Current Main Menu contains only a temporary Character Select panel; it must not become the final system |
+| Data-driven seven-fighter roster | **Missing** | Build from struct/Data Asset or Data Table |
+| Camera travel to in-world showcase points | **Missing** | Core defining requirement |
+| P2 join and independent selection | **Missing** | Second-controller join required |
+| Ready-up and Continue to Mode Select | **Missing** | Must not launch directly into a match |
 | **M3 Mode Select** | | |
 | Training / Local Versus / disabled Online | **Missing** | `Local_Versus_btn` exists unwired in main menu; no mode select screen |
 | **M4 Eucalyptus Summit level** | **Missing** (assets Partial) | no map asset; env meshes at `EE_ProjectFiles/Maps/LV_EucalyptusSummit/Environment/Main_Platform` |
@@ -123,14 +322,32 @@ No focus set to any button; no gamepad consideration.
 
 ---
 
-## 7. Shortest path to Koda vs. Ripper playable in Eucalyptus Summit
+## 7. Shortest path to Wren vs. Ripper playable in Eucalyptus Summit
 1. **Create `LV_EucalyptusSummit` map** under `/Game/EE_ProjectFiles/Maps/LV_EucalyptusSummit/` using the existing `Main_Platform` mesh + GoodSky/lighting, with two PlayerStarts and a blocking-volume perimeter → falls = ring-out zone below.
-2. **Duplicate `BP_CombatCharacter` → `BP_EE_Fighter`** (keep template combat intact); child it twice (`BP_EE_Koda`, `BP_EE_Ripper`); assign RiggedKoda / (new skeletal) Ripper meshes with retargeted or placeholder Mannequin AnimBP.
+2. **Duplicate `BP_CombatCharacter` → `BP_EE_Fighter`** (keep template combat intact); child it twice (`BP_EE_Wren`, `BP_EE_Ripper`); assign the current Wren and Ripper skeletal meshes with retargeted or placeholder AnimBPs. Their integrated gloves/claws remove the need for separate weapon attachment work in the first test.
 3. **Ring-out volume**: adapt the `BP_Combat_LavaFloor` overlap pattern into `BP_EE_RingOutVolume` — on fighter overlap, declare the other fighter the winner instead of applying damage.
 4. **Versus GameMode**: `BP_EE_VersusGameMode` — spawn P1 + P2 (second local player, splitscreen already enabled in DefaultEngine.ini) or P1 vs. dummy AI (`BP_Combat_Dummy`) for the first capture; simple round state: fight → HP 0 or ring-out → win screen widget → restart.
 5. **Wire Play → Character Select → LV_EucalyptusSummit** flow (M1→M2 handoff), or for the very first capture, `Open Level LV_EucalyptusSummit` directly from Play.
 
-**Biggest unplanned gap**: no IK Rig/Retargeter assets — the moment RiggedKoda needs the template's combat montages, retargeting setup (Mannequin → Koda skeleton) becomes the critical path. Ripper has no skeletal mesh at all yet (Blender/AccuRig workflow pending).
+**Biggest unplanned gap**: no IK Rig/Retargeter assets — retargeting remains a critical path for both Wren and Ripper unless their current skeletons already support the required combat animation pipeline. The live editor now shows a Ripper skeletal mesh, skeleton, and physics asset, so the older static-mesh-only warning is superseded and must be re-verified rather than assumed.
+
+---
+
+## 7A. Front-End Flow Correction (2026-07-15)
+
+The earlier M1 implementation opened a Character Select placeholder panel inside `WBP_MainMenu`. That was useful only as a temporary wiring test and is now superseded.
+
+Required correction:
+
+1. Keep the working Main Menu, video, Options, Credits, settings, quit modal, fonts, and button art.
+2. Replace `Local_Versus_btn` with `Lore_btn`.
+3. Remove `P_CharSelect` from the Main Menu's internal panel flow after the dedicated Character Select is connected.
+4. Bind Play to transition into the dedicated Dynamic Character Select.
+5. Build Character Select around camera travel between physical fighter showcase points.
+6. After all active players confirm, transition to Mode Select.
+7. Use an Arena Select popup from Mode Select.
+
+Do not delete working M1 systems and do not create another Character Select popup.
 
 ---
 

@@ -1,82 +1,421 @@
 # Eucalyptus Edge — Project State
 
-> Auto-maintained by Claude. Updated whenever a major milestone is completed.
+> Maintained as the current source of truth for Claude and Unreal MCP work.
 > Last updated: **2026-07-15**
 
-**Game:** Family-friendly UE 5.8 3D weapon arena fighter (Soulcalibur-style), Blueprint-only.
-**World:** Verdantia · **Tagline:** "Cute Fighters. Serious Skills." · "Nature Fights Back!"
-**GDD:** `C:\Users\Trevor\Desktop\Eucalyptus-Edge\Docs\EucalyptusEdge_GDDv2.docx`
+**Game:** Family-friendly UE 5.8 3D weapon-based arena fighter, Blueprint-only.  
+**World:** Verdantia  
+**Tagline:** **Cute Fighters. Serious Skills.**  
+**Primary presentation references:** Monster Hunter World, Tekken 8, Super Smash Bros.  
+**Current engine:** Unreal Engine 5.8
+
+---
+
+## Canonical Phase 1 Roster
+
+The project currently has seven modeled base fighters:
+
+1. Koda the Koala
+2. Wren the Kangaroo
+3. Ripper the Tasmanian Devil
+4. Kiri the Kookaburra
+5. Echo the Platypus
+6. Banjo the Sugar Glider
+7. Atlas the Emu
+
+### Secret unlockable fighter
+
+8. **Sonia the White Tigress** — secret unlockable fighter and teaser for the future regional DLC direction.
+
+Sonia must:
+- remain hidden or locked in the normal roster until her unlock condition is met
+- use white tiger fur with orange-and-gold clothing accents
+- use Twin Crescent Chakrams
+- appear in roster data now, but not as a normal immediately available fighter
+- have a configurable secret/unlock flag rather than being hard-coded into UI visibility
+
+**Removed or archived:**
+- Mako is permanently removed from the franchise.
+- Bindi is cut.
+- Bramble and Tazra are archived concepts and are not part of the active game roster.
+
+Claude must not restore obsolete roster entries from older GDD revisions or old folders.
+
+**Current model-folder check:** All seven canonical fighter model folders are present: Atlas, Banjo, Echo, Kiri, Koda, Ripper, and Wren. No active-roster fighter is missing.
+
+---
+
+## Canonical Arena Roster
+
+The current canonical Verdantia arena roster is:
+
+1. **Eucalyptus Summit** — ancient mountain sanctuary
+2. **Crystal Caverns** — underground crystal shrine
+3. **Bamboo Harbor** — peaceful riverside village and docks
+4. **Frostpine Ridge** — frozen mountain pass
+5. **Sunbaked Outback** — harsh golden-red desert arena
+6. **Moonlit Rainforest** — dense magical rainforest at night
+7. **Edge Festival Colosseum** — Verdantia championship arena
+8. **Blightroot Hollow** — corrupted root-choked hollow shaped by the Blight
+
+**Canon correction:**  
+`Red Dune Outpost` and `Sunbreak Outback` are obsolete names. The correct arena name is **Sunbaked Outback**.
+
+Arena canon and implementation status are separate:
+- An arena may be canonical even if its UE level is not built yet.
+- Existing meshes or concept art do not automatically mean a playable map exists.
+- Claude must not remove an arena from canon merely because its level asset is missing.
+
+
+---
+
+
+## Canonical Arenas
+
+Current named arenas and regions include:
+
+- Eucalyptus Summit
+- Crystal Caverns
+- Bamboo Harbor
+- Frostpine Ridge
+- Sunbaked Outback
+- Edge Festival Colosseum
+- Moonlit Rainforest
+- **Blightroot Hollow** — the newest Blight-corrupted arena concept
+
+Blightroot Hollow is a future arena/environment and must remain part of the project canon. It represents Verdantia overtaken by the Blight, with corrupted roots, purple crystal growth, black smoke, twisted vegetation, and dangerous ring-out terrain.
+
+---
+
+## First Playable Matchup
+
+The first end-to-end combat target is now:
+
+```text
+Wren vs. Ripper
+Arena: Eucalyptus Summit
+```
+
+Reason:
+- Wren already has her boxing gloves integrated into the current model.
+- Ripper already has his claw weapons integrated into the current model.
+- Neither fighter is blocked on separate weapon modeling.
+- This makes them the fastest pair for validating combat, animation, camera, health, ring-out, and victory flow.
+
+Koda vs. Ripper is no longer the first implementation target.
+
+For the first playable slice:
+- Player 1 defaults to Wren.
+- Player 2 or CPU defaults to Ripper.
+- Use Eucalyptus Summit as the first arena.
+- Placeholder or retargeted animations are acceptable initially.
+- The match must prove movement, light/medium/heavy attacks, block/dodge foundation, health, ring-out, and win state.
 
 ---
 
 ## Current Milestone
 
-**Main Menu Overhaul** — one unified AAA-style front end (Monster Hunter World / Tekken 8 approach):
+# M2 — Dynamic Character Select
 
-- One primary full-screen widget: `WBP_MainMenu` (modified in place — no backup widget; Git is the revert path)
-- One reusable button: `WBP_EE_MenuButton` (idle/hover/pressed/disabled art states)
-- Panels (Lore / Options / Credits) slide inside the same interface via WidgetSwitcher — no separate menu screens
-- Optional reusable panel widget only if it proves necessary; keep widget count low
-- **No placeholder systems.** Play button fires an exposed Event Dispatcher (`OnPlayRequested`) for Character Select to bind later
+The Main Menu foundation is functional. The next milestone is a dedicated, cinematic Character Select experience.
+
+The current Character Select placeholder panel inside `WBP_MainMenu` is temporary and incorrect as the final design. It must be removed once the dedicated Character Select flow is working.
+
+The defining feature of Character Select is:
+
+> As a player highlights a fighter, the camera glides through Verdantia to that fighter's physical showcase location in the world.
+
+This is not a popup, not a static modal, and not a single stationary preview mannequin.
+
+---
+
+## Final Front-End Flow
+
+Only three major full-screen front-end states are planned:
+
+```text
+1. Main Menu
+2. Character Select
+3. Mode Select
+```
+
+Supporting choices should use overlays or popups where appropriate.
+
+Canonical flow:
+
+```text
+Main Menu
+→ Play
+→ Dynamic Character Select
+→ Mode Select
+→ Arena Select popup
+→ Loading transition
+→ Match
+```
+
+### Main Menu buttons
+
+```text
+Play
+Lore
+Options
+Credits
+Exit
+```
+
+Remove the obsolete `Local Versus` button from the Main Menu.  
+Do not add a separate `Characters` button.
+
+### Character Select responsibilities
+
+- Player 1 is active by default.
+- Player 2 can press Start on a second controller to join.
+- Each active player navigates and confirms independently.
+- Character portraits are data-driven.
+- Highlighting a portrait updates the character information and moves the camera to that fighter's showcase point.
+- Confirming triggers a character-specific confirmation pose or animation.
+- Continue is enabled only when all active players are ready.
+- Duplicate-character selection must be configurable rather than hard-coded.
+- Secret/locked roster entries must remain discoverable through data without appearing as normal unlocked choices.
+- Sonia must be present in roster data as locked/secret.
+
+### Mode Select choices
+
+After character confirmation:
+
+```text
+Training
+Versus CPU
+Local Versus
+Online Battle
+```
+
+For Phase 1, Online Battle may be visible but disabled as coming later.
+
+### Arena Select
+
+Arena selection should be an overlay/popup over Mode Select rather than another full-screen front-end screen.
+
+---
 
 ## Completed Work
 
-- [x] Menu flow foundation: `LV_MainMenu` startup map → `BP_EE_MainMenu` (GameMode) → `BP_EE_MenuController` (creates `WBP_MainMenu`, adds to viewport)
-- [x] Root-caused the video background never playing: `EE_Background.mp4` + FileMediaSource existed, but the MediaPlayer → MediaTexture → material chain was never created
-- [x] Button art cut from `Images/MainMenuButtons.png` atlas with background removed to alpha: `MainMenu/Textures/ButtonStates/EE_Btn_{Idle,Hover,Pressed,Disabled}.png` (~1281 px wide)
-- [x] Cinzel font (OFL-licensed) downloaded to `MainMenu/Fonts/` with license file — menu font (VerdantiaFont.png is just an image, not a usable font)
-- [x] MCP port conflict solved: `Launch_EucalyptusEdge_Dev.bat` in project root launches UE 5.8 with `-ModelContextProtocolPort=8765` (XAMPP owns default port 8000)
-- [x] **PHASE1 project audit** (2026-07-15): full asset/Blueprint/milestone inventory → `PHASE1_AUDIT.md`
-- [x] **M1 Main Menu wiring** (2026-07-15, via MCP — details in `PHASE1_AUDIT.md` §8): panel structure inside `WBP_MainMenu` (`Panel_Content` → `WS_Panels` WidgetSwitcher: CharSelect placeholder / Options / Credits + shared `Back_btn`), quit-confirm modal (`Overlay_QuitConfirm`, Yes → QuitGame / No → cancel), `OnPlayRequested` Event Dispatcher (fired by Play), all 5 nav buttons + Back/Yes/No wired, initial + per-transition keyboard focus, input locking (nav column collapses while a panel is open), hover scale feedback on all nav buttons. Compiled + saved.
+- [x] UE 5.8 project migration.
+- [x] `LV_MainMenu` configured as Editor Startup Map and Game Default Map.
+- [x] `BP_EE_MainMenu` GameMode and `BP_EE_MenuController`.
+- [x] `WBP_MainMenu` creation and display.
+- [x] UI-only input mode and valid PlayerController connection.
+- [x] Mouse cursor visibility.
+- [x] Controller focus begins on the Play button.
+- [x] Main Menu art states: idle, hover, pressed, disabled.
+- [x] Main Menu logo, Cinzel display font, Inter body font.
+- [x] Main Menu video background pipeline:
+  - `EE_MenuMediaPlayer`
+  - `EE_MenuMediaTexture`
+  - `M_EE_MenuVideo`
+  - `IMG_VideoBG`
+- [x] Options framework and persistent settings:
+  - `BP_EE_SettingsSave`
+  - `BP_EE_GameInstance`
+  - reusable slider/check/dropdown rows
+- [x] Quit confirmation modal.
+- [x] Credits and Options panel foundation.
+- [x] Default 60 FPS cap.
+- [x] Main Menu project organization under `/Game/EE_ProjectFiles/`.
+- [x] All seven canonical fighter model folders now exist: Atlas, Banjo, Echo, Kiri, Koda, Ripper, and Wren. Wren and Ripper are the first combat pair because their weapons are already integrated. Claude must still verify exact live asset paths, skeletons, physics assets, materials, and animation readiness before binding them.
 
-- [x] **Menu texture + video pass** (2026-07-15, via MCP — details in `PHASE1_AUDIT.md` §9): Images/ atlases spliced with alpha (12 pieces: 4 large plank button states, 4 small button states, green banner + parchment panels, gem divider, vine flourish) and applied to all WBP_MainMenu buttons/panels; **video background LIVE** — `EE_MenuMediaPlayer` + `EE_MenuMediaTexture` + `M_EE_MenuVideo` + full-screen `IMG_VideoBG`, Construct opens `EE_Background`; verified playing in PIE
-- [x] **MP4 audio + 60 FPS cap** (2026-07-15): Native Audio Out enabled on `EE_MenuMediaPlayer` (WmfMedia → OS mixer; bypasses UE audio so Master Volume doesn't govern it yet); default `FrameRateLimit` = 60 in `BP_EE_SettingsSave` + `[/Script/Engine.GameUserSettings] FrameRateLimit=60` in DefaultEngine.ini — PIE-verified `t.MaxFPS=60` at startup
-- [x] **Settings framework + Options + font pack** (2026-07-15, `PHASE1_AUDIT.md` §10): `BP_EE_SettingsSave` SaveGame (25 settings incl. accessibility) + `BP_EE_GameInstance` (loads & applies settings at startup, registered in DefaultEngine.ini) + reusable row widgets (`WBP_EE_Row_Slider/Check/Dropdown` with dispatchers + instance-editable labels/options) + working Options panel (12 rows, Sync-on-open, Apply→apply+save to `EE_Settings.sav`; PIE-verified). **Verdantia Font Pack live**: Cinzel = Verdantia Display (nav/titles/prompts), Inter = Edge Sans (body/settings rows), both OFL with license files
+---
 
-## Pending Work
+## Main Menu Corrections Required
 
-- [ ] TEMP_ button sounds (manual import; MCP can't create audio assets) — last M1 gap
-- [ ] SoundClass/SoundMix assets so the stored Master/Music/SFX volume settings actually apply (blocked on first audio assets)
-- [ ] Real UWidgetAnimation fade/slide transitions (0.15–0.3s) to replace instant panel show/hide (MCP can't create widget animations)
-- [ ] Options panel layout polish (rows overhang the banner art at some aspect ratios); more settings categories (Controls/Accessibility tabs) using the existing row widgets
-- [ ] Optional: `WBP_EE_MenuButton` reusable widget (art now applied directly to the Buttons, so this is a refactor, not a blocker)
-- [ ] Lore panel — note: current button column has **Local Versus**, not Lore; Local Versus currently opens the CharSelect placeholder panel
-- [ ] Credits panel contents (studio placeholder text in place)
-- [ ] Menu background video replacement per Trevor's direction: living Edge Festival scene (moving banners, birds, waterfalls, evolving Blight storm) instead of a static scenic shot
+The present widget still contains legacy work from the earlier menu plan.
 
-## Known Issues
+Required cleanup:
 
-- **XAMPP squats port 8000** (UE's default MCP port) — always launch via the dev launcher. Do not stop Apache.
-- **`EE_Background.mp4` location:** lives in `Content/EE_ProjectFiles/MainMenu/UI/`, not `Content/Movies/`. Plays in editor, but packaged builds won't include loose non-asset files unless the folder is added to *Additional Non-Asset Directories to Copy* (or the mp4 moves to `Content/Movies/`). Address before first packaged build.
-- **UI atlases** in `Content/EE_ProjectFiles/Images/` are packed sheets with opaque dark backgrounds — any further art extracted from them needs the same flood-fill-to-alpha treatment.
-- **Emptied character folders** (`AtlasEmuModel/`, `KangarooModel/`, `TasModel/`) are intentional — replacement FBX files are coming. Do not restore or delete.
+- [ ] Rename/replace `Local_Versus_btn` with `Lore_btn`.
+- [ ] Remove the Character Select placeholder from the Main Menu's internal `WidgetSwitcher`.
+- [ ] Make Play transition to the dedicated Character Select state or level.
+- [ ] Preserve Options, Credits, and Quit modal behavior.
+- [ ] Do not rebuild the working Main Menu from scratch.
+- [ ] Retain the existing video background, settings framework, fonts, button art, and focus handling.
 
-## Current Assets (Content/EE_ProjectFiles)
+The Main Menu should remain visually minimal:
 
-| Area | Assets |
-|---|---|
-| `MainMenu/UI/` | `EE_logo`, `EE_Background` (FileMediaSource) + `EE_Background.mp4` |
-| `MainMenu/Textures/` | `UI_BtnNormal`, `UI_BtnGlow`; `ButtonStates/` source PNGs (idle/hover/pressed/disabled, not yet imported) |
-| `MainMenu/Fonts/` | `Cinzel-VariableFont.ttf` + `OFL.txt` (not yet imported) |
-| `MainMenu/Materials/` | `M_water`, `M_Grass` |
-| `Images/` | UI atlas sheets: `MainMenuButtons`, `UI_Buttons`, `UI_Panels`, `UI_Icons`, `UI_Toggles`, `UI_Dividers`, `UI_Decorative`, `UI_ButtonPack`, `CircularIcons`, `ProgressBar`, `UI_WoodCursor`, `VerdantiaFont` (image only), `EEthumbnail` |
-| `Characters/` | Rigged models + physics assets + materials for **Koda** (koala), **Kiri** (kookaburra), **Echo** (platypus). Atlas/Kanga/Tas folders emptied pending replacement models |
-| `Maps/` | `LV_MainMenu` (startup), `Lv_CrystalCaverns` (crystals, lanterns, bridge, platform env set), `LV_EucalyptusSummit` (tree, main platform env set) |
+```text
+Play
+Lore
+Options
+Credits
+Exit
+```
 
-## Current Blueprints
+---
 
-| Blueprint | Type | Purpose |
-|---|---|---|
-| `BP_EE_MainMenu` | GameMode | Main menu game mode for `LV_MainMenu` |
-| `BP_EE_MenuController` | PlayerController | Creates `WBP_MainMenu`, adds to viewport, sets input mode |
-| `BP_EE_GameInstance` | GameInstance | Project GameInstance — loads `EE_Settings` save on Init and applies all settings (resolution, window mode, VSync, FPS cap, scalability, res scale, motion blur) |
-| `BP_EE_SettingsSave` | SaveGame | 25 persisted settings across Display/Graphics/Audio/Controls/Gameplay/Accessibility |
-| `WBP_EE_Row_Slider` / `_Check` / `_Dropdown` | Widgets | Reusable setting rows (label + control + change dispatcher + Get/Set accessors) — the UI framework for all future screens |
-| `WBP_MainMenu` | Widget | The single full-screen front-end widget — nav column, WidgetSwitcher panels (CharSelect placeholder/Options/Credits), quit modal, `OnPlayRequested` dispatcher; all buttons wired (2026-07-15) |
-| `WBP_EE_MenuButton` | Widget | *(planned)* reusable 4-state menu button |
+## Required Character Select Architecture
 
-## TODO / Next Recommended Task
+Preferred content structure:
 
-**➡ Next: Character Select (M2)** — bind to `OnPlayRequested`, reuse the Framework row/panel widgets and the two fonts. Remaining M1 polish in parallel: TEMP_ button sounds + fade/slide widget animations (manual editor steps), plus a hands-on PIE pass with a controller (focus/nav/Apply behavior, video loop, settings persisting across restarts).
+```text
+/Game/EE_ProjectFiles/CharacterSelect/
+├── Blueprints/
+│   ├── BP_EE_CharacterSelectGameMode
+│   ├── BP_EE_CharacterSelectController
+│   ├── BP_EE_CharacterSelectManager
+│   └── BP_EE_CharacterShowcasePoint
+├── Data/
+│   ├── ST_EE_CharacterSelectEntry
+│   └── DA_EE_CharacterRoster
+├── Level/
+│   └── LV_CharacterSelect
+└── Widgets/
+    ├── WBP_CharacterSelect
+    ├── WBP_CharacterPortrait
+    ├── WBP_PlayerJoinPanel
+    └── WBP_CharacterInfoPanel
+```
 
-After M2: arena/fight loop work per `PHASE1_AUDIT.md` §7.
+A single equivalent full-screen state inside a front-end shell is acceptable only if it preserves the same dedicated cinematic experience and does not behave like a popup.
+
+### Character data fields
+
+Each roster entry should expose:
+
+```text
+Character ID
+Display Name
+Role / Fighting Style
+Weapon Name
+Portrait
+Signature Color
+Skeletal Mesh or Character Blueprint
+Showcase Point ID
+Showcase Camera / Camera Target
+Idle Animation
+Attention Animation
+Confirm Animation
+Unlock State
+```
+
+Do not hard-code a long chain of character-specific branches when a struct, Data Asset, or Data Table can drive the roster.
+
+---
+
+## Dynamic Camera Rules
+
+When a fighter is highlighted:
+
+1. Read the selected character entry.
+2. Update name, role, weapon, portrait, and player focus color.
+3. Resolve that fighter's `BP_EE_CharacterShowcasePoint`.
+4. Glide or blend the camera to the corresponding view.
+5. Trigger the fighter's attention/idle response.
+
+Initial camera blend target:
+
+```text
+0.6–1.0 seconds
+```
+
+Camera movement should be:
+
+- smooth
+- cinematic
+- readable
+- controller-responsive
+- never shaky
+- fast enough that roster navigation does not feel sluggish
+
+The camera should make Verdantia feel like one connected living showcase environment.
+
+---
+
+## Local Player Join Rules
+
+- Player 1 exists by default.
+- Player 2 joins with Start/Menu on a second controller.
+- Each local player must have separate focus, selected character, confirmation state, and input ownership.
+- Do not let one physical device control both players.
+- Controller support is the priority.
+- Mouse support can remain for Player 1.
+- The interface must clearly communicate:
+  - Press Start to Join
+  - Selecting
+  - Ready
+  - Back / Cancel
+
+---
+
+## First Playable Fight Target
+
+The first playable combat matchup is now:
+
+```text
+Wren vs. Ripper
+Arena: Eucalyptus Summit
+```
+
+Reason:
+
+- Wren already has her Verdantia boxing gloves integrated into the model.
+- Ripper already has his claw weapons integrated into the model.
+- Both can enter the combat pipeline without waiting for separate weapon modeling or attachment work.
+- This makes them the fastest pair for validating movement, camera, hit reactions, light/medium/heavy attacks, defense, Edge Energy hooks, ring-outs, and local-versus flow.
+
+Koda is no longer the required first combat test opponent. He remains part of the active roster and can follow once his staff pipeline is ready.
+
+---
+
+## Current Combat Foundation
+
+The project still uses Epic's Fighting/Combat Variant as a foundation.
+
+Useful template systems:
+
+- free 3D CharacterMovement
+- light combo montage
+- charged/heavy attack montage
+- melee sphere traces
+- health and life bar
+- damage interfaces
+- hit reactions
+- AI foundation
+
+Still required for Eucalyptus Edge:
+
+- lock-on camera
+- block
+- dodge/parry framework
+- Edge Energy
+- local Player 2 spawning/input
+- round state
+- ring-out state
+- victory flow
+- character-specific combat
+- retargeting or custom animation setup
+
+Do not destructively modify the original template assets. Duplicate them into `/Game/EE_ProjectFiles/Combat/` before Eucalyptus Edge-specific changes.
+
+---
+
+## Known Issues and Constraints
+
+- XAMPP uses port 8000. Launch UE through the project development launcher using MCP port 8765.
+- The menu MP4 should eventually live in `Content/Movies/` or be included through packaging settings.
+- Native MediaPlayer audio currently bypasses the normal SoundClass mixer.
+- Some Options rows need responsive-layout polish.
+- Real UMG fade/slide animations still require a manual editor pass.
+- Final fighter asset paths and rig status must be re-audited in the live UE 5.8 editor before implementation.
+- Missing final animations must not block architecture: use temporary poses or mannequins at showcase points until the real assets are ready.
+
+---
+
+## Immediate Next Task
+
+1. Perform a read-only live-editor audit of current Character Select, Main Menu, roster, input, and fighter assets.
+2. Remove the incorrect Character Select popup/placeholder behavior.
+3. Create the dedicated dynamic Character Select foundation.
+4. Implement data-driven Player 1 navigation and cinematic camera travel.
+5. Add Player 2 join and independent confirmation.
+6. Transition confirmed players into Mode Select.
+7. Build the first combat validation as Wren vs. Ripper on Eucalyptus Summit.
+8. Verify canonical arena implementation status for all eight arenas without confusing concept art, meshes, and playable maps.
