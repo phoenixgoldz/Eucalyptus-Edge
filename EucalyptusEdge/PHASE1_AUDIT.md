@@ -435,3 +435,13 @@ Flow: **Options click → SyncOptionsFromSettings** (reads save, sets all 12 row
 - Options rows currently overhang the green banner's inner area at some aspect ratios — cosmetic, revisit when the panel becomes a proper content frame for Character Select.
 - A stray-input episode during one PIE run (likely automation keys landing in the game viewport) wrote junk settings; the .sav was deleted — next launch recreates it from proper defaults.
 - Dropdown option lists live on each row instance (designer-editable `Options` array).
+
+---
+
+## 11. Vertical Slice v0.1 + Character Select presentation (2026-07-16)
+
+Logged in detail in PROJECT_STATE.md (source of truth). Summary:
+- **v0.1 flow shipped & PIE-verified**: Main Menu → Character Select → Wren/Ripper pick → LV_EucalyptusSummit → match vs AI → KO/ring-out → Results (Rematch / Character Select / Main Menu). New assets under `EE_ProjectFiles/Combat/` and `EE_ProjectFiles/CharacterSelect/`; template untouched (EE children only).
+- **Character Select presentation pass**: per-fighter streamed Level Instances (`LVI_CS_Wren` festival terrace / `LVI_CS_Ripper` rough pit), 5 tagged cameras with cubic view-target blends, highlight→confirm→FIGHT state machine with full Back chain, fighters face their presentation cameras (yaw +90 preview-actor fix only).
+- **Wren clean reimport**: corrected 129-bone / tail_01–07 / 175 cm FBX promoted as production; BP_EE_Wren + preview repointed. FBX has **no morph targets** (needs Blender re-export with shape keys). Retarget set pending one manual "Retarget Animations" dialog run (unreachable via MCP UI automation); block/get-up/victory anims don't exist in the template at all.
+- **Performance Standard** recorded in PROJECT_STATE.md as a permanent engineering requirement (60 FPS locked, frame-rate-independent combat, quality-before-responsiveness reduction order).

@@ -11,6 +11,37 @@
 
 ---
 
+## PERFORMANCE STANDARD (Permanent Engineering Requirement — 2026-07-16)
+
+Performance is a core engineering requirement for all future development.
+
+**Targets**
+- 60 FPS locked during gameplay. Combat is the highest priority; Character Select also targets 60 FPS.
+- Future 120 FPS support is optional and must never change gameplay timing.
+
+**Engineering rules**
+- Gameplay must remain frame-rate independent. Never base combat logic on rendered frames.
+- Use Delta Time, Animation Notifies, Timers, and Montages.
+- Hit windows must be animation-driven, not frame-count driven.
+- Movement must never assume a specific FPS.
+
+**Performance priority (highest → lowest)**
+1. Combat responsiveness
+2. Stable frame pacing
+3. Animation quality
+4. VFX
+5. Shadows
+6. Post processing
+7. Background foliage density
+
+If performance drops below 60 FPS, reduce visual quality before sacrificing gameplay responsiveness.
+
+**Vertical Slice requirement:** the Wren vs Ripper demo is not complete unless combat holds a stable 60 FPS, the camera stays smooth, ring-outs stay smooth, Edge Energy stays smooth, and there is no noticeable hitching during combat.
+
+Current enforcement already in place: `t.MaxFPS 60` via `BP_EE_SettingsSave` default + `DefaultEngine.ini` (`FrameRateLimit=60`, `bSmoothFrameRate=False`); combat logic is event/notify/timer-driven (no frame counting); Character Select environments are lightweight streamed Level Instances.
+
+---
+
 ## Canonical Phase 1 Roster
 
 The project currently has seven modeled base fighters:
@@ -242,6 +273,25 @@ Full loop works: **Main Menu → Play/Local Versus → Character Select (Wren/Ri
 - [x] **LV_EucalyptusSummit (first playable arena)** — `Maps/LV_EucalyptusSummit/LV_EucalyptusSummit`: Main_Platform mesh scaled ×12 (top ≈ Z 67), two PlayerStarts at ±280, MatchCamera, GameMode override, sky/light/fog kept from template level, no safety floor (falls ring out below Z −400).
 - [x] Main Menu `Play_btn` and `Local_Versus_btn` now Open Level → LV_CharacterSelect (OnPlayRequested dispatcher still fires; all other menu behavior untouched).
 
+### Character Select presentation pass (2026-07-16, PIE-verified end-to-end)
+
+The flat lineup was replaced with the in-world presentation concept. All v0.1 selection/match/results logic is unchanged underneath.
+
+- [x] **Per-fighter streamed environments** (canon architecture): `Level/LVI_CS_Wren` (Edge Festival training terrace — warm spot, banners, eucalyptus trees, braziers, training-post placeholders) and `Level/LVI_CS_Ripper` (rough combat pit — broken/tilted wood, tipped brazier, dead tree, red accents, distant purple Blight glow), each a lightweight non-WP level placed in `LV_CharacterSelect` as a **Level Instance** actor (tags `ENV_Wren` / `ENV_Ripper`). Future fighters follow the same pattern (`LVI_CS_<Name>`). Both stay loaded in Phase 1 (tiny prop sets, 60 FPS safe); per-highlight hide/unload is a later optimization.
+- [x] **Camera flow**: 5 tagged CameraActors (`CSCam_Overview`, `CSCam_Wren`, `CSCam_WrenClose`, `CSCam_Ripper`, `CSCam_RipperClose`). Controller resolves them by tag on BeginPlay and flies with `Set View Target with Blend` (cubic, 0.9 s highlight / 0.5 s lock-in push / 1.0 s return). Overview on entry.
+- [x] **Highlight ≠ confirm**: roster row now navigates the 3D world. Highlight → camera flight + "WREN — Disciplined Counter Boxer" / "RIPPER — Wild Pressure Brawler" + CONFIRM appears. CONFIRM → GameInstance write + close-cam push + FIGHT revealed. BACK: confirmed → highlighted → overview → Main Menu (all four states PIE-verified).
+- [x] **Rotation fix** at preview-actor level only: both fighters face their presentation cameras at world yaw +90 (mesh native forward is +Y, matching the Manny component convention used in combat). Arena spawn rotations untouched.
+- [x] **Idle motion (placeholder)**: `EE_Seq_WrenIdle` / `EE_Seq_RipperIdle` Level Sequences auto-play looping actor-transform idles (calm 2 s bob/sway for Wren; faster, twitchier 1.33 s bob/swing for Ripper). These are placeholders until real skeletal idles exist (see Wren section below).
+
+### Wren clean reimport (2026-07-16)
+
+- [x] Corrected `WrenKangaroo.fbx` (Claude Desktop's Blender fix, exported 2026-07-16 04:00) validated in a temp import: **129 bones**, `tail_01–tail_07` + `ctrl_tail_root/mid/tip` + `TailPlant_IK`, Manny-convention names incl. `ik_hand_*`/`ik_foot_*`, **exactly 175 cm**, feet at Z=0, scale 1.0, no import rotation, no stretching.
+- [x] Promoted as production: `Characters/WrenKangarooModel/WrenKangaroo` (+ `_Skeleton`, `_PhysicsAsset` from the same corrected import). `BP_EE_Wren` and the Character Select preview repointed; no mesh-component scale compensation anywhere (template's standard −90° yaw / −90 Z offset retained — correct for this skeleton).
+- [x] The pre-correction assets were removed during Trevor's own reimport; `BP_EE_Wren`'s stale (None) mesh pointer was the "poisoning" and is fixed.
+- [ ] **Morph targets: the corrected FBX contains none** (verified via two import paths). Facial morphs need to be re-exported from Blender with shape keys enabled.
+- [ ] **Retarget set NOT yet generated** — IK Rig / IK Retargeter assets cannot be created through MCP tooling, and the Content Browser "Retarget Animations" dialog is not reachable by UI automation. **One manual editor step remains:** select `MM_Idle`, `MF_Unarmed_Walk_Fwd/Bwd/Left/Right`, `MM_HitReact_Front_Lgt_01`, `MM_HitReact_Front_Hvy_01`, `MM_Death_Front_01`, `MM_Death_Back_01`, `MM_Dash` → right-click → Retarget Animations → target `WrenKangaroo` → export to `Characters/WrenKangarooModel/Anims` with `Wren_` prefix. Claude can then wire idle/locomotion/reactions. Note: **block, get-up, and victory animations do not exist in the template** — those need bespoke or store animations.
+- Cleanup note for Trevor: `Characters/WrenKangarooModel/ImportClean/` holds load-locked duplicate skeleton/physics/texture orphans from the repair — safe to delete in-editor.
+
 **What remains after v0.1 (not started / unchanged):**
 - Fighters are unanimated (single-node ref pose; no IK Rigs/Retargeters yet) — retargeting or bespoke anims is the next combat-feel step.
 - Only the simple `EEStrike` attack works on Wren/Ripper skeletons (template montage combos require Manny skeleton); block/dodge/Edge Energy/lock-on/rounds not built.
@@ -437,11 +487,12 @@ Do not destructively modify the original template assets. Duplicate them into `/
 
 ## Immediate Next Task
 
-The Vertical Slice v0.1 minimum flow is done (2026-07-16, see Completed Work). Next steps, in rough order:
+The Vertical Slice v0.1 flow, the in-world Character Select presentation, and the Wren reimport are done (2026-07-16, see Completed Work). Next steps, in rough order:
 
-1. Animation: IK Rigs + Retargeters (or bespoke anims) so Wren and Ripper move/attack with real animation instead of ref pose.
-2. Combat feel: montage-driven attacks on the EE skeletons, block/dodge foundation, hit reactions, knockback tuning.
-3. Local Versus Player 2 (second controller) replacing the stand-in AI.
-4. Upgrade Character Select toward the M2 cinematic design (data-driven roster, camera travel, P2 join, Mode Select).
-5. Main Menu cleanup: rename `Local_Versus_btn` → `Lore_btn`, remove the internal `P_CharSelect` placeholder panel.
-6. Proper match HUD (fixed health bars, round state) and Eucalyptus Summit environment dressing.
+1. **Manual (Trevor, ~5 min):** run the Retarget Animations dialog for the 10 Manny anims listed in the Wren section (MCP tooling can't reach it). Then Claude wires idle/locomotion/hit-react/knockdown/defeat onto Wren.
+2. Re-export Wren FBX with shape keys so facial morph targets import; same retarget pass for Ripper.
+3. Combat feel: montage-driven attacks on the EE skeletons, block/dodge foundation, knockback tuning (frame-rate-independent per the Performance Standard).
+4. Local Versus Player 2 (second controller) replacing the stand-in AI.
+5. Character Select polish toward full M2: data-driven roster, per-highlight environment show/hide-unload, lock-in character reaction anims, P2 join, Mode Select.
+6. Main Menu cleanup: rename `Local_Versus_btn` → `Lore_btn`, remove the internal `P_CharSelect` placeholder panel.
+7. Proper match HUD (fixed health bars, round state) and Eucalyptus Summit environment dressing.
