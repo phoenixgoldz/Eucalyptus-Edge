@@ -1,7 +1,7 @@
 # Eucalyptus Edge — Project State
 
 > Maintained as the current source of truth for Claude and Unreal MCP work.
-> Last updated: **2026-07-15**
+> Last updated: **2026-07-16**
 
 **Game:** Family-friendly UE 5.8 3D weapon-based arena fighter, Blueprint-only.  
 **World:** Verdantia  
@@ -224,6 +224,32 @@ Arena selection should be an overlay/popup over Mode Select rather than another 
 - [x] Main Menu project organization under `/Game/EE_ProjectFiles/`.
 - [x] All seven canonical fighter model folders now exist: Atlas, Banjo, Echo, Kiri, Koda, Ripper, and Wren. Wren and Ripper are the first combat pair because their weapons are already integrated. Claude must still verify exact live asset paths, skeletons, physics assets, materials, and animation readiness before binding them.
 
+### Vertical Slice v0.1 — minimum flow (2026-07-16, PIE-verified end-to-end)
+
+Full loop works: **Main Menu → Play/Local Versus → Character Select (Wren/Ripper) → Fight → LV_EucalyptusSummit → match → KO or ring-out → Results → Rematch / Character Select / Main Menu.** Both winner directions verified; Rematch, back-to-select, and back-to-menu all verified in PIE.
+
+- [x] **Character Select (interim, functional)** — `/Game/EE_ProjectFiles/CharacterSelect/`:
+  - `Level/LV_CharacterSelect` (stripped duplicate of Lvl_ThirdPerson): Wren + Ripper preview SkeletalMeshActors on a lit stage, fixed `CharSelectCamera`, GameMode override set.
+  - `Blueprints/BP_EE_CharSelectGameMode` (SpectatorPawn) + `BP_EE_CharSelectController` (view target → camera, creates widget, UI-only input + cursor).
+  - `Widgets/WBP_EE_CharacterSelect`: Verdantia-styled bottom band — 7 roster buttons (Wren/Ripper selectable, Koda/Kiri/Echo/Banjo/Atlas visible-but-LOCKED/disabled), selection readout, BACK → main menu, FIGHT! → arena. Selection stored in `BP_EE_GameInstance` (`SelectedFighterP1/P2` Name vars + `bP2IsAI`); P2 auto-set to the non-chosen fighter.
+  - This is **not** the final M2 cinematic Character Select — it is the minimum functional stand-in; camera-travel showcase design still pending.
+- [x] **Combat framework** — `/Game/EE_ProjectFiles/Combat/` (template untouched; all EE work in child/new classes):
+  - `BP_EE_Fighter` (child of `BP_CombatCharacter`): `FighterName`, `RingOutZ` (−400, instance-editable), `bIsKOd`; Tick ring-out check (Z below threshold → eliminated); `HandleDeath` override (ragdoll + hide lifebar + report to GameMode, no respawn/destroy); `EEStrike` custom event (own sphere trace 250uu/r100 Pawn-only → ApplyDamage MeleeDamage) fired by IA_ComboAttack and by the AI.
+  - `BP_EE_Wren` / `BP_EE_Ripper` children with their skeletal meshes (AnimationSingleNode mode — no retargeted anims yet, fighters are unanimated).
+  - `BP_EE_VersusGameMode`: BeginPlay reads GameInstance selections → `SpawnFighterAt` at PlayerStart 0/1 → possess P1 (`BP_EE_MatchPlayerController` adds IMC_Default/MouseLook/Combat) + spawn `BP_EE_MatchAIController` for P2 → wires `BP_EE_MatchCamera` (Tick: frames both fighters, distance-scaled) → `OnFighterEliminated(Loser)` shows results once.
+  - `BP_EE_MatchAIController`: chase target until ~200uu, face target, strike every 1.2s. Architecture keeps P2-as-human clean (swap AI controller for a second player controller).
+  - `Widgets/WBP_EE_Results`: parchment panel, `SetWinner(Name)` → "WREN/RIPPER WINS!", REMATCH / CHARACTER SELECT / MAIN MENU (controller-focusable).
+- [x] **LV_EucalyptusSummit (first playable arena)** — `Maps/LV_EucalyptusSummit/LV_EucalyptusSummit`: Main_Platform mesh scaled ×12 (top ≈ Z 67), two PlayerStarts at ±280, MatchCamera, GameMode override, sky/light/fog kept from template level, no safety floor (falls ring out below Z −400).
+- [x] Main Menu `Play_btn` and `Local_Versus_btn` now Open Level → LV_CharacterSelect (OnPlayRequested dispatcher still fires; all other menu behavior untouched).
+
+**What remains after v0.1 (not started / unchanged):**
+- Fighters are unanimated (single-node ref pose; no IK Rigs/Retargeters yet) — retargeting or bespoke anims is the next combat-feel step.
+- Only the simple `EEStrike` attack works on Wren/Ripper skeletons (template montage combos require Manny skeleton); block/dodge/Edge Energy/lock-on/rounds not built.
+- Local Versus P2 (second controller) not implemented — AI stands in; architecture ready.
+- Match HUD is the template over-head lifebars only; no round intro/announcer/audio.
+- Main Menu cleanup deferred: `Local_Versus_btn` → `Lore_btn` rename and removing the internal `P_CharSelect` placeholder panel.
+- M2 cinematic Character Select (camera travel, showcase points, P2 join, Mode Select) still the real milestone; the interim screen should be replaced, not extended.
+
 ---
 
 ## Main Menu Corrections Required
@@ -411,11 +437,11 @@ Do not destructively modify the original template assets. Duplicate them into `/
 
 ## Immediate Next Task
 
-1. Perform a read-only live-editor audit of current Character Select, Main Menu, roster, input, and fighter assets.
-2. Remove the incorrect Character Select popup/placeholder behavior.
-3. Create the dedicated dynamic Character Select foundation.
-4. Implement data-driven Player 1 navigation and cinematic camera travel.
-5. Add Player 2 join and independent confirmation.
-6. Transition confirmed players into Mode Select.
-7. Build the first combat validation as Wren vs. Ripper on Eucalyptus Summit.
-8. Verify canonical arena implementation status for all eight arenas without confusing concept art, meshes, and playable maps.
+The Vertical Slice v0.1 minimum flow is done (2026-07-16, see Completed Work). Next steps, in rough order:
+
+1. Animation: IK Rigs + Retargeters (or bespoke anims) so Wren and Ripper move/attack with real animation instead of ref pose.
+2. Combat feel: montage-driven attacks on the EE skeletons, block/dodge foundation, hit reactions, knockback tuning.
+3. Local Versus Player 2 (second controller) replacing the stand-in AI.
+4. Upgrade Character Select toward the M2 cinematic design (data-driven roster, camera travel, P2 join, Mode Select).
+5. Main Menu cleanup: rename `Local_Versus_btn` → `Lore_btn`, remove the internal `P_CharSelect` placeholder panel.
+6. Proper match HUD (fixed health bars, round state) and Eucalyptus Summit environment dressing.
