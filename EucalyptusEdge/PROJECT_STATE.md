@@ -250,6 +250,7 @@ Arena selection should be an overlay/popup over Mode Select rather than another 
   - `BP_EE_GameInstance`
   - reusable slider/check/dropdown rows
 - [x] Quit confirmation modal.
+- [x] Main Menu music: `WAV_Menu_Loop` (Path of Adventure pack, 96 s loop, SoundGroup Music, bLooping) spawned at 0.7 volume in WBP_MainMenu Construct, layered under the video's native ambience. The pack's `WAV_Battle_Loop`/`WAV_BossBattle_Loop` are earmarked for the arena. Volume is a raw multiplier until SoundClass/SoundMix assets exist for the Options mixer.
 - [x] Credits and Options panel foundation.
 - [x] Default 60 FPS cap.
 - [x] Main Menu project organization under `/Game/EE_ProjectFiles/`.
