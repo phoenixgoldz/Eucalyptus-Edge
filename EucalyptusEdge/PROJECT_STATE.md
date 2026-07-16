@@ -288,7 +288,7 @@ The flat lineup was replaced with the in-world presentation concept. All v0.1 se
 - [x] Corrected `WrenKangaroo.fbx` (Claude Desktop's Blender fix, exported 2026-07-16 04:00) validated in a temp import: **129 bones**, `tail_01–tail_07` + `ctrl_tail_root/mid/tip` + `TailPlant_IK`, Manny-convention names incl. `ik_hand_*`/`ik_foot_*`, **exactly 175 cm**, feet at Z=0, scale 1.0, no import rotation, no stretching.
 - [x] Promoted as production: `Characters/WrenKangarooModel/WrenKangaroo` (+ `_Skeleton`, `_PhysicsAsset` from the same corrected import). `BP_EE_Wren` and the Character Select preview repointed; no mesh-component scale compensation anywhere (template's standard −90° yaw / −90 Z offset retained — correct for this skeleton).
 - [x] The pre-correction assets were removed during Trevor's own reimport; `BP_EE_Wren`'s stale (None) mesh pointer was the "poisoning" and is fixed.
-- [ ] **Morph targets: the corrected FBX contains none** (verified via two import paths). Facial morphs need to be re-exported from Blender with shape keys enabled.
+- [ ] **Morph targets: the corrected FBX contains none** (verified via two import paths). Facial morphs need to be re-exported from Blender with shape keys enabled — work order + export gotchas written up in `CLAUDE_DESKTOP_HANDOFF.md`.
 - [ ] **Retarget set NOT yet generated** — IK Rig / IK Retargeter assets cannot be created through MCP tooling, and the Content Browser "Retarget Animations" dialog is not reachable by UI automation. **One manual editor step remains:** select `MM_Idle`, `MF_Unarmed_Walk_Fwd/Bwd/Left/Right`, `MM_HitReact_Front_Lgt_01`, `MM_HitReact_Front_Hvy_01`, `MM_Death_Front_01`, `MM_Death_Back_01`, `MM_Dash` → right-click → Retarget Animations → target `WrenKangaroo` → export to `Characters/WrenKangarooModel/Anims` with `Wren_` prefix. Claude can then wire idle/locomotion/reactions. Note: **block, get-up, and victory animations do not exist in the template** — those need bespoke or store animations.
 - Cleanup note for Trevor: `Characters/WrenKangarooModel/ImportClean/` holds load-locked duplicate skeleton/physics/texture orphans from the repair — safe to delete in-editor.
 
@@ -489,8 +489,8 @@ Do not destructively modify the original template assets. Duplicate them into `/
 
 The Vertical Slice v0.1 flow, the in-world Character Select presentation, and the Wren reimport are done (2026-07-16, see Completed Work). Next steps, in rough order:
 
-1. **Manual (Trevor, ~5 min):** run the Retarget Animations dialog for the 10 Manny anims listed in the Wren section (MCP tooling can't reach it). Then Claude wires idle/locomotion/hit-react/knockdown/defeat onto Wren.
-2. Re-export Wren FBX with shape keys so facial morph targets import; same retarget pass for Ripper.
+1. **Claude Desktop (Blender side):** work orders in **`CLAUDE_DESKTOP_HANDOFF.md`** — Wren re-export WITH shape keys (current FBX has zero morph targets), source-authored idle takes for Wren (boxing) and Ripper (aggressive), and the template-gap animations (block, get-up, victory, defeat).
+2. **Manual (Trevor, ~5 min):** run the Retarget Animations dialog for the 10 Manny anims listed in the Wren section (MCP tooling can't reach it). Then Claude wires idle/locomotion/hit-react/knockdown/defeat onto Wren. (Skippable for any motion Claude Desktop authors natively.)
 3. Combat feel: montage-driven attacks on the EE skeletons, block/dodge foundation, knockback tuning (frame-rate-independent per the Performance Standard).
 4. Local Versus Player 2 (second controller) replacing the stand-in AI.
 5. Character Select polish toward full M2: data-driven roster, per-highlight environment show/hide-unload, lock-in character reaction anims, P2 join, Mode Select.
