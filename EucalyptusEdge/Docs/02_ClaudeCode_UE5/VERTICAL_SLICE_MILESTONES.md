@@ -3,7 +3,7 @@
 Flow: Splash → Main Menu → Character Select → Arena Intro → Match → Victory / Ring Out.
 
 - **UI-M1 · Component Library** — ✅ DONE (v1.0, 97 files / 14 components + Style Guide + Principles)
-- **UI-M2 · Character Select in UE** — controller nav, animations, sound, particles, localization-ready text, save selected fighter. Spec: `handoff_charselect.md`. **Pre-step: Session 1 runs `PROJECT_AUDIT.md` (inspection only) before any build work.** ← **CURRENT**
+- **UI-M2 · Character Select in UE** — **UMG overlay layer for the Dynamic Character Select** (camera-showcase system already partially built — PHASE1_AUDIT §0/§11): nameplates, join panels, previews, ready states, controller nav, sound, particles, localization-ready text; confirm → Mode Select. Spec: `handoff_charselect.md` (paradigm-synced 2026-07-17). **Pre-step: Session 1 runs `PROJECT_AUDIT.md` (inspection only) before any build work.** ← **CURRENT**
 - **UI-M3 · Main Menu** — transitions, background movie, input prompts, settings (slider components ready)
 - **UI-M4 · HUD** — health, Edge, round timer, K.O., Ring Out, damage flash (Tier-1 quiet rule applies)
 - **UI-M5 · Victory Flow** — winner animation, ceremonial plaque, return flow

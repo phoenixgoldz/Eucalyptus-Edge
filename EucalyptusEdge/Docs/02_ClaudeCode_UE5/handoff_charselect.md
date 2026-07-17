@@ -1,5 +1,7 @@
 # CHARACTER SELECT — GOLD STANDARD BUILD (UE 5.8, Claude Code session)
 **Goal:** one finished screen that reads "commercial game." Everything else inherits from it.
+
+> **PARADIGM SYNC (2026-07-17):** The canonical Character Select is the **Dynamic Character Select** per PHASE1_AUDIT.md §0 — camera glides through Verdantia to each fighter's in-world showcase point (streamed Level Instances + tagged cameras, already partially built). It is a dedicated full-screen state, never a popup or a flat grid. **This document now specs the UMG OVERLAY LAYER for that system**: nameplates, join panels, health/Edge previews, ready states, and buttons composed from the component library over the 3D scene. The grid-of-rings layout in `CharSelect_GoldStandard_Mock.png` is superseded as a screen layout; its components remain the overlay kit. Layout table positions below apply to overlay elements only — the roster "slots" become focusable overlay chips/portraits, not full-screen tiles.
 Milestone: M2 · Assets: `EE_UI_ComponentLibrary_v1.0.zip` · Style: `UI_STYLE_GUIDE.md` v1.0 · Layout: `CharSelect_GoldStandard_Mock.png`
 
 ## Layout table (1920×1080 design space, top-left anchored)
@@ -42,11 +44,12 @@ Vars: FighterRow (DataTable handle), bLocked, bMystery. Visual states map 1:1 to
 | Banjo | Banjo | yes | no |
 | Echo | Echo | yes | no |
 | Atlas | Atlas | yes | no |
-| Mystery | ??? | yes | **yes — never named anywhere in data, UI, or asset names** |
-No other rows. Ever.
+| Sonia | ??? (until unlocked) | yes | **secret — per PROJECT_STATE: present in roster data with a configurable secret/unlock flag, Twin Crescent Chakrams; display stays "???" and slot stays hidden/locked until the unlock condition; never named in any public-facing or marketing material** |
+No other rows. Ever. (Ruling source: PROJECT_STATE.md §Canonical Phase 1 Roster — supersedes the earlier "never named in data" line.)
 
-## Vertical slice defaults (CANON LOCK: Wren vs. Ripper)
-P1 initial focus = **Wren**, P2 initial focus = **Ripper**. (The mock's Koda-hover was a state demonstration only.) On Fight!: save both selections and load **Eucalyptus Summit**. Koda remains selectable in the grid but is not the slice matchup until his staff pipeline completes.
+## Vertical slice defaults (CANON LOCK: Wren vs. Ripper · FLOW SYNC 2026-07-17)
+P1 initial focus = **Wren**, P2 initial focus = **Ripper**. (The mock's Koda-hover was a state demonstration only.)
+**Flow per PHASE1_AUDIT §0:** confirm → all active players ready → transition to **Mode Select** (never directly into a match) → Arena Select popup → match. The earlier "Fight! loads Eucalyptus Summit directly" line is superseded; direct-load remains acceptable only as a temporary capture shortcut, not the shipped flow. Koda remains selectable but is not the slice matchup until his staff pipeline completes.
 
 ## Controller navigation
 UniformGrid focus navigation (D-pad/stick), wrap horizontal, explicit Down from row 2 → Fight, Up from buttons → nearest slot. A/Cross = select (locked slots play deny cue + violet shimmer 0.3 s), B/Circle = Back. Keyboard mirrors. Set `IsFocusable` and custom `OnNavigation` on edge slots.

@@ -8,13 +8,16 @@ Fill a copy named `PROJECT_AUDIT_RESULTS_YYYY-MM-DD.md`; save log excerpts and s
 - Missing refs: editor log on map load + Reference Viewer spot checks on the main maps.
 - Percentages in the dashboard are the auditor's estimate — one line of justification each.
 
-## Known prior state (from past sessions — VERIFY, may be stale)
-- Main Menu (project M1) was "nearly complete."
-- **Wren:** promoted `WrenKangaroo.fbx` passed checks (1.750 m, 129 bones incl. 7-bone tail chain, 92 morphs) but the **shape-key re-export was pending** — this caused the "tiny in level / stretches in PIE" bug. Confirm which FBX is actually in-engine and whether morphs are correct scale.
-- **Ripper:** skeletal mesh imported; **textures did not carry through** — session ended mid material recovery.
-- **Atlas:** imported upright, +X facing, ~195 cm, zero rotation offsets; `SM_WindspinePolearm` exported; sockets *planned* (`WeaponSocket_R` on hand_r, `SupportHand_IK` on the SM) — verify whether they were actually created.
+## Known prior state (SYNCED 2026-07-17 from PHASE1_AUDIT.md §11 + PROJECT_STATE.md — read both FIRST; PROJECT_STATE.md is the source of truth)
+- **Vertical Slice v0.1 EXISTS and is PIE-verified end-to-end**: Main Menu → Character Select → Wren/Ripper pick → LV_EucalyptusSummit → match vs AI → KO/ring-out → Results (Rematch / Character Select / Main Menu). New assets under `EE_ProjectFiles/Combat/` and `EE_ProjectFiles/CharacterSelect/`; template untouched (EE children only).
+- **Dynamic Character Select is partially built**: per-fighter streamed Level Instances (`LVI_CS_Wren`, `LVI_CS_Ripper`), 5 tagged cameras with cubic view-target blends, highlight→confirm→FIGHT state machine with full Back chain. This is the canonical paradigm — NOT a flat UMG grid.
+- **Main Menu (project M1) is done except button sounds**: all buttons wired, quit modal, sliding panels, MP4 video background PIE-verified, full settings framework (BP_EE_GameInstance + SaveGame, 12-row Options panel), Cinzel/Inter font pack, 60 FPS cap.
+- **All seven fighters have model folders in-engine** (Koda, Kiri, Echo, Wren rigged sets; Ripper skeletal mesh + skeleton + physics + materials visible; Atlas/Banjo present — re-audit exact assets live).
+- **Wren (rev 3, 2026-07-17):** morphs **DELIVERED and in engine** (six confirmed: Jaw_Open, Blink_L/R, EyeLook_L/R, Smile — 6-of-9 key-list reconciliation pending with Blender side); new Wren base/normal materials imported; dodge ×3 + heavy tail-spring takes imported and gameplay-wired (i-frames, F22 impact window). **Native playback gated on one 3-minute manual step: create `ABP_Wren` AnimBP** (UE 5.8 strict-checks skeletons on every montage path; MCP cannot create AnimBPs).
+- **Ripper: still blocked on source** — desktop `RipperModel/Ripper_Tas.fbx` is a 4 KB empty export; engine runs on `Ripper_Tas_original_backup`; `Ripper_Idle_Aggressive` has no skeleton. Both fighters' **physics assets were removed in the asset churn — regenerate in-editor**.
+- **Missing combat pieces** (template gaps): lock-on, block, dodge wiring, block/get-up/victory anims don't exist in the template. No IK Rig/Retargeter assets yet.
 - **Koda:** staff not yet modeled (deferred per canon — Wren vs. Ripper is the slice fight).
-- Kiri / Banjo / Echo: in-engine status unknown — likely not imported.
+- **Performance Standard** (permanent, in PROJECT_STATE.md): 60 FPS locked, frame-rate-independent combat, quality-before-responsiveness reduction order.
 - Edge Energy *mechanics* deferred until after the vertical slice (bar art exists in the component library).
 
 ---

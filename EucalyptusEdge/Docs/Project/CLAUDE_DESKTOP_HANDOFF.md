@@ -113,3 +113,21 @@ Ripper's UE assets predate the Wren correction round. Before authoring his takes
 2. Verify morph target list + bone count + height, in-engine per §12 step 15.
 3. Import animation takes against the existing skeletons, wire idle/locomotion into the Character Select previews and `BP_EE_Wren`/`BP_EE_Ripper`.
 4. Update PROJECT_STATE.md and report gaps.
+
+---
+
+## NEW WORK ORDER 5 — M2 Dynamic Character Select showcase set (added 2026-07-17, after the Verdantia world build)
+
+The Character Select level is now one connected Verdantia world: all seven fighters stand in their origin regions (Koda eucalyptus sanctuary at the heart, Wren grassland rise, Ripper woodland hollow, Kiri wind perch, Echo wetland shrine, Banjo canopy hideout, Atlas outback escarpment) and the camera flies to each on highlight, driven by per-fighter showcase data. What the world needs from the Blender side, in priority order:
+
+1. **Atlas's Windspine Polearm re-export** — `SM_WindspinePolearm` no longer exists in Content (deleted in the asset churn; only `AtlasEmu/polearmTextures/` survived). Re-export the polearm static mesh per Rigging Bible §4.2 grip-pivot rules. Atlas currently showcases weaponless.
+2. **Banjo model** — he is the only fighter with NO mesh in the project (black Manny silhouette stands in at his canopy hideout). Any Banjo delivery instantly upgrades his showcase; follow the exact Wren export procedure.
+3. **Showcase idles/attention/confirm takes** (short, loop-clean, 30 fps, same export rules as WO2) — the showcase system plays these the moment they exist, per-fighter, no code changes needed:
+   - Kiri: perch idle with balance shifts / head turns; confirm = boomerang flourish.
+   - Koda: calm staff-less training idle (staff pipeline pending); confirm = controlled flourish.
+   - Echo: low tonfa-ready idle; confirm = crystal shimmer pose.
+   - Atlas: vigilant tall idle (he is currently a static T-pose — highest visual impact for lowest effort).
+   - Wren/Ripper already have working idles; Wren's confirm uses the tail-spring kick.
+4. **WO1–WO4 all still stand** (Wren remaining morphs, Ripper source re-export — his region is built and waiting, ring-out set).
+
+Delivery paths and export rules unchanged from WO1/WO2. UE side wires each take into `BP_EE_CharacterShowcasePoint` instance data on receipt.

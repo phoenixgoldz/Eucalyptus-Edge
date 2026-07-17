@@ -92,3 +92,53 @@ New Tripo mesh received into RipperModel\ (imported at 971,897 v / 1.94M faces).
 - RipperModel.blend (91 MB) = raw-mesh bloat, discard.
 - Ripper_Tas_original_backup.fbx (4.9 MB) = OLD doomed mesh + 28-bone skeleton. Keep ONLY for skeleton bone-rest reference.
 - Ripper_Tas.fbx (4 KB stub), Ripper_Idle_Aggressive.fbx (old engine+doomed mesh), Ripper_Validation.fbx = all superseded, discard.
+
+## ===== CRITICAL: UE IMPORT FAILURE CLASS — "TWIG / EXPLODED MESH AT REST" =====
+SYMPTOM: character imports but shows as a spiky twig / scattered bones in the BP viewport or asset preview, EVEN WITH NO ANIMATION PLAYING (reference pose). Seen on Wren after re-import 2026-07-16.
+
+ROOT CAUSE (verified): NOT the FBX. The production WrenKangaroo.fbx tested CLEAN in Blender — rest-pose deform 0.0000, bind perfect, scale 1.0, 129 bones, no wild rest transforms. The twig is UE-side:
+1. **Reusing the OLD Skeleton asset.** Re-importing / importing with the old Skeleton selected re-binds the new mesh to the poisoned old skeleton (built from the pre-fix broken mesh). The Skeleton asset — not the Skeletal Mesh — carries the poison.
+2. **Manny Anim Blueprint driving a non-Manny skeleton** without a valid IK Retargeter. ABP_Manny_Combat expects Manny proportions; on Wren's 129-bone kangaroo skeleton with no retarget it explodes the pose.
+
+MANDATORY FIX SEQUENCE (applies to EVERY character — Wren, Ripper, Atlas, all future):
+1. DELETE ALL old assets for that character: Skeletal Mesh, **Skeleton asset**, Physics Asset, AND any IK Retargeter/IK Rig referencing them. The Skeleton is the critical one.
+2. FRESH import the FBX with **Skeleton = None** (forces a brand-new skeleton from the FBX's own hierarchy). Never pick an existing skeleton for a rebuilt mesh.
+3. Import Morph Targets ON, Uniform Scale 1.0, defaults.
+4. Open the new Skeletal Mesh ALONE and confirm correct shape in the asset viewer BEFORE any Blueprint/AnimBP.
+5. Only then wire anims. For the slice, test raw anim assets directly on the character's own skeleton first. Manny retarget requires a proper IK Retargeter (source Manny → target character) — NOT direct AnimBP reuse.
+
+VERIFICATION HOLE CLOSED: Blender "shoulder-stress QA passed" tests geometry+weights round-trip but does NOT catch UE skeleton-rebinding. Add to doctrine: after any mesh re-export, the UE-side check is "open Skeletal Mesh asset alone, no AnimBP" — if twig there, it's skeleton-asset reuse; if twig only under animation, it's retarget/hemisphere.
+
+## ===== ANIMATION: 60FPS FLYING-FRAME CLASS (separate from the twig) =====
+SYMPTOM: at UE 60fps, limbs whip / character briefly vanishes during fast beats (launch, hop, kick). Not visible at Blender 30fps.
+CAUSE: authored transitions compress large joint swings (calf 100-170°/frame) into 2-3 keys. UE interpolates the 60fps midpoint through a wild arc. Quaternion hemisphere flips are a SECONDARY contributor (fixed 32 on TailSpring via sign-alignment; idle now 1°/frame clean).
+QA METRIC TO ADD (was missing): per-frame quaternion angular delta scan — FAIL any bone >~45-60°/frame. Run on every take before export.
+FIX (real, not post-process): re-time fast beats over more frames with eased in-betweens so no step exceeds ~40°/frame. This also resolves "too fast" + "stiff" — same root cause. Post-hoc slerp-resampling was attempted and ABORTED (partially wiped TailSpring curves — min keyframe count dropped 72→2). **TailSpring action in blend is now DAMAGED and must be rebuilt from the authoring engine** (exported v15 FBX on disk is still good/unaffected). Do NOT attempt curve-surgery resampling again; rebuild from code.
+
+## IMMEDIATE STATE (end of session)
+- WrenKangaroo.fbx on disk = GOOD (clean bind, weights repaired, 129 bones, 175cm). UE twig = skeleton-asset reuse; fix via mandatory sequence above.
+- Wren_Idle_Boxing.fbx, Dodge_*.fbx on disk = good blocks (idle natural; dodges need re-time for 60fps + pacing).
+- Wren_Heavy_TailSpringDoubleKick.fbx on disk = good v15; but the ACTION inside WrenModel.blend is damaged (aborted resample) — rebuild from engine next session before any re-export.
+- Ripper: RipperRetopo.blend prepped (150cm, decimated 28k, oriented), awaiting rig — will need the SAME UE mandatory-fix-sequence discipline on import.
+
+## ===== CRITICAL DIAGNOSIS: "TWIG IN ARENA" ROOT CAUSE (documented so it never repeats) =====
+**Symptom:** Character imports fine; looks correct in Character Select; becomes a thin "twig" (collapsed limbs) ONLY in the battle arena during gameplay (PIE).
+
+**ROOT CAUSE = UE-side animation retarget, NOT the Blender mesh.**
+- Character Select displays the mesh on its **reference pose** (no AnimBP) → correct.
+- Battle arena runs the character's **Anim Class**. Wren's BP_EE_Wren had Anim Class = **`ABP_Manny_Combat`** (a MANNEQUIN AnimBP). Playing Manny animation on a non-Manny (kangaroo) skeleton drives the bones with Manny's proportions/rest orientations → limbs collapse to slivers = the twig.
+- PROOF (Blender-side, this session): re-imported production WrenKangaroo.fbx measured healthy — limb girths 0.176/0.310/0.202, skeleton head-span 1.408 vs mesh 1.750, all 11 Manny-standard bones present, shoulder-stress edge QA 2.15× (clean). Mesh + weights are FINE. Re-exporting the mesh CANNOT fix a twig whose cause is the AnimBP. (This is why repeated Blender re-exports didn't help — wrong lane.)
+
+**THE FIX (UE / Claude Code lane):**
+1. PREFERRED: give each fighter its OWN AnimBP that plays its OWN native takes. Wren's four FBX takes (Idle_Boxing, Heavy_TailSpringDoubleKick, Dodge_BackHop, Dodge_Bound_L/R) were authored ON his own 129-bone skeleton → ZERO retarget needed → deform perfectly. Change BP_EE_Wren → Details → Animation → Anim Class from ABP_Manny_Combat to ABP_Wren. Same pattern for Ripper (ABP_Ripper on Ripper_Tas skeleton).
+2. IF Manny AnimBP must be shared for combat logic: build an IK Retargeter (Manny source → fighter target), map retarget root + chains, and set per-bone Translation Retargeting: ALL bones = "Skeleton", root + pelvis = "Animation". Without this, translation curves from Manny distort limb lengths.
+
+**PREVENTION RULE (applies to Ripper + every future fighter):** never ship a fighter running a Manny/foreign AnimBP on its own skeleton. Each fighter uses native takes via its own AnimBP, OR a properly configured IK Retargeter. Verify in PIE arena, not just Character Select — the reference pose hides this class of bug.
+
+## ANIMATION 60fps / FLYING-FRAME NOTE (separate, lower priority than the twig)
+Per-frame rotation-spike scan found leg/arm bones swinging 100–170°/frame during fast launch/hop beats (TailSpring F31-32/F46-48; dodges F17-19). At 30fps Blender hides it; UE 60fps interpolation between far-apart keys whips the limb ("flying/missing" frames). Quaternion-hemisphere alignment pass fixed sign-flips (idle now 1°/frame) but the big swings are genuine fast transitions needing re-timing (spread over more frames + eased in-betweens) — the same work that fixes "too fast" and "stiff". NOT a corruption; an authoring-density choice.
+- **CAUTION LOGGED:** an attempted 2×-density slerp-resample script partially wiped the TailSpring action (some fcurves dropped 72→2 keys). The action in WrenModel.blend is DAMAGED and must be rebuilt from the authoring code (deterministic). The EXPORTED Wren_Heavy_TailSpringDoubleKick.fbx on disk is the intact v15 — unaffected. Do NOT trust the in-blend TailSpring action until rebaked.
+- Blender 5.x fcurves: NOT action.fcurves — use action.layers[].strips[].channelbag(slot).fcurves.
+
+## POSE-ENGINE RULE ADDED
+Author fast transitions with enough frames that no bone exceeds ~40°/frame (UE 60fps-safe). Add a per-frame quaternion angular-velocity scan to standard QA (>90°/frame = fail). Quaternion-hemisphere alignment (adjacent-key dot>0) is a required post-bake pass before export.

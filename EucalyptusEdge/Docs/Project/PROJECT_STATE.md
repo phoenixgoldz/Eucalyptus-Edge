@@ -372,6 +372,52 @@ In-use packs (do not touch): MWLandscapeAutoMaterial, PathOfAdventure, FreeAtmos
 
 **Not touched per spec:** Blender assets, rigs, Ripper, camera, VFX, HUD, audio.
 
+### M2 Dynamic Character Select — Verdantia origin-world v1 (2026-07-17, PIE-verified core loop)
+
+`LV_CharacterSelect` is no longer a flat stage: the 504 m × 504 m World-Partition landscape now hosts **one connected Verdantia with seven origin regions**, and highlight → camera-travel → showcase resolves **through data, not branch chains**. Screenshots: `Saved/Screenshots/Verdantia_M2/`.
+
+**World layout** (anchors in uu; conceptual map honored — Kiri north, Banjo/Koda/Echo mid row, Ripper/Wren south flanks, Atlas far south):
+| Region | Fighter | Anchor | Elevation |
+|---|---|---|---|
+| Ancient Eucalyptus Sanctuary (heart of Verdantia) | Koda | (0, 0) | ground, carved stone training circle |
+| Sunlit Grassland Rise | Wren | (−5000, 7000) | ground — existing festival-terrace LVI moved intact |
+| Tasmanian Woodland Hollow | Ripper | (−5000, −7000) | ground — existing pit LVI moved intact |
+| High Canopy Wind Perch | Kiri | (11000, 0) | stage ≈ Z 330 atop boulder outcrop, open sky behind |
+| Crystal Wetland Shrine | Echo | (4000, 9000) | stone shelf over a real water plane (fighter stays dry) |
+| Upper Canopy Hideout | Banjo | (4000, −9000) | stage ≈ Z 140 on rock pillar amid ×7-scaled eucalypts |
+| Windswept Outback Escarpment | Atlas | (−11000, 0) | mesa ≈ Z 120, red-rock materials, 4 distant mesa silhouettes |
+
+- Landscape material: new `CharacterSelect/Materials/MI_EE_VerdantiaLandscape` (instance of the MWAM MountainRange example; `MW_UseSnow` off, snow scalars zeroed, grass correction warmed). Original Fab assets untouched — everything is instances/overrides.
+- Dressing v1 (~100 actors, outliner `Verdantia/<Region>`): Eucalyptus_Tree groves, DZ Cork Oak/Aspen woodland, GV shrubs as ferns/scrub, MWAM grass + stones, water plane with `M_Water_Ocean_2_Inst` at Echo, DesertValley red-rock overrides on Atlas rocks, transition trees along the camera corridors. Niagara: NS_leaf (Koda/Wren/Ripper/Banjo), NS_feather (Kiri), NS_Sparkling_Noise shimmer + subtle teal LocalFogVolume mist (Echo), Edge motes (Koda). One warm soft SpotLight per new stage (800–1500 cd — the Wren overexposure lesson applied). Single DirectionalLight/SkyLight/SkyAtmosphere/VolumetricCloud stack — no per-region suns. Violet check passed: a violet-reading sparkle system at Echo was removed (violet = Blight only).
+
+**Data architecture (new):** `Blueprints/BP_EE_CharacterShowcasePoint` — instance-editable per-fighter data (CharacterID, DisplayName, FighterRole, WeaponName, OriginRegion, OriginDescription, InfoLine, SignatureColor, bLocked/bSecret/bSelectable, CameraBlendTime, ShowcaseCamera/CloseCamera/FighterActor refs, Idle/Attention/Confirm anim refs, ConfirmVFX, bPlayAnims) + functions (GetID, GetShowcaseCam, GetCloseCam, GetShowcaseBlendTime, GetInfoLine, GetIsSelectable, GetIsLocked, OnHighlighted/OnUnfocused/OnConfirmed). Seven instances placed (`EE_SP_<Name>`), each also actor-tagged with its plain CharacterID for the runtime lookup. **No Mako/Bindi/Bramble/Tazra anywhere. Sonia is not exposed** — the architecture supports a hidden entry via bSecret, and per the 2026-07-17 ruling a "???"-displayed secret row can be added when the UI-M2 widget rebuild lands.
+
+**Controller/widget rework (all compile clean):** `FlyToFighter(ID)` resolves the showcase point by tag → `CurrentShowcase` → `SetViewTargetWithBlend` (cubic, per-fighter blend time) → `OnHighlighted`; `FlyToClose` uses the point's close camera + `OnConfirmed`; new `GetHighlightInfo`/`CanConfirmCurrent` feed the widget. Retargeting is inherently interruptible — the newest highlight simply re-targets the blend. All 7 roster buttons now highlight & travel; CONFIRM is gated by `CanConfirmCurrent` (Wren/Ripper selectable; Koda/Kiri highlight-only until their combat BPs exist; Echo/Banjo/Atlas story-locked). PIE-verified: Koda highlight travel + data info line, Wren confirm (LOCKED IN + close-cam push + FIGHT), BACK cancel restore, Koda confirm correctly denied, zero Blueprint runtime errors on the final pass.
+
+**Fighters:** Koda `RiggedKoda`, Kiri `RiggedKiri`, Echo `RiggedEcho`, Atlas `Atlus` now show **real materials** (silhouette overrides cleared) with native `*0_Open_A_UE5` single-node idles (Atlas static — no anims exist for his skeleton). `Preview_Wren`'s mesh pointer was **nulled again** (reimport collateral) — restored, boxing idle re-set, confirm anim = `Wren_Heavy_TailSpringDoubleKick`. Ripper unchanged on `_original_backup` + MM_Idle. **Banjo = black-silhouette Manny stand-in (TEMP — no model exists in Content).**
+
+**Known gaps / follow-ups (M2 continues):**
+- P2 join / dual focus / camera-ownership policy, Mode Select destination, duplicate-pick rule — not built (widget still the single-focus interim band; FIGHT still loads the arena directly).
+- No landscape-sculpt tooling in MCP — relief is mesh-built; proper cliff/vista meshes still wanted from Fab (MWAM stones are small scatter rocks, so the perch/mesa forms are modest).
+- Weapon trails: no prebuilt one-shot/trail Niagara in the project; ribbon materials identified for a bespoke pass (`_SplineVFX/_GenericSource/Material/M_Vfx_RibbonBeamRay`, `MI_Basic_trail05`, `T_Vfx_trail_05`). ConfirmVFX refs left None meanwhile (guarded).
+- Atlas has **no polearm mesh in-project** (`SM_WindspinePolearm` deleted in the asset churn; only `polearmTextures/` remain) — needs re-export from Blender.
+- Roster buttons still carry "LOCKED" labels on the five non-slice fighters; the ??? mystery slot arrives with the gold-standard UI-M2 widget rebuild.
+- Kiri/Koda/Echo/Atlas need real idle/attention/confirm takes; Banjo needs a model (work orders in CLAUDE_DESKTOP_HANDOFF.md).
+
+### Wren "twig" deformation — root-caused and FIXED (2026-07-17, arena-PIE-verified)
+
+**Root cause:** `BP_EE_Wren` ran `ABP_Manny_Combat` (target skeleton `SK_Mannequin`) on `WrenKangaroo_Skeleton` — and the 2026-07-16 14:08 mesh reimport had **wiped `WrenKangaroo_Skeleton.CompatibleSkeletons`** (now empty), so Manny-proportioned bone data collapsed Wren's limbs in the arena. Character Select never deformed because the preview uses AnimationSingleNode + native `Wren_Idle_Boxing`.
+**Isolation:** Test A (reference pose in Eucalyptus Summit) = correct proportions → mesh/transform/skinning healthy. Test B (native boxing idle, single-node, in arena) = correct → fault is the ABP_Manny_Combat evaluation path, not the import.
+**Fix (least-risk, matches the already-approved ABP_Wren v1 trade-off):** `BP_EE_Wren` CharacterMesh0 → `AnimationSingleNode` + looping `Wren_Idle_Boxing`; `DoHeavy`/`DoDodge` switched from `PlaySlotAnimationAsDynamicMontage` (returned None on Wren per the montage strict-check wall) to direct `PlayAnimation` of the native takes; `ClearBusy` now restores the looping idle. All timers/damage/i-frames/knockback logic untouched. Backup at `Combat/Backups/BP_EE_Wren_PreTwigFix_20260717`. **Rollback:** set AnimationMode back to AnimationBlueprint (AnimClass ref still on the CDO) or restore the backup.
+**Validated in arena PIE:** correct proportions at intro and mid-match, combat loop → K.O. → Results all work, no new warnings. **Note:** MCP *can* now create an AnimBlueprint asset shell (`BlueprintTools.create`, parent AnimInstance) but cannot set TargetSkeleton nor author AnimGraph nodes — Trevor's 3-minute manual ABP_Wren remains the upgrade path for locomotion blending (dodge root-motion displacement also waits on it; single-node dodges play in place).
+**Same-day CharSelect touch-ups:** roster labels corrected (KODA/KIRI no longer say LOCKED — they highlight but can't confirm; Echo/Banjo/Atlas keep LOCKED), auto-exposure clamped 0.9–1.1 with fast adaptation (no brightness pumping during camera travel), height fog warmed/tuned. Landscape sculpting and the UI Component Library restyle remain open (no sculpt tooling via MCP; restyle is its own UMG session).
+
+### Combat facing + match-end freeze + production UI pass (2026-07-17, PIE-verified)
+
+- **Fighters now face each other at spawn:** LV_EucalyptusSummit's PlayerStart at (+400) was yaw 0 (facing away); now yaw 180. Verified in PIE — Wren and Ripper square up at READY.
+- **Match-end freeze:** the HUD timer was already gated on `bMatchEnded` (stops the instant ShowFinish fires — verified frozen at K.O.); the missing piece was the WORLD kept simulating under the Results panel. `BP_EE_VersusGameMode.ShowResults` now ends with `SetGamePaused(true)`. Results buttons still work while paused (verified: CHARACTER SELECT traveled correctly; fresh levels load unpaused, so no unpause step is needed). **No in-match pause menu exists yet** — pausing mid-fight (Start/Esc + menu) is still an open feature, noted below.
+- **UI Component Library integration (partial by availability):** only `Buttons/Large`, `Buttons/IconRound`, `Bars/*`, and `Brand/T_UI_Logo_Lockup` were ever imported (they live at `MainMenu/UI/01_ImportToUnreal/`). The `Frames/` (IconRing rings, panels, Ring_Locked), `Ornaments/`, and FX-sprite sets from COMPONENTS.md are **not in the project and no source PNGs exist on disk** — they need re-delivery/import before the full gold-standard overlay (portrait rings, nameplate panels, ??? slot ring) can be built. Applied now, per the 2026-07-17 paradigm-synced `handoff_charselect.md` (UMG overlay over the 3D world): carved-wood Idle/Hover/Pressed/Disabled button styles on all 7 roster buttons + BACK/CONFIRM/FIGHT in `WBP_EE_CharacterSelect`, the same set on the three `WBP_EE_Results` buttons, production Health/Edge bar textures on all four `WBP_EE_MatchHUD` progress bars, and the Eucalyptus Edge logo lockup (new `Img_Logo`) top-left of Character Select. All text remains UMG Text. All widgets compile clean. Screenshots: `Saved/Screenshots/UI_Combat_Pass/`.
+
 **What remains after v0.1 (not started / unchanged):**
 - Fighter animation is template-generic via compatible skeletons (`ABP_Manny_Combat` on both). Character-specific movesets, native-authored takes (`Wren_Idle_Boxing` pattern), and the block/get-up/victory gaps remain.
 - Only the simple `EEStrike` attack works on Wren/Ripper skeletons (template montage combos require Manny skeleton); block/dodge/Edge Energy/lock-on/rounds not built.

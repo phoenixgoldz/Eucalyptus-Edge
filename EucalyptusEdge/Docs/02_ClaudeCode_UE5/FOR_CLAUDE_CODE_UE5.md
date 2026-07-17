@@ -7,9 +7,10 @@ Run `PROJECT_AUDIT.md` end to end. Verify the known-prior-state list, fill every
 ## SESSION 2 — BUILD UI-M2 (informed by the audit)
 Only after the audit report exists. Task: build **UI-M2 — the gold-standard Character Select screen** — and run the doc-sync checklist.
 
-## Read order (all in this package)
+## Read order (paths per Docs\ layout)
+0. `..\Project\PROJECT_STATE.md` (SOURCE OF TRUTH) + `..\Project\PHASE1_AUDIT.md` §0 and §11 (current directives + latest work log)
 1. `..\CANON.md`
-2. `PROJECT_AUDIT.md` (Session 1's entire job)
+2. `PROJECT_AUDIT.md` (Session 1's entire job — known-state synced 2026-07-17)
 3. `..\00_StyleBible\UI_PRINCIPLES.md` (ten lines — they outrank visual preference)
 4. `..\00_StyleBible\UI_STYLE_GUIDE.md` (tokens, motion timings, state law)
 5. `handoff_charselect.md` (the full build spec: layout table, WBP tree, DT_Fighters, nav, FX, sound, acceptance checklist)

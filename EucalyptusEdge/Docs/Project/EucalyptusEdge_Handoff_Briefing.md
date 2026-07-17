@@ -26,7 +26,7 @@ Phoenix (Trevor Hicks), founder of **PhoenixGold Game Studios**. You are joining
 | Wren | Kangaroo | Kicks/gloves — mobile bruiser, ring-out pressure | 180 cm | Starter |
 | Kiri | Kookaburra | Boomerang — precision duelist, aerial | 150 cm | Starter |
 | Ripper | Tasmanian Devil | Natural claws — aggressive brawler | 158 cm | Starter |
-| Banjo | Sugar Glider | Vine Whip Grappler — acrobatic aerial | 140 cm | Unlock: defeat Blighted Banjo (Story) |
+| Banjo | Sugar Glider | Vine Whip Grappler — acrobatic aerial | **120 cm** (ruled 2026-07-17; superseded value was 140 — see Rigging Bible §2.5) | Unlock: defeat Blighted Banjo (Story) |
 | Echo | Platypus | Ice Crystal Tonfas — Crystal Tonfa Specialist, ice kit | 155 cm | Unlock: defeat Blighted Echo (Story) |
 | Atlas | Emu | Windspine Polearm | 190 cm | Unlock: defeat Blighted Atlas (Story) |
 
@@ -61,7 +61,7 @@ Pending public cleanup (Phoenix's queue, not yours unless asked): commit the new
 ## TONIGHT'S WORKFLOW — do this, in order
 
 ### A. Blender (Claude Desktop + Blender MCP)
-Verify the addon socket first with a trivial command, then for **Ripper (158), Atlas (190), Banjo (140), Wren (180)**:
+Verify the addon socket first with a trivial command, then for **Ripper (158), Atlas (190), Banjo (140), Wren (180)** *(stale heights — Rigging Bible §2.5 supersedes: Ripper 150, Atlas 195, Banjo 120, Wren 175)*:
 1. Scene Properties → Units: **Metric**, Unit Scale **0.01**, Length **Centimeters** (1 BU = 1 UE cm). Set up once in a template `.blend`.
 2. Resize each fighter to canonical height **before rigging** — never rescale a finished rig.
 3. `Ctrl+A` → **Apply All Transforms** (scale must read 1.0).
