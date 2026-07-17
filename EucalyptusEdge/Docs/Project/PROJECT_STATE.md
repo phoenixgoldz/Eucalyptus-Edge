@@ -354,6 +354,99 @@ In-use packs (do not touch): MWLandscapeAutoMaterial, PathOfAdventure, FreeAtmos
 
 **Fab note:** Claude cannot reach the logged-in Fab library from tooling; to upgrade the arena/stage nature dressing, add to the project from Fab (UE 5.8): a **eucalyptus/outback vegetation set** (tree + bush + fern variety), a **rock/cliff set** (the MWAM stones are snow-tinted), and a **distant-mountain/vista or skybox** pack. Once they exist under `/Game/`, Claude places them.
 
+### Eucalyptus Summit environment art pass — concept-matching v1 (2026-07-17 C, Claude Code)
+
+Built the arena environment toward the `Eucalyptus_Summit` concept texture
+(`/Game/EE_ProjectFiles/Maps/LV_EucalyptusSummit/Eucalyptus_Summit`, 1536×1024, design
+notes written on the art). **Read the brief** by opening the texture in its editor and
+screenshotting the window (CaptureAssetImage/thumbnail is only 256 px — too small to read).
+Concept spec captured: central circular stone platform with a eucalyptus-leaf medallion,
+rope-and-post railings, **two side paths** (breakable railings) that end in ring-out edges,
+hanging lanterns, festival banners, hero eucalyptus trees, a forest surround, and a misty
+cliff vista; day/night + wind/leaf hazards; "surrounded by ancient eucalyptus forest."
+
+**Before:** the level was near-bare — just the platform mesh (which already has the medallion
++ a low stone rim) sitting on a **flat grey checkerboard** (the Landscape's `LandscapeMaterial`
+was `None`). Prior "dressed v1" props from earlier notes were gone (parallel-session churn).
+Reference shots saved to `Saved/Screenshots/EucalyptusSummit_Env/` (BEFORE, Beauty_Wide,
+MatchView, ConceptArt_Reference).
+
+**Built (all actors prefixed `EE_Sum_`, arena surface ≈ Z 0, platform radius ~1310, ground ≈ Z −254):**
+- **Landscape material** → `MI_EE_VerdantiaLandscape` (killed the checkerboard → natural rocky ground). Biggest single win.
+- **Trees:** 2 hero `Eucalyptus_Tree` (scale 16) flanking the camera view + 7 mid-ring + 16 distant treeline (scale 18–24, snap-to-ground) → layered forest depth that wraps the flat horizon.
+- **Side paths:** 2 `Wooden_Bridge` (scale 13×6×3) along ±X as the ring-out extensions behind each fighter.
+- **Rim railings:** 14 `Fence01` segments ringed at radius 1200 (tangent), with **gaps at the two path openings**. Fence01 ships with `WorldGridMaterial` (renders bright blue) → reassigned the asset's slot to `M_Wood_Walnut` so all 14 read as brown wood.
+- **Festival banners:** 2 `Right_Festival_Banner` (scale 5, gold eucalyptus sigil) on the hero trees.
+- **Braziers + fire:** 6 `Stone_Brazier` on the rim, each now topped with a **fire FX** — a custom looping Niagara `NS_BrazierFire` (in `/Game/EE_ProjectFiles/VFX/`) built by grafting the pack's only flame emitter (`PEN_SparksFlame`, a footstep spark-flame) into a new system and setting its EmitterState Loop Behavior → **Infinite**; compiles clean. 6 warm PointLights (Intensity **130**, orange, radius 480) are **kept** as the light-cast the fire throws (Niagara sprite fire doesn't illuminate surroundings). NOTE: the source emitter is a small spark-flame so the flame reads **modest in daylight** — couldn't get a strong live confirmation (editor still-captures don't tick Niagara; PIE/Simulate kept timing out in a contended editor). For a strong campfire, import a dedicated fire Niagara (Fab) and swap the emitter, or boost SpawnCount/SpriteSize/emissive color on `NS_BrazierFire`. Stone_Brazier is a FrostpineRidge asset (snow-capped top, mildly off-biome). **Update:** a parallel terrain pass later moved the 6 braziers from the rim (R1140) out beyond the railing (R1560); the fire FX + point lights were re-seated onto them (and one brazier that snapped onto a spire at Z≈1281 was re-grounded to Z −149 with its fire).
+- **Rocks:** 12 `SM_MWAM_Stone A–D` boulders (scale ~25–44, snap-to-ground) around the summit base.
+- **Ground cover:** 8 `SM_MWAM_Grass A–D` clumps; 2 `NS_leaf` drifting-leaf Niagara over the arena.
+- **Lighting/atmosphere:** sun warmed 6500 K → **5000 K** at pitch **−52** / yaw −40 (raised from −44 in a later rebalance to cut harsh backlit silhouettes), **SkyLight Intensity 1.0 → 1.6** for shadow fill; ExponentialHeightFog `StartDistance` 0 → **2200**, density → 0.045 so the arena stays clear while the distant treeline hazes out (the concept's misty depth). NOTE: the low match-camera view can read dark in a *still editor capture* (transient viewport auto-exposure metering the bright sky) — the wide view and the actual sun/sky are bright; judge final exposure in PIE. Rebalanced reference shots: `Saved/Screenshots/EucalyptusSummit_Env/Summit_Env_Rebalanced_{Wide,MatchView}.png`.
+
+**Removed:** 16 `GV_FreeShrubsPack` shrubs — the pack's full meshes render as **broken bright-green flat cards** in this project (missing/incompatible foliage material). MWAM grass renders fine; use it instead.
+
+**Result:** reads as the concept — medallion arena, wooden railings with path gaps, banners,
+braziers, framed by hero eucalyptus trees inside a forest, rock summit base, warm light, hazy
+distance. Verified in the level viewport from the concept vantage AND the low lateral match-camera
+height (play space stays clear — railings/braziers sit at the rim, fighters spawn ±400 X well inside).
+**Judge final lighting in PIE** (editor-viewport exposure is misleading, per standing gotcha).
+
+**Still short of concept (next passes):** real cliff/karst-spire vista + waterfalls (needs Fab meshes —
+the MWAM Mountain is an 800 m sky-wall that fights SkyAtmosphere, unusable per prior sessions); true
+hanging lanterns (the `SM_Spot_lamp` pivot is offset/awkward); breakable railings/lanterns as gameplay;
+day-night cycle; denser ivy/foliage; a left-mirrored banner. Landscape is a flat plain, not a true
+drop-away summit (no landscape sculpting via MCP).
+
+### Combat feel + dodge root-motion mode (2026-07-17 C, Claude Code)
+
+**Dodge root motion — engine side complete (Trevor's work order).** The three `_v2` dodges
+(`Wren_Dodge_Back_v2` / `Left_v2` / `Right_v2`) have `bEnableRootMotion = ON` and
+`RootMotionRootLock = RefPose`; `Wren_Heavy_TailSpring_v2` stays in-place (root motion OFF, range
+comes from controlled UE root motion). The missing piece was **`ABP_Wren` Class Defaults →
+`RootMotionMode = RootMotionFromEverything`** (was the default `RootMotionFromMontagesOnly`, which
+extracts nothing for state-machine/slot sequences → the slide-and-snap). With that set, PIE confirms
+root motion now **drives the capsule** (mesh planted, no slide, no snap). ⚠ **Distance is still ~100×
+hot** — a single dodge throws Wren ~150 m off the map. Root cause is Blender-side: the FBX root track
+is authored in metres and imported as centimetres (reimport log: *"invalid bind poses… rebind using
+time zero pose"* on `root_Skeleton`). Engine settings are correct; fix = root-track scale in the dodge
+FBX re-export. Until then, dodges are best left off in playtests or the FBXes re-exported.
+
+**Constant mutual facing (Soul Calibur).** New `BP_EE_VersusGameMode.GetOpponentOf(Fighter)` returns
+the other fighter; new `BP_EE_Fighter.FaceOpponent(DeltaSeconds)` yaw-interpolates the fighter toward
+its opponent every Tick (`RInterpTo` speed 8, yaw-only so pitch/roll stay level), spliced as the first
+call in the Fighter Event Tick. **Verified rotating live in PIE** (Wren's yaw tracked toward Ripper
+across reads). Because it wins over movement-orient, dodges/knockbacks stay oriented to the opponent —
+sidesteps read as lateral relative to the foe, as intended.
+
+**Cinematic match camera.** `BP_EE_MatchCamera` Tick rewritten from a fixed `+Y` offset to a **lateral
+side-framing**: camera sits perpendicular to the fighter-to-fighter axis (cross product of the axis
+with world-up, side chosen by which side the camera is already on so it doesn't pop across), at
+`clamp(distance×0.9 + 400, 550, 1600)` back and 170 up, looking at the fighters' midpoint +90. Position
+and rotation are smoothed (`VInterpTo` 3 / `RInterpTo` 5) so it glides instead of snapping. Never
+top-down; always frames both fighters.
+
+**Ring-out feel (Super Smash Bros).** `SetSimulatePhysics(Mesh, true)` spliced into
+`BP_EE_Fighter.HandleElimination` so **every** elimination — KO or ring-out — ragdoll-falls (previously
+only the HP=0 `HandleDeath` path ragdolled; the Tick `Z < RingOutZ` ring-out path did not). The heavy
+already `LaunchCharacter`s the target (forward×knockback + up 320) for the knock-off pressure.
+
+**Weapon / impact VFX (Wren).** `DoHeavy` spawns `NS_Sparkling_Glow` attached at `foot_r` and `foot_l`
+(kick-arc trails on the tail-spring), stored in new `TrailFXR`/`TrailFXL` and `Deactivate`d in
+`ClearBusy`; `DoDodge` spawns `NS_Sparkling_Noise` at `pelvis` (dash puff); `HeavyImpact` spawns
+`NS_Damage` at the struck fighter's location. Placeholder Niagara from `FreeParticle_SoftTofu` /
+`Variant_Combat` — swap for bespoke leaf/impact FX later. (`_SplineVFX/MI_Basic_trail05` remains the
+intended material for a true ribbon weapon-trail when a socket/bone trail is authored.)
+
+**Not a bug — the "~10 s auto-loss."** An idle Wren loses to Ripper's AI in ~10 s (damage, or knockback
+launching Wren off the platform → ring-out with HP full — matches every "RIPPER WINS at timer ~50"
+screenshot). Consistent with the documented "AI KOs idle player in ~7 s." A real player who dodges/
+attacks won't see it. Automated PIE testing keeps hitting it only because Slate key-injection rarely
+reaches the game viewport, leaving the test Wren idle.
+
+**All four BPs (Fighter, VersusGameMode, MatchCamera, Wren) compile clean and are saved.** Editor was
+**shared** with a live Ripper-reimport session during this work (tore down several PIE runs — not these
+changes). Config note left as-is: both fighter instances override `RingOutZ = 0` vs the Fighter
+default `−400` (harmless while standing; relevant when tuning ring-out generosity).
+
 ### Wren native animation integration — fast pass (2026-07-16 night) — EXACT PASS/FAIL
 
 **PASS — assets & organization:** the four imports (from `KangarooModel/` FBXes, already on the production `WrenKangaroo_Skeleton`, no new skeleton) reorganized to `Characters/WrenKangarooModel/Anims/` with clean names: `Wren_Dodge_BackHop`, `Wren_Dodge_Bound_L`, `Wren_Dodge_Bound_R`, `Wren_Heavy_TailSpringDoubleKick` (+ `Wren_Idle_Boxing` moved alongside; old-path references resolve via redirectors). `bEnableRootMotion = true` on the three dodges; heavy left root-static per spec.
@@ -622,8 +715,8 @@ Roadmap set by Trevor 2026-07-16 evening after Sprint 2 review. Guiding principl
 1. ~~Fix Wren's rendering issue so both preview fighters display correctly.~~ **DONE same day** (Wren = overexposure fix; Ripper = backup mesh re-point — see Sprint 2 section). Final Ripper asset still lands via the Blender re-export.
 2. ~~**Soulcalibur-style screen-space HUD**~~ **v1 DONE same day** (see "Match HUD v1" section): name plates, mirrored health bars, timer + ROUND 1, EDGE meters, READY…/FIGHT! intro, K.O./RING OUT banner, over-head widgets hidden. Remaining on this item: event overlays (combo counter, COUNTER, PERFECT, GUARD CRUSH, EDGE ULTIMATE READY), character-intro beat before READY…, banner-before-results timing, real round system.
 3. ~~**Enlarge + dress Eucalyptus Summit**~~ **DONE same day** (see "Eucalyptus Summit enlargement" section): platform 1.85× (radius 710 → ~1310 uu), spawns ±400, rim banners/braziers with fire light, eucalyptus treeline + stone outcrops below the rim, drifting-leaf Niagara, PIE-verified with the new HUD. Remaining: unique summit landmarks (this is dressing v1 from existing props), and the MWAM background-mountain meshes proved unusable as distant scenery — a proper skybox/backdrop is a future pick (Fab).
-4. **Cinematic match camera** (Soulcalibur feel): low lateral framing — never top-down — both fighters always framed, dynamic zoom/rotation, invisible to the player.
-5. **Ring-out presentation**: hit → launch → falling anim → slight camera track → fade → RING OUT → winner pose (launch/falling/land takes ordered from Blender in handoff WO4).
+4. **Cinematic match camera** (Soulcalibur feel): low lateral framing — never top-down — both fighters always framed, dynamic zoom/rotation, invisible to the player. **v1 DONE 2026-07-17 C** (see "Combat feel + dodge root-motion mode" section): lateral side-framing perpendicular to the fighter axis, smoothed VInterp/RInterp, distance clamp by separation. Remaining: dynamic rotation/DoF beats, intro/ring-out camera moves.
+5. **Ring-out presentation**: hit → launch → falling anim → slight camera track → fade → RING OUT → winner pose (launch/falling/land takes ordered from Blender in handoff WO4). **Partial 2026-07-17 C**: eliminations (KO + ring-out) now ragdoll-fall (SetSimulatePhysics on HandleElimination), heavy launches the target. Remaining: dedicated launch/falling/land takes, camera track on the falling loser, fade → banner timing.
 6. **Cinematic Character Select as designed**: one connected Verdantia with distinct showcase environments, smooth camera travel, confirmation animations (foundation from Sprint 2: themed LVIs, fly-cams, real idles).
 7. **Integrate Wren's native boxing set from Blender** as takes land (idle is in; heavy tail-spring kick, dodges, get-up queued behind Gate B), then build out the full combat animation set for both fighters.
-8. **Combat feel polish**: hit reactions, block, dodge, Edge Energy, VFX and sound on every exchange (frame-rate-independent per the Performance Standard).
+8. **Combat feel polish**: hit reactions, block, dodge, Edge Energy, VFX and sound on every exchange (frame-rate-independent per the Performance Standard). **Started 2026-07-17 C**: constant mutual facing (FaceOpponent, PIE-verified), Wren weapon/dash/impact Niagara (placeholder), ragdoll on elimination. Remaining: block, Edge Energy, hit-reaction takes, bespoke FX, per-hit sound layer.
