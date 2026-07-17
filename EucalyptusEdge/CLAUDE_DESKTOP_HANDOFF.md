@@ -1,8 +1,42 @@
 # CLAUDE DESKTOP HANDOFF — Blender/Source-Art Work Orders
 
-**From:** Claude Code (UE 5.8 side) · **Date:** 2026-07-16
+**From:** Claude Code (UE 5.8 side) · **Date:** 2026-07-17 (rev 3)
 **For:** Claude Desktop (Blender / source asset side)
 **Read together with:** `WEAPON_SOCKET_AND_FACIAL_RIGGING_STANDARD.md` (LOCKED — do not modify), `PROJECT_STATE.md` (current state + permanent Performance Standard), `STYLE_GUIDE.md` (visual canon).
+
+---
+
+## REV 3 STATUS UPDATE (2026-07-17) — read this first; supersedes rev 2 where they conflict
+
+- **WO1 (Wren morphs) — DELIVERED AND IN ENGINE.** Your 14:07 `WrenKangaroo.fbx` re-export was reimported over the production mesh at 14:08. The production asset now carries **real, named morph targets**: `Jaw_Open`, `Blink_L`, `Blink_R`, `EyeLook_L`, `EyeLook_R`, `Smile` — six confirmed by direct asset inspection. Rev 2 referenced 9 rebuilt keys: if your final export contained more than these six, the extras either carried empty deltas (UE silently discards those on import) or use names outside the expected set — please send the exact shipped key list so we can reconcile 6-of-6 vs 6-of-9. Either way the pipeline is **proven end-to-end now**; keep authoring the rest of the §7 set (brows, frown/snarl, cheek/muzzle compression, visemes) with the identical export settings.
+- **Wren material upgrade received:** `Wren_Tex_Base` / `Wren_Normal` / `Wren_MatBase` imported 13:28 and replace the old tripo placeholder material chain (now removed).
+- **WO2 — major Wren delivery received and WIRED:** `Wren_Dodge_BackHop`, `Wren_Dodge_Bound_L`, `Wren_Dodge_Bound_R`, `Wren_Heavy_TailSpringDoubleKick`, plus the re-exported `Wren_Idle_Boxing` all imported clean onto the production 129-bone skeleton (no new skeleton — exactly right) and live under `Characters/WrenKangarooModel/Anims/`. Gameplay is wired around them already: heavy fires damage at the F22 impact frame (0.73 s window, tunable), dodges run root motion with i-frames (0.08–0.55 s). Two notes:
+  1. **Playback is temporarily gated by a UE-side wall, not your exports** — UE 5.8 strict-checks skeletons on every montage path, so the takes need a native `ABP_Wren` AnimBlueprint (3-minute editor step queued for Trevor). No Blender action; keep delivering.
+  2. **Naming ask:** prefix the FBX filenames with the fighter (`Dodge_BackHop.fbx` → `Wren_Dodge_BackHop.fbx`); UE side renamed on import this round.
+- **Ripper — still blocked on source (unchanged from rev 2).** Desktop `RipperModel/Ripper_Tas.fbx` is still the 4 KB empty export; UE continues to run on `Ripper_Tas_original_backup`, and `Ripper_Idle_Aggressive` remains skeleton-less. We can see active work in `RipperRetopo.blend` — when the retopo/re-rig is done, export per WO3 + the rev 2 export rules and the UE side will run the 4-step swap (import at original name → CompatibleSkeletons edit → re-point `BP_EE_Ripper` + select preview → rebind the idle).
+- **WO4 unchanged** — the template falling state covers airborne fighters meanwhile; bespoke Launch / Falling / Land / Victory takes are still wanted, Wren first.
+- **Housekeeping (context, no action):** both characters' physics assets were removed in the asset churn; UE side regenerates them in-editor. Separately, `FOR_CLAUDE_DESKTOP_BLENDER.md` (UI prop-artist package) is a **different track** — this document remains the character/animation work-order channel.
+
+---
+
+## REV 2 STATUS UPDATE (2026-07-16 evening)
+
+- **WO1 (Wren morphs) — root cause CONFIRMED on the UE side, matches your delta audit.** I binary-parsed the production FBX: all 91 blendshape channels are wired correctly but carry float-noise deltas (max 7.15e-07; even the Jul 6 AccuRIG backup only 3.8e-05). UE imported with morphs **enabled** and correctly discarded empty targets — never an import-settings problem. Your 9 rebuilt real keys await **Gate A** (Trevor's slider test); after that, re-export per WO1 below. UE will verify by **measured deltas**, not key count.
+- **WO2 partial delivery received and WIRED:** `Wren_Idle_Boxing` imported clean (61 f loop @30 fps) and now drives Wren's Character Select presentation idle **and** the lock-in close-up. Loop seam reads clean in-engine. 
+- **Two Ripper deliveries FAILED on import — need re-export:**
+  1. `RipperModel/Ripper_Tas.fbx` (mesh reimport, 17:50) → Interchange error *"There was nothing to import from the provided source data"* — usually an empty selection with selection-only export, or no mesh/armature objects in the exported set. The old UE assets were renamed to `Ripper_Tas_original_backup` before the attempt, so UE temporarily lost Ripper entirely; I've re-pointed `BP_EE_Ripper` + the select preview at the backup until a good export lands at the original name.
+  2. `Ripper_Idle_Aggressive` (anim) imported but **bound to no skeleton** (asset-check error "This anim sequence asset has no Skeleton") — likely exported without the armature or against a mismatched armature name. Re-export as armature-only take per the export rules in WO2.
+- **Interim animation solution live in UE (context, no action needed):** both fighters' skeletons now list the template `SK_Mannequin` as a compatible skeleton and run the template combat AnimBlueprint — so idle/locomotion/attacks play *today*. Native takes remain strictly better (Manny proportions ≠ Wren/Ripper); keep authoring.
+
+## NEW WORK ORDER 4 — Ring-out / knockback set (design locked by Trevor today)
+
+Ring-out presentation now has a defined sequence (hit → launch → falling → camera track → fade → RING OUT → winner pose). Each fighter eventually needs, reusable everywhere:
+- **Launch** (hit reaction into airborne, ~0.5 s)
+- **Falling** (loop, limbs flailing, readable silhouette)
+- **Land** (for non-ring-out knockdowns; pairs with the existing knockdown get-up order)
+- **Victory pose** (already in WO2 item 3 — now doubles as the ring-out winner pose)
+
+Same export rules as WO2. Wren first (production skeleton is stable); Ripper after his source check clears.
 
 ---
 

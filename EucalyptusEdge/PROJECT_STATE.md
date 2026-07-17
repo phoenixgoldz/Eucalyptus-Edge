@@ -250,7 +250,7 @@ Arena selection should be an overlay/popup over Mode Select rather than another 
   - `BP_EE_GameInstance`
   - reusable slider/check/dropdown rows
 - [x] Quit confirmation modal.
-- [x] Main Menu music: `WAV_Menu_Loop` (Path of Adventure pack, 96 s loop, SoundGroup Music, bLooping) spawned at 0.7 volume in WBP_MainMenu Construct, layered under the video's native ambience. The pack's `WAV_Battle_Loop`/`WAV_BossBattle_Loop` are earmarked for the arena. Volume is a raw multiplier until SoundClass/SoundMix assets exist for the Options mixer.
+- [x] Main Menu music: `WAV_Menu_Loop` (Path of Adventure pack, 96 s loop, SoundGroup Music, bLooping) spawned at 0.7 volume in WBP_MainMenu Construct, layered under the video's native ambience. The pack's `WAV_Battle_Loop`/`WAV_BossBattle_Loop` are earmarked for the arena. (Sprint 2: submix routing + live volume sliders now exist — see Sprint 2 section.)
 - [x] Credits and Options panel foundation.
 - [x] Default 60 FPS cap.
 - [x] Main Menu project organization under `/Game/EE_ProjectFiles/`.
@@ -293,8 +293,87 @@ The flat lineup was replaced with the in-world presentation concept. All v0.1 se
 - [ ] **Retarget set NOT yet generated** — IK Rig / IK Retargeter assets cannot be created through MCP tooling, and the Content Browser "Retarget Animations" dialog is not reachable by UI automation. **One manual editor step remains:** select `MM_Idle`, `MF_Unarmed_Walk_Fwd/Bwd/Left/Right`, `MM_HitReact_Front_Lgt_01`, `MM_HitReact_Front_Hvy_01`, `MM_Death_Front_01`, `MM_Death_Back_01`, `MM_Dash` → right-click → Retarget Animations → target `WrenKangaroo` → export to `Characters/WrenKangarooModel/Anims` with `Wren_` prefix. Claude can then wire idle/locomotion/reactions. Note: **block, get-up, and victory animations do not exist in the template** — those need bespoke or store animations.
 - Cleanup note for Trevor: `Characters/WrenKangarooModel/ImportClean/` holds load-locked duplicate skeleton/physics/texture orphans from the repair — safe to delete in-editor.
 
+### Sprint 2 — Combat anims via compatible skeletons, full audio pass, themed select stages, select cinematics, Niagara (2026-07-16)
+
+- [x] **Combat animations (no retarget set needed for the slice):** `SK_Mannequin` (template skeleton) added to **CompatibleSkeletons** on `WrenKangaroo_Skeleton` and `Ripper_Tas_Skeleton`; `BP_EE_Wren`/`BP_EE_Ripper` mesh components switched from empty AnimationSingleNode (T-pose) to **AnimationBlueprint** mode running the template `ABP_Manny_Combat`. PIE-verified: fighters idle and locomote in the arena (AI Ripper walks in and wins vs. an idle player, exactly as v0.1 logic dictates); Wren's guard idle verified in the select close-up. Bones map by name — Wren matches 71/161 Manny bones (tail/extras keep ref pose), Ripper 23/161 (no twists/fingers). Template montage attacks run through the same compatibility path. The manual Retarget-Animations step is now **optional polish**, no longer a blocker.
+- [x] **Audio wired end-to-end** (`/Game/EE_ProjectFiles/Audio/`): `EE_Master/EE_Music/EE_SFX` SoundClasses + `EE_MusicSubmix`/`EE_SFXSubmix` (duplicated from engine assets — MCP has no create-asset tool for these). Routing: menu = existing `WAV_Menu_Loop`; **Character Select** = `CUE_Village_Loop` (widget Construct); **Fight** = `CUE_Battle_Loop` (`BP_EE_VersusGameMode` BeginPlay); **KO** = `Breaking_Bones_01_Cue` (head of `HandleDeath`); **Ring-out** = `Mgc_Water_Throw_02_Cue` (Tick ring-out branch, before `HandleElimination`); **Victory** = `Trailer_Horns_of_War_Cue` (Results Construct); **Hover/Click** = `S_Wood_Mono_2_Cue`/`Drs_Close_Box_01_Cue` set as WidgetStyle Hovered/PressedSlateSound on all 22 buttons across MainMenu/CharacterSelect/Results (no graph or layout changes). Known-benign: `PlaySound2D` looping music logs an "orphaned sound" warning; level travel stops it. Convert to SpawnSound2D audio components later if per-track control is wanted.
+- [x] **Volume sliders are live:** new `BP_EE_GameInstance.ApplyAudioSettings` (SetSubmixOutputVolume on engine `MasterSubmixDefault` + the two EE submixes from `BP_EE_SettingsSave` Master/Music/SFX values), called at the head of `ApplyAllSettings` — so it applies on game Init *and* on Options APPLY. All routed cues/waves carry the EE submix + SoundClass.
+- [x] **Themed select stages:** `LVI_CS_Wren` = Australian rocky plateau — MWAM stone outcrops ringing the terrace, grass clumps on/around the platform, warm-tinted spot/point lights + 2 orange brazier PointLights. `LVI_CS_Ripper` = blighted forest — 5 tilted/scaled eucalyptus (dead-forest cluster), stones, existing distant glow recolored **purple** (170,60,255 @ 12k), 2 extra purple corruption PointLights, 2 **LocalFogVolumes** with purple albedo (localized so Wren's stage stays clear; extinction tuned low after an opaque-purple first pass). PIE-verified from the game cameras — note the editor viewport's exposure misleads badly here; judge lighting in PIE only.
+- [x] **Select cinematics:** preview actors tagged `CSPreview_Wren`/`CSPreview_Ripper` and now play **real skeletal idles** (`Wren_Idle_Boxing` native; Ripper `MM_Idle` via compatible skeleton); the transform-bob `EE_Seq_*` LevelSequences set to bAutoPlay=false (actors kept). `FlyToFighter` re-plays the fighter's idle on highlight; `FlyToClose` re-plays it at lock-in. (Tried `MM_ChargedAttack` as a lock-in pose — its root motion lunges the preview out of the close camera frame; reverted to idle.) PIE-verified: WREN → camera flight → boxing-guard idle → CONFIRM ("LOCKED IN") → close push → FIGHT!.
+- [x] **Niagara set dressing:** `NS_leaf` ×2 drifting leaves over Wren's terrace; `NS_Sparkling_Glow`/`_Glow_2`/`_Noise` as purple corruption motes in Ripper's grove. PIE-verified visible from the overview and close cams. (No true rain system exists in the imported packs — LocalFogVolumes + motes carry the weather mood for now; a real NS rain system is a future import.)
+
+**⚠ Mid-sprint collision (mitigated; final fix waits on Blender re-export):** while Sprint 2 was running, a parallel session renamed `TasModel/Ripper_Tas` (+skeleton) to `Ripper_Tas_original_backup` and attempted to reimport a new `RipperModel/Ripper_Tas.fbx`, which **failed** ("nothing to import…"), and imported `TasModel/Animations/Ripper_Idle_Aggressive` **without a skeleton** (asset-check error). This nulled the mesh pointers on the Ripper select preview and the `BP_EE_Ripper` CDO. **Mitigation applied same day:** both re-pointed at `Ripper_Tas_original_backup` (whose skeleton carries the SK_Mannequin compatibility edit), so Ripper displays and fights again. When a good re-export lands (work order in `CLAUDE_DESKTOP_HANDOFF.md` rev 2): (1) import at the original `TasModel/Ripper_Tas` name, (2) add `SK_Mannequin` to the new skeleton's CompatibleSkeletons, (3) re-point `BP_EE_Ripper` + the select preview from the backup to the new asset, (4) rebind `Ripper_Idle_Aggressive` and swap it in as Ripper's select idle.
+
+**Same-day rendering fixes after Trevor's playtest feedback:** Wren's "partially invisible" select preview was overexposure — `LVI_CS_Wren`'s PointLight_0 sat *inside* the character (now intensity 0) and the presentation spot was far too hot (now 1200, soft warm 255/214/170). PIE-verified: Wren's close-up reads clean (armor, guard pose, falling leaves). Ripper preview restored via the backup re-point above.
+
+### Match HUD v1 — Soulcalibur-style screen-space HUD (2026-07-16 evening, PIE-verified)
+
+`Widgets/WBP_EE_MatchHUD`, created by `BP_EE_VersusGameMode.CreateMatchHUD` (new function, called at the end of BeginPlay after both fighters + camera are wired). All text uses the **Verdantia** font pack (`Framework/Fonts/Verdantia_Font`).
+
+- [x] **Layout** (per Trevor's mock): WREN / RIPPER name plates top-left/top-right (names resolved from GameInstance selections at Construct), two mirrored 640px health bars (P1 fills right-to-left, P2 left-to-right, green), thin cyan **EDGE** meters + labels below each bar, center **round timer** (Verdantia 56) with **ROUND 1** beneath in gold.
+- [x] **Live health**: HUD Tick polls `Current HP / Max HP` on both fighters (`FighterP1/P2` instance-editable refs set by the GameMode before AddToViewport). PIE-verified draining as the AI lands hits.
+- [x] **Match intro**: READY… (1.2 s) → **FIGHT!** (0.8 s) → clear, driven by a Tick-accumulated IntroTime (no latent nodes). Big gold Verdantia center text. PIE-verified.
+- [x] **Round timer**: counts 60 → 0 after the intro; at 0 the lower-HP fighter is eliminated via `HandleElimination` (tie eliminates P1/awards P2). *Logic in graph; the 60 s time-out path itself not yet observed in PIE (matches end in ~13 s vs the current AI).*
+- [x] **Finish banner**: new HUD function `ShowFinish(Loser)` — shows **RING OUT!** if the loser fell below its RingOutZ, else **K.O.!** — called from `OnFighterEliminated`. Known polish item: the Results panel appears the same frame and covers the banner; the banner needs a beat (~1.5 s) before Results, which wants the results call moved out of the function graph (latent Delay not allowed there).
+- [x] **Floating over-head lifebars hidden**: `BP_EE_Fighter` BeginPlay now hides the template LifeBar widget component (template untouched; per the roadmap these are replaced, not polished).
+- Not yet: Edge Energy meters are visual placeholders (system doesn't exist), no round system beyond the ROUND 1 label, and the temporary event overlays (combo counter, COUNTER, PERFECT, GUARD CRUSH, EDGE ULTIMATE READY) are future work on the same widget.
+
+### HUD v1.1 + finish presentation + locked roster platforms (2026-07-16 late, PIE-verified, all 12 gameplay/UI Blueprints compile clean)
+
+- [x] **HUD portraits (placeholder)**: `Img_PortraitP1/P2` — 96×96 dark framed squares flanking the name plates (names/health/EDGE shifted outward to fit). Swap their brushes for real portrait textures when art exists.
+- [x] **Winner banner**: `Txt_WinnerBanner` (Verdantia 54, gold) — `ShowFinish` now shows **K.O.! / RING OUT!** plus **WREN WINS! / RIPPER WINS!** beneath it the moment a fighter is eliminated.
+- [x] **Delayed results = ring-out camera hold**: `OnFighterEliminated` refactored — sets `WinnerName` (new GameMode var), fires the HUD banner, then `SetTimerByFunctionName → ShowResults` (new function: creates/populates the Results widget) after **1.8 s**. During that beat the match camera keeps framing both fighters, so a ring-out loser is tracked falling before the panel appears. (Latent `Delay` nodes are unavailable to MCP graph writes — the timer-to-function pattern is the sanctioned equivalent.)
+- [x] **Ring-out behavior notes**: KO already triggers only at the kill plane (fighter Tick: Z < RingOutZ = −400, the \"kill volume\" equivalent); airborne fighters play the template falling state through `ABP_Manny_Combat` (CharacterMovement falling drives it — no extra wiring). Bespoke Launch/Falling/Land takes remain ordered from Blender (handoff WO4).
+- [x] **Locked-roster presentation platforms**: 5 individual `Main_Platform` (×3.5) platforms in an arc behind the hero stages in `LV_CharacterSelect` — Koda, Kiri, Echo, Banjo, Atlas — each with its fighter's skeletal mesh rendered as a **black silhouette** via new `CharacterSelect/Materials/M_EE_Silhouette` (OverrideMaterials on all slots). Banjo has no model yet and uses a silhouetted `SKM_Manny_Simple` stand-in. Outliner folder `LockedRoster`, labels `EE_CS_*`. Locked buttons stay disabled; the camera only flies to Wren/Ripper.
+- [x] **Wren re-verified**: renders correctly in select (post-exposure-fix) and is present + taking hits in the arena (health drains). Not always on-screen mid-match — that is the match camera's framing, i.e. roadmap item 4 (cinematic camera), not a mesh/material issue. No Blender assets touched.
+- [x] **Compile gate**: WBP_EE_MatchHUD, WBP_EE_Results, BP_EE_VersusGameMode, BP_EE_Fighter, BP_EE_Wren, BP_EE_Ripper, BP_EE_MatchPlayerController, BP_EE_MatchAIController, BP_EE_CharSelectController, WBP_EE_CharacterSelect, WBP_MainMenu, BP_EE_GameInstance — all compile with no errors. Ready for Trevor's commit.
+
+### Eucalyptus Summit enlargement + dressing v1, and asset cleanup (2026-07-16 evening, PIE-verified)
+
+**Arena** (`Maps/LV_EucalyptusSummit`): Main_Platform scaled non-uniformly to (22.2, 22.2, 12) — walkable radius measured by trace: **710 → ~1310 uu (1.85×)**, top height unchanged (~Z 51–67, so ring-out tuning is untouched). PlayerStarts widened ±280 → ±400. Dressing v1 from existing props: 4 festival banners (rim, facing in), 4 stone braziers at cardinals with warm fire PointLights, 8 eucalyptus trees ringing the summit below the rim (canopy breaks the silhouette), 6 MWAM stone outcrops on the slope, 3 NS_leaf drift emitters. All dressing actors live under outliner folders `Arena/Dressing`, `Arena/FX`, `Arena/Lighting` with `EE_Sum_` labels. **Do not use `SM_MWAM_MountainA/B` as distant scenery** — tried three placements; they always render as sky-filling walls or broken fragments against the SkyAtmosphere. A proper backdrop (skybox or purpose-built vista meshes, e.g. from Fab) is the future answer; the clean floating-summit horizon looks intentional meanwhile.
+
+**Cleanup done:** `/Game/Dev/` (Claude's morph-test imports) deleted; loose assets at `Maps/` root (Right_Festival_Banner + its tripo material/textures) moved to `EE_ProjectFiles/Props/Festival/` (redirectors left in place — run **Fix Up Redirectors** on `EE_ProjectFiles` when convenient).
+
+**Pack audit (for Trevor's in-editor bulk delete — sampled reference check found no users; the CB delete dialog does the authoritative check):**
+
+| Pack | Size | Verdict |
+|---|---|---|
+| `A_Surface_Footstep` | 349 MB | DELETE — footstep system, overlaps SmallSoundKit/FootstepsMiniPack, unused |
+| `PWL_Light_Manager` | 235 MB | DELETE — lighting tool, unused |
+| `Ambient_Music_v1` | 187 MB | DELETE — unused music (PathOfAdventure + FreeAtmos cover music) |
+| `MC_Sample` | 159 MB | DELETE — emote/prop demo on its own skeleton, out of scope |
+| `Free_Crawl_Animation` | 147 MB | DELETE — prone crawl set, out of scope |
+| `FreeAnimsMixPack` | 386 MB | KEEP for now — Manny-skeleton `AS_Combo`/`AS_DyingFromWounds`/`AS_SwingSword` are combat-anim candidates via compatible skeletons; delete its `Demo/` + `Map/` subfolders if space matters |
+| `FreeAnimationLibrary` | 181 MB | KEEP for now — counter/finisher/knockdown anims useful for combat gaps |
+| `FreeModularMagicSFX` | 95 MB | KEEP — Edge Energy SFX source |
+| `_SplineVFX` | 74 MB | KEEP — corruption/Blight VFX (MiasmaBoil) earmarked |
+| GoodSky / FootstepsMiniPack / PCG_Spline_Tool / PCKeyboardMouseIconPack | ~30 MB total | KEEP — small, plausibly useful |
+| `ThirdPerson` | 0.3 MB | KEEP — referenced by Variant_Combat blueprints |
+
+In-use packs (do not touch): MWLandscapeAutoMaterial, PathOfAdventure, FreeAtmosGameMusic (victory sting), SmallSoundKit, FreeParticle_SoftTofu, Variant_Combat, Characters, Input, LevelPrototyping, GoodSky (sky refs).
+
+**Fab note:** Claude cannot reach the logged-in Fab library from tooling; to upgrade the arena/stage nature dressing, add to the project from Fab (UE 5.8): a **eucalyptus/outback vegetation set** (tree + bush + fern variety), a **rock/cliff set** (the MWAM stones are snow-tinted), and a **distant-mountain/vista or skybox** pack. Once they exist under `/Game/`, Claude places them.
+
+### Wren native animation integration — fast pass (2026-07-16 night) — EXACT PASS/FAIL
+
+**PASS — assets & organization:** the four imports (from `KangarooModel/` FBXes, already on the production `WrenKangaroo_Skeleton`, no new skeleton) reorganized to `Characters/WrenKangarooModel/Anims/` with clean names: `Wren_Dodge_BackHop`, `Wren_Dodge_Bound_L`, `Wren_Dodge_Bound_R`, `Wren_Heavy_TailSpringDoubleKick` (+ `Wren_Idle_Boxing` moved alongside; old-path references resolve via redirectors). `bEnableRootMotion = true` on the three dodges; heavy left root-static per spec.
+
+**PASS — critical bug found & fixed:** `BP_EE_Wren`'s CDO `SkeletalMeshAsset` had been **nulled** (collateral from a failed property-set rollback this session) — this was the real "Wren invisible in arena" bug. Restored to `WrenKangaroo`, AnimationMode=AnimationBlueprint confirmed, compiled, saved, PIE-verified spawning with mesh.
+
+**PASS — gameplay wiring (all compiles clean, verified firing in PIE):**
+- Inputs: **F** = heavy, **Q/E/C** = dodge left/right/back (polled via `WasInputKeyJustPressed` in `PollDodgeInput`, called from Wren's Tick after Parent:Tick — new InputActions/IMC mappings are not tool-editable, mappings live in a private field). Keyboard-only for now.
+- `DoHeavy` / `DoDodge(Anim)` / `HeavyImpact` / `StartIFrames` / `EndIFrames` / `ClearBusy` functions on `BP_EE_Wren`; `Busy` gating verified in PIE (sets on press, auto-clears via timer — no animation lock, no re-trigger).
+- **Heavy impact window:** damage fires only via `SetTimerByFunctionName → HeavyImpact` at `HeavyImpactDelay` (default **0.73 s** = the F22 impact frame), not for the whole animation. Impact = 250 uu forward sphere trace → `ApplyDamage(HeavyDamage=2)` + `LaunchCharacter` (forward × `HeavyKnockback=900` + up 320) for ring-out pressure. (Anim-notify authoring isn't exposed to MCP; the timer window is the frame-rate-independent equivalent, all values instance-editable.)
+- **Dodge i-frames:** `DodgeInvulnerable` (new on `BP_EE_Fighter`) gated into `EEStrike` before ApplyDamage (Branch spliced; AI hits respect it). Window data-driven: `DodgeIFrameStart=0.08`, `DodgeIFrameEnd=0.55`, `DodgeDuration=0.7` — all tunable floats on Wren.
+
+**FAIL — native animation playback (engine/tooling wall, root-caused):** Wren's mesh runs the shared `ABP_Manny_Combat` (compatible-skeleton setup from Sprint 2). UE 5.8 **strict-checks skeletons on every montage path**: `PlaySlotAnimationAsDynamicMontage` returns None for Wren-skeleton sequences, and `Montage_Play` returns 0 even for Manny montages (consistent with the v0.1 finding that template montage combos never played on EE skeletons). Compatible-skeleton entries exist **both directions** — montages ignore them. Dynamic-montage return is now captured in `LastMontage` for diagnosis. MCP cannot create AnimMontage assets (duplicate refused) nor Animation Blueprints, so the block is not resolvable from tooling.
+
+**UNBLOCK (Trevor, ~3 min):** Content Browser → right-click → Animation → **Animation Blueprint**, target skeleton `WrenKangaroo_Skeleton`, name `ABP_Wren` (suggested: `Characters/WrenKangarooModel/`). In its AnimGraph: play `Wren_Idle_Boxing` → **Slot 'DefaultSlot'** → Output Pose. Save. Then Claude sets `BP_EE_Wren`'s AnimClass to `ABP_Wren` — every mechanism wired tonight (heavy + impact window, root-motion dodges, i-frames) becomes live with strict-matching skeletons, and PIE verification of travel-direction / no-double-movement completes. Trade-off until a fuller ABP exists: Wren's combat locomotion becomes the boxing idle (no walk blend).
+
+**Not touched per spec:** Blender assets, rigs, Ripper, camera, VFX, HUD, audio.
+
 **What remains after v0.1 (not started / unchanged):**
-- Fighters are unanimated (single-node ref pose; no IK Rigs/Retargeters yet) — retargeting or bespoke anims is the next combat-feel step.
+- Fighter animation is template-generic via compatible skeletons (`ABP_Manny_Combat` on both). Character-specific movesets, native-authored takes (`Wren_Idle_Boxing` pattern), and the block/get-up/victory gaps remain.
 - Only the simple `EEStrike` attack works on Wren/Ripper skeletons (template montage combos require Manny skeleton); block/dodge/Edge Energy/lock-on/rounds not built.
 - Local Versus P2 (second controller) not implemented — AI stands in; architecture ready.
 - Match HUD is the template over-head lifebars only; no round intro/announcer/audio.
@@ -488,12 +567,13 @@ Do not destructively modify the original template assets. Duplicate them into `/
 
 ## Immediate Next Task
 
-The Vertical Slice v0.1 flow, the in-world Character Select presentation, and the Wren reimport are done (2026-07-16, see Completed Work). Next steps, in rough order:
+Roadmap set by Trevor 2026-07-16 evening after Sprint 2 review. Guiding principle: **the architecture is in place — the remaining work is presentation and gameplay polish, not restructuring. Do not polish placeholders** (the floating over-head health widgets and the temporary arena floor have served their purpose and get *replaced*, not improved). Claude Terminal stays on UE; Blender work stays with Claude Desktop.
 
-1. **Claude Desktop (Blender side):** work orders in **`CLAUDE_DESKTOP_HANDOFF.md`** — Wren re-export WITH shape keys (current FBX has zero morph targets), source-authored idle takes for Wren (boxing) and Ripper (aggressive), and the template-gap animations (block, get-up, victory, defeat).
-2. **Manual (Trevor, ~5 min):** run the Retarget Animations dialog for the 10 Manny anims listed in the Wren section (MCP tooling can't reach it). Then Claude wires idle/locomotion/hit-react/knockdown/defeat onto Wren. (Skippable for any motion Claude Desktop authors natively.)
-3. Combat feel: montage-driven attacks on the EE skeletons, block/dodge foundation, knockback tuning (frame-rate-independent per the Performance Standard).
-4. Local Versus Player 2 (second controller) replacing the stand-in AI.
-5. Character Select polish toward full M2: data-driven roster, per-highlight environment show/hide-unload, lock-in character reaction anims, P2 join, Mode Select.
-6. Main Menu cleanup: rename `Local_Versus_btn` → `Lore_btn`, remove the internal `P_CharSelect` placeholder panel.
-7. Proper match HUD (fixed health bars, round state) and Eucalyptus Summit environment dressing.
+1. ~~Fix Wren's rendering issue so both preview fighters display correctly.~~ **DONE same day** (Wren = overexposure fix; Ripper = backup mesh re-point — see Sprint 2 section). Final Ripper asset still lands via the Blender re-export.
+2. ~~**Soulcalibur-style screen-space HUD**~~ **v1 DONE same day** (see "Match HUD v1" section): name plates, mirrored health bars, timer + ROUND 1, EDGE meters, READY…/FIGHT! intro, K.O./RING OUT banner, over-head widgets hidden. Remaining on this item: event overlays (combo counter, COUNTER, PERFECT, GUARD CRUSH, EDGE ULTIMATE READY), character-intro beat before READY…, banner-before-results timing, real round system.
+3. ~~**Enlarge + dress Eucalyptus Summit**~~ **DONE same day** (see "Eucalyptus Summit enlargement" section): platform 1.85× (radius 710 → ~1310 uu), spawns ±400, rim banners/braziers with fire light, eucalyptus treeline + stone outcrops below the rim, drifting-leaf Niagara, PIE-verified with the new HUD. Remaining: unique summit landmarks (this is dressing v1 from existing props), and the MWAM background-mountain meshes proved unusable as distant scenery — a proper skybox/backdrop is a future pick (Fab).
+4. **Cinematic match camera** (Soulcalibur feel): low lateral framing — never top-down — both fighters always framed, dynamic zoom/rotation, invisible to the player.
+5. **Ring-out presentation**: hit → launch → falling anim → slight camera track → fade → RING OUT → winner pose (launch/falling/land takes ordered from Blender in handoff WO4).
+6. **Cinematic Character Select as designed**: one connected Verdantia with distinct showcase environments, smooth camera travel, confirmation animations (foundation from Sprint 2: themed LVIs, fly-cams, real idles).
+7. **Integrate Wren's native boxing set from Blender** as takes land (idle is in; heavy tail-spring kick, dodges, get-up queued behind Gate B), then build out the full combat animation set for both fighters.
+8. **Combat feel polish**: hit reactions, block, dodge, Edge Energy, VFX and sound on every exchange (frame-rate-independent per the Performance Standard).
