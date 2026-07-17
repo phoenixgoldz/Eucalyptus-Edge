@@ -3,6 +3,49 @@ One entry per working session, newest first. Percentages are the auditor's estim
 
 ---
 
+## SESSION 2026-07-17 B (Claude Code / UE 5.8 — audio unification + ABP_Wren verification + doc sync)
+
+### Completed
+```
+✓ Main Menu music (carried from 07-16 evening): WAV_Menu_Loop (Path of Adventure) looping from
+  WBP_MainMenu Construct at 0.7 vol, SoundGroup Music; Battle/BossBattle loops earmarked for arena
+✓ Audio volume framework UNIFIED (commit 1f84462): a duplicate SoundClass/SoundMix set built in
+  parallel at Framework/Audio/ was deleted; ApplyAudioSettings restored to the PIE-proven
+  three-line submix version (MasterSubmixDefault + EE_MusicSubmix + EE_SFXSubmix);
+  WAV_Menu_Loop re-pointed to Audio/EE_Music — no double-applied volume. Submix system is CANONICAL.
+✓ ABP_Wren live re-verified in-editor: asset at Characters/WrenKangarooModel/ABP_Wren,
+  TargetSkeleton = WrenKangaroo_Skeleton, BP_EE_Wren AnimClass = ABP_Wren_C,
+  AnimationMode = AnimationBlueprint, mesh pointer healthy
+✗ Heavy/dodge mid-swing visual check attempted again via automation — same latency wall as
+  session A (key press can't reach game-viewport focus + swing shorter than tool round-trip).
+  Status stands: logic-verified, eyeball-pending (Trevor: PIE, press F and Q/E/C, ~10 s)
+✓ Docs synced: PROJECT_STATE, this log, PHASE1_AUDIT §11
+```
+
+### Lessons for future sessions
+```
+• PARALLEL SESSIONS are active on this project — git log + PROJECT_STATE + SESSION_LOG before
+  building anything; the audio near-collision is the second incident (Ripper rename was the first)
+• Content Browser asset tiles/rows are invisible to Slate automation; asset-type creation via
+  +Add menu works but is fragile — prefer AssetTools.duplicate of an existing asset of the type
+```
+
+### Next Session (consolidated queue — unchanged priorities from session A plus the standing brief)
+```
+1. Session-1 PROJECT AUDIT (inspection only, per FOR_CLAUDE_CODE_UE5.md) — verify the whole
+   project state after this many parallel hands; produces the dashboard that prioritizes fixes
+2. Trevor (~10 s): PIE playtest F / Q-E-C to close the ABP_Wren montage eyeball check
+3. Re-deliver + import missing UI texture sets (Frames/Ornaments/FX) → gates UI-M2
+4. UI-M2 gold-standard Character Select overlay (Session 2, per handoff_charselect.md):
+   rings/panels/join panels/previews/??? slot, controller nav, Mode Select flow correction
+5. ABP_Wren v2 (editor work): locomotion blendspace + state machine — the "real locomotion" gate
+6. Pause Menu; cinematic match camera; ring-out presentation (roadmap items unchanged)
+7. Blender (Claude Desktop, WO1–WO5): Ripper re-export (desktop FBX is a 4 KB empty file),
+   Banjo model, Atlas polearm re-export, showcase idle/attention/confirm takes
+```
+
+---
+
 ## SESSION 2026-07-17 (Claude Code / UE 5.8)
 
 ### Completed (addendum — ABP_Wren wired, same day)

@@ -1,7 +1,7 @@
 # Eucalyptus Edge — Project State
 
 > Maintained as the current source of truth for Claude and Unreal MCP work.
-> Last updated: **2026-07-16**
+> Last updated: **2026-07-17**
 
 **Game:** Family-friendly UE 5.8 3D weapon-based arena fighter, Blueprint-only.  
 **World:** Verdantia  
@@ -410,6 +410,8 @@ In-use packs (do not touch): MWLandscapeAutoMaterial, PathOfAdventure, FreeAtmos
 **Isolation:** Test A (reference pose in Eucalyptus Summit) = correct proportions → mesh/transform/skinning healthy. Test B (native boxing idle, single-node, in arena) = correct → fault is the ABP_Manny_Combat evaluation path, not the import.
 **Fix (least-risk, matches the already-approved ABP_Wren v1 trade-off):** `BP_EE_Wren` CharacterMesh0 → `AnimationSingleNode` + looping `Wren_Idle_Boxing`; `DoHeavy`/`DoDodge` switched from `PlaySlotAnimationAsDynamicMontage` (returned None on Wren per the montage strict-check wall) to direct `PlayAnimation` of the native takes; `ClearBusy` now restores the looping idle. All timers/damage/i-frames/knockback logic untouched. Backup at `Combat/Backups/BP_EE_Wren_PreTwigFix_20260717`. **Rollback:** set AnimationMode back to AnimationBlueprint (AnimClass ref still on the CDO) or restore the backup.
 **Validated in arena PIE:** correct proportions at intro and mid-match, combat loop → K.O. → Results all work, no new warnings. **Note:** MCP *can* now create an AnimBlueprint asset shell (`BlueprintTools.create`, parent AnimInstance) but cannot set TargetSkeleton nor author AnimGraph nodes — Trevor's 3-minute manual ABP_Wren remains the upgrade path for locomotion blending (dodge root-motion displacement also waits on it; single-node dodges play in place).
+
+**ABP_Wren status (2026-07-17, live-verified twice):** the ABP now EXISTS (Trevor-created) at `Characters/WrenKangarooModel/ABP_Wren`, TargetSkeleton = `WrenKangaroo_Skeleton`; `BP_EE_Wren` runs it (AnimationMode = AnimationBlueprint, AnimClass = ABP_Wren_C, mesh pointer healthy). Boxing idle through the ABP is PIE-verified with correct proportions; `DoHeavy`/`DoDodge` restored to `PlaySlotAnimationAsDynamicMontage` via DefaultSlot (skeletons now match, so root-motion dodges + auto-return are live in logic). **Open:** the heavy/dodge swings are logic-verified but eyeball-pending — automation cannot press F/Q/E/C with game-viewport focus faster than the AI ends the match; a ~10-second human playtest closes it. v1 AnimGraph is idle→DefaultSlot→Output only; v2 (locomotion blendspace + state machine, editor work) is the "real locomotion" gate.
 **Same-day CharSelect touch-ups:** roster labels corrected (KODA/KIRI no longer say LOCKED — they highlight but can't confirm; Echo/Banjo/Atlas keep LOCKED), auto-exposure clamped 0.9–1.1 with fast adaptation (no brightness pumping during camera travel), height fog warmed/tuned. Landscape sculpting and the UI Component Library restyle remain open (no sculpt tooling via MCP; restyle is its own UMG session).
 
 ### Combat facing + match-end freeze + production UI pass (2026-07-17, PIE-verified)
@@ -612,6 +614,8 @@ Do not destructively modify the original template assets. Duplicate them into `/
 ---
 
 ## Immediate Next Task
+
+**Queue sync 2026-07-17 (see SESSION_LOG.md for the full consolidated list):** the standing brief (`Docs/02_ClaudeCode_UE5/FOR_CLAUDE_CODE_UE5.md`) orders a **Session-1 full project audit (inspection only, per PROJECT_AUDIT.md)** before further building — warranted after multiple parallel sessions — followed by **Session-2 UI-M2** (gold-standard Character Select overlay per `handoff_charselect.md`), which is **gated on re-delivering the Frames/Ornaments/FX UI texture sets** (not in the project, no source PNGs on disk). Quick unblockers: Trevor's ~10 s F/Q-E-C playtest (ABP_Wren montage eyeball check) and the Blender work orders (Ripper re-export — current desktop FBX is a 4 KB empty file — Banjo model, Atlas polearm, showcase takes).
 
 Roadmap set by Trevor 2026-07-16 evening after Sprint 2 review. Guiding principle: **the architecture is in place — the remaining work is presentation and gameplay polish, not restructuring. Do not polish placeholders** (the floating over-head health widgets and the temporary arena floor have served their purpose and get *replaced*, not improved). Claude Terminal stays on UE; Blender work stays with Claude Desktop.
 
