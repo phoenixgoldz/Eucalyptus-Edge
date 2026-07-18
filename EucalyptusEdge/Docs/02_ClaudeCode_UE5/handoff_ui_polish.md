@@ -105,9 +105,9 @@ Full rebind of **every** gameplay + menu action: Movement · Camera · Lock Targ
 
 > **▶ ARCHITECTURE NOTE (Enhanced Input):**
 > - Build on UE **Enhanced Input** (`InputAction` + `InputMappingContext`). Model each **profile as a saved set of Player-Mappable Key overrides** (or a swappable IMC) persisted in `BP_EE_SettingsSave`.
-> - **Gotcha — chorded actions:** the control scheme uses modifier chords heavily (`RB + Face` → Edge Light/Medium/Ultimate/Mobility; `Forward + Dodge` → Combat Leap). UE's Player-Mappable Keys system rebinds simple 1:1 bindings cleanly but **does not natively expose chord/modifier combos to a remap UI**. Plan a custom remap layer for chorded actions, or forbid rebinding the modifier itself and only rebind the base keys. Decide this early — it shapes the whole remap UI.
+> - **Gotcha — chorded actions:** the control scheme uses modifier chords heavily (`RB + Face` → Edge Light/Medium/Ultimate/Mobility; `LB + Attack` → Throw / Command Grab; `Forward + Dodge` → Combat Leap). UE's Player-Mappable Keys system rebinds simple 1:1 bindings cleanly but **does not natively expose chord/modifier combos to a remap UI**. Plan a custom remap layer for chorded actions, or forbid rebinding the modifier itself and only rebind the base keys. Decide this early — it shapes the whole remap UI.
 > - Keep gameplay logic bound to **abstract action names**, never physical buttons — that is what makes Switch/Steam Input backends drop in later, and it prevents Steam Input from double-driving native input.
-> - **Cross-link:** the "Toggle / Hold" accessibility option below is the resolution mechanism for `CONTROLLER_LAYOUT.md` Open Question #3 (lock-on toggle vs hold) — make lock/block/dash toggle-or-hold per-action settings.
+> - **Cross-link:** lock-on is **resolved** in `CONTROLLER_LAYOUT.md` (auto-lock at round start + **L3 toggle** canonical; **LT** momentary hold override). The "Toggle / Hold" accessibility option below governs L3's press semantics (default = toggle) and applies per-action to lock / block / dash.
 
 ### Accessibility Options
 

@@ -23,5 +23,14 @@ Mako, Bindi, Bramble, and Tazra must not appear in any material, ever.
 - Hover/energy glow uses the sampled chartreuse-emerald (#AED92D family); gold = honor; every crystal emits Edge Energy; magic is subtle — alive, never distracting.
 - All player-facing strings are UMG Text (localizable). Splash callouts (K.O., RING OUT…) are baked art and stay English.
 
+## Controls (Phase 1 — resolved 2026-07-18; full spec `Docs/Project/CONTROLLER_LAYOUT.md`)
+- **Face:** X/□ Light · Y/△ Medium · B/○ Heavy · A/✕ Dodge. **RB = Edge modifier** (RB+X/Y/B/A = Edge Light / Edge Medium / Ultimate / Mobility Skill; Ultimate needs a full meter).
+- **Grab = Guard + Attack**, never on the RB layer: **LB+Light = universal throw** (doubles as a ring-out tool), **LB+Heavy = character command grab**.
+- **Pause = Menu (Xbox) / Options (PS)** — reserved; no gameplay action may ever bind to it.
+- **Lock-on:** auto-locked at round start (1v1); **L3 = canonical toggle**; LT = momentary hold override; toggle-vs-hold is an Accessibility setting.
+- **Dodge** = Back/Left/Right + neutral spot-dodge; **no forward dodge** (Forward+A = Combat Leap; grounded forward = Dash/RT). No dedicated jump button.
+- **LB tap-vs-hold:** fresh LB press ≤4f before a hit = **Perfect Parry** (no Edge cost); held 5–8f = **Perfect Guard**; older hold = Normal Block. Cannot parry from a held guard. Frame values tunable; input assignments locked.
+- Controller-first; full remapping + saved **profiles** (Default / Southpaw / Soulcalibur / Smash-style / custom) — see `Docs/02_ClaudeCode_UE5/handoff_ui_polish.md`.
+
 ## Documentation state
 FROZEN. Changes only when implementation feedback requires them, and every change syncs across: this package, the desktop `handoff.md`, the GDD, and the repo README.
