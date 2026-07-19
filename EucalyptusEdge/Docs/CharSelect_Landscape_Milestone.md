@@ -62,3 +62,25 @@ Target map: `/Game/EE_ProjectFiles/CharacterSelect/Level/LV_CharacterSelect`
 
 ## Deferred (NOT in Stage 1)
 Cameras, characters, showcase actors, pedestals, foliage, trees, grass, rocks, water, Niagara, PCG, splines, lighting polish, post-process, audio, UI, `WBP_CharacterSelect`, GameMode/selection/input logic.
+
+---
+
+# STAGE 1 EXECUTION RESULTS — **PASS (with documented pre-existing warnings)**
+
+Executed on live map `/Game/EE_ProjectFiles/CharacterSelect/Level/LV_CharacterSelection` (renamed from LV_CharacterSelect; old map obsolete).
+
+**Import blocker found + fixed:** the pack's `..._1009x1009.png` was not importable (Unreal rejected it). Rebuilt a bit-exact 16-bit grayscale PNG from the valid RAW16 → `EE_LV_CharacterSelect_Heightmap_1009x1009_FIXED.png` (0 differing pixels vs RAW16), which imported cleanly.
+
+**Landscape config:** actor `Landscape2` (internal `Landscape_1`), exactly one. 1009×1009 · 63 quads/section · 1 sec/comp · 16×16 = 256 components · XY 50cm · **Z 23 (corrected from 100 — full-range data made Z100 = 512m)** · centered on world origin · **504.0×504.0 m, 0–117.8 m** · collision verified · material `MI_EE_VerdantiaLandscape` · appears non-WP (no streaming proxies).
+
+**Region heights (traced vs spec, m):** Koda 44.9/45 · Wren 34.1/34 · Ripper 28.6/29 · Kiri 99.2/99 · Echo 14.3/14 · Banjo 80.2/80 · Atlas 83.2/83 — all within ~0.5 m.
+
+**Warnings:** Map Check 0/0. One transient error set ("Landscape physical material failed to complete before saving", ×37) on the first post-material save → **resolved on re-save, no recurrence.** Pre-existing benign engine "landscape thumbnail material TShadowDepth" warnings at startup (not ours). Save→reopen verified: 1 landscape, correct dims, no lights.
+
+**Assets:** reused `MI_EE_VerdantiaLandscape`. Created on disk (not Content): the FIXED heightmap PNG. No Content-Browser assets created; no duplicates. ⚠ Pre-existing dupes to clean later: earlier texture-import left `EE_LV_CharacterSelect_Heightmap_*` + 9 `Mask_*` Texture2D in `/CharacterSelect/Materials/` (unused by the landscape).
+
+**Deferred (confirmed not done):** cameras, characters, showcases, foliage, water, Niagara, PCG, splines, UI/WBP, audio, lighting polish.
+
+Screenshot: `Saved/Screenshots/Verdantia_CS/Landscape_vista_lit.png` (relief, temp light removed after).
+
+**STOP — awaiting user approval for Stage 2.**
