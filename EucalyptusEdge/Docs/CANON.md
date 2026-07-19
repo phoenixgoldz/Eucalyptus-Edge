@@ -32,5 +32,15 @@ Mako, Bindi, Bramble, and Tazra must not appear in any material, ever.
 - **LB tap-vs-hold:** fresh LB press ≤4f before a hit = **Perfect Parry** (no Edge cost); held 5–8f = **Perfect Guard**; older hold = Normal Block. Cannot parry from a held guard. Frame values tunable; input assignments locked.
 - Controller-first; full remapping + saved **profiles** (Default / Southpaw / Soulcalibur / Smash-style / custom) — see `Docs/02_ClaudeCode_UE5/handoff_ui_polish.md`.
 
+## Audio & Music (Phase 1 — locked 2026-07-19; full spec `Docs/Project/MUSIC_DESIGN_BIBLE.md`)
+- **One identity:** everything derives from **The Edge Theme**. Home key **D major**, colored by **Lydian↔Mixolydian** modal mixture (raised-4th magic / lowered-7th ancient-heroic). Style = AAA cinematic orchestral, organic, hopeful, heroic. **Never** trailer music, EDM, rock, metal, chiptune, lo-fi, jazz, or horror.
+- **The Edge Cell (the hook):** scale degrees **5–1–2–3 = A–D–E–F#** (P5 leap up, step to the bright major 3rd). **Every track must state or imply it within its first 10 seconds.**
+- **Wonder Lift** (magic/Edge seed): **F#–G#–A** (Lydian raised-4th rising to 5). **Honor Cadence** (victory / "gold = honor"): **♭VII–IV–I = C–G–D**.
+- **Blight Signature = the musical "violet": reserved for corruption ONLY.** Minor 3rd (F♮) + the **D–A♭ "Blight tritone"** + detuned low didgeridoo drone. Used at Blightroot Hollow and corrupted beats — **nowhere else**, and **still orchestral, never horror**.
+- **Derivation:** menus/title in lilting **6/8**; combat recasts the same pitches in driving **cut-time 4/4** with taikos. Instrumentation carries place/personality; intervals stay constant.
+- **Dynamic combat music:** Intro → Loop A (Neutral) ⇄ Loop B (Pressure), **additive** Final-Round + **Edge-Energy** layers, Victory/Defeat stings. **Crossfade only — never restart.** Edge layer is a subtle high shimmer (magic is "alive, never distracting").
+- **Nature layer** rides its **own `EE_Ambient` submix** (subtle; ducks under Edge Ultimates). **Didgeridoo only** in Sunbaked Outback + the Blight drone, sparingly, never cliché.
+- **Framework:** the `EE_Master/EE_Music/EE_SFX` + `EE_MusicSubmix/EE_SFXSubmix` system is **canonical**; add `EE_Ambient`/`EE_Voice` under `EE_Master`. **No parallel volume system.** Interactive music via per-arena MetaSound + `BP_EE_MusicDirector` driven by `BP_EE_VersusGameMode`. Replaces all placeholder music incl. the `Trailer_Horns_of_War_Cue` victory.
+
 ## Documentation state
 FROZEN. Changes only when implementation feedback requires them, and every change syncs across: this package, the desktop `handoff.md`, the GDD, and the repo README.
